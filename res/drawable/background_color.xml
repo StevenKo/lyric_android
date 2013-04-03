@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+	<!-- When selected, use grey -->
+	<item android:state_selected="true">
+		<shape>
+			<solid android:color="@color/lightsteelblue" />
+			<corners 
+				android:topLeftRadius="10dp" 
+				android:topRightRadius="10dp" />
+		</shape>
+	</item>
+	<!-- When not selected, use white -->
+	
+	<item>
+		<shape>
+			<solid android:color="@color/lightgrey" />
+			<corners 
+				android:topLeftRadius="10dp" 
+				android:topRightRadius="10dp" />
+		</shape>
+	</item>
+
+</selector>
