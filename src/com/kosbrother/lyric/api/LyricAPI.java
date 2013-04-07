@@ -19,6 +19,7 @@ import org.json.JSONObject;
 import android.util.Log;
 
 import com.kosbrother.lyric.entity.Album;
+import com.kosbrother.lyric.entity.Singer;
 import com.kosbrother.lyric.entity.SingerCategory;
 import com.kosbrother.lyric.entity.SingerSearchWay;
 import com.kosbrother.lyric.entity.SingerSearchWayItem;
@@ -27,6 +28,47 @@ public class LyricAPI {
     final static String         HOST  = "http://106.187.102.167";
     public static final String  TAG   = "LyricAPI";
     public static final boolean DEBUG = true;
+
+    public static Singer getSinger(int singer_id) {
+        String message = getMessageFromServer("GET", "/api/v1/singers/" + singer_id + ".json", null);
+        if (message == null) {
+            return null;
+        } else {
+            try {
+                JSONObject nObject;
+                nObject = new JSONObject(message.toString());
+                int id = nObject.getInt("id");
+                String name = nObject.getString("name");
+                String description = nObject.getString("description");
+
+                return new Singer(id, name, description);
+            } catch (JSONException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+    }
+
+    public static ArrayList<Singer> getCategoryHotSingers(int singer_category_id) {
+        String message = getMessageFromServer("GET", "/api/v1/singers/hot_singers.json?singer_category_id=" + singer_category_id, null);
+        ArrayList<Singer> singers = new ArrayList<Singer>();
+        if (message == null) {
+            return null;
+        } else {
+            return parseSingers(message, singers);
+        }
+    }
+
+    public static ArrayList<Singer> getSingers(int singerSearchWayItemId) {
+        String message = getMessageFromServer("GET", "/api/v1/singers.json?serch_item_id=" + singerSearchWayItemId, null);
+        ArrayList<Singer> singers = new ArrayList<Singer>();
+        if (message == null) {
+            return null;
+        } else {
+            return parseSingers(message, singers);
+        }
+    }
 
     public static Album getAlbum(int album_id) {
         String message = getMessageFromServer("GET", "/api/v1/albums/" + album_id + ".json", null);
@@ -100,6 +142,25 @@ public class LyricAPI {
         return SingerSearchWayItem.getSingerSearchWayItems(singerSearchWayId);
     }
 
+    private static ArrayList<Singer> parseSingers(String message, ArrayList<Singer> singers) {
+        try {
+            JSONArray jArray;
+            jArray = new JSONArray(message.toString());
+            for (int i = 0; i < jArray.length(); i++) {
+
+                int id = jArray.getJSONObject(i).getInt("id");
+                String name = jArray.getJSONObject(i).getString("name");
+                singers.add(new Singer(id, name, "null"));
+
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return singers;
+    }
+
     private static ArrayList<Album> parseAlbums(String message, ArrayList<Album> albums) {
         try {
             JSONArray jArray;
@@ -113,10 +174,10 @@ public class LyricAPI {
                 if (!release.equals("null")) {
                     SimpleDateFormat createFormatter = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss'Z'");
                     Date release_time = createFormatter.parse(release);
-                    Album album = new Album(id, name, release_time, null);
+                    Album album = new Album(id, name, release_time, "null");
                     albums.add(album);
                 } else {
-                    Album album = new Album(id, name, null, null);
+                    Album album = new Album(id, name, null, "null");
                     albums.add(album);
                 }
 
