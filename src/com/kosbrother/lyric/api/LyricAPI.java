@@ -23,11 +23,56 @@ import com.kosbrother.lyric.entity.Singer;
 import com.kosbrother.lyric.entity.SingerCategory;
 import com.kosbrother.lyric.entity.SingerSearchWay;
 import com.kosbrother.lyric.entity.SingerSearchWayItem;
+import com.kosbrother.lyric.entity.Song;
 
 public class LyricAPI {
     final static String         HOST  = "http://106.187.102.167";
     public static final String  TAG   = "LyricAPI";
     public static final boolean DEBUG = true;
+
+    public static Song getSong(int song_id) {
+        String message = getMessageFromServer("GET", "/api/v1/songs/" + song_id + ".json", null);
+        if (message == null) {
+            return null;
+        } else {
+            try {
+                JSONObject nObject;
+                nObject = new JSONObject(message.toString());
+                int id = nObject.getInt("id");
+                String name = nObject.getString("name");
+                String lyric = nObject.getString("lyric");
+                int album_id = 0;
+
+                if (!nObject.isNull("album_id"))
+                    album_id = nObject.getInt("album_id");
+
+                return new Song(id, name, lyric, album_id);
+            } catch (JSONException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+    }
+
+    public static ArrayList<Song> getSingerSongs(int singer_id, int page) {
+        String message = getMessageFromServer("GET", "/api/v1/songs.json?singer_id=" + singer_id + "&page=" + page, null);
+        ArrayList<Song> songs = new ArrayList<Song>();
+        if (message == null) {
+            return null;
+        } else {
+            return parseSongs(message, songs);
+        }
+    }
+
+    public static ArrayList<Song> getCategoryHotSongs(int singer_category_id, int page) {
+        String message = getMessageFromServer("GET", "/api/v1/songs/hot_songs.json?category_id=" + singer_category_id + "&page=" + page, null);
+        ArrayList<Song> songs = new ArrayList<Song>();
+        if (message == null) {
+            return null;
+        } else {
+            return parseSongs(message, songs);
+        }
+    }
 
     public static Singer getSinger(int singer_id) {
         String message = getMessageFromServer("GET", "/api/v1/singers/" + singer_id + ".json", null);
@@ -50,8 +95,8 @@ public class LyricAPI {
 
     }
 
-    public static ArrayList<Singer> getCategoryHotSingers(int singer_category_id) {
-        String message = getMessageFromServer("GET", "/api/v1/singers/hot_singers.json?singer_category_id=" + singer_category_id, null);
+    public static ArrayList<Singer> getCategoryHotSingers(int singer_category_id, int page) {
+        String message = getMessageFromServer("GET", "/api/v1/singers/hot_singers.json?singer_category_id=" + singer_category_id + "&page=" + page, null);
         ArrayList<Singer> singers = new ArrayList<Singer>();
         if (message == null) {
             return null;
@@ -60,8 +105,8 @@ public class LyricAPI {
         }
     }
 
-    public static ArrayList<Singer> getSingers(int singerSearchWayItemId) {
-        String message = getMessageFromServer("GET", "/api/v1/singers.json?serch_item_id=" + singerSearchWayItemId, null);
+    public static ArrayList<Singer> getSingers(int singerSearchWayItemId, int page) {
+        String message = getMessageFromServer("GET", "/api/v1/singers.json?serch_item_id=" + singerSearchWayItemId + "&page=" + page, null);
         ArrayList<Singer> singers = new ArrayList<Singer>();
         if (message == null) {
             return null;
@@ -140,6 +185,30 @@ public class LyricAPI {
 
     public static ArrayList<SingerSearchWayItem> getSingerSearchWayItems(int singerSearchWayId) {
         return SingerSearchWayItem.getSingerSearchWayItems(singerSearchWayId);
+    }
+
+    private static ArrayList<Song> parseSongs(String message, ArrayList<Song> songs) {
+        try {
+            JSONArray jArray;
+            jArray = new JSONArray(message.toString());
+            for (int i = 0; i < jArray.length(); i++) {
+
+                int id = jArray.getJSONObject(i).getInt("id");
+                String name = jArray.getJSONObject(i).getString("name");
+                int album_id = 0;
+
+                if (!jArray.getJSONObject(i).isNull("album_id"))
+                    album_id = jArray.getJSONObject(i).getInt("album_id");
+
+                songs.add(new Song(id, name, "null", album_id));
+
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return songs;
     }
 
     private static ArrayList<Singer> parseSingers(String message, ArrayList<Singer> singers) {
