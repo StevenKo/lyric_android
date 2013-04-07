@@ -58,9 +58,29 @@ public class LyricAPI {
         }
     }
 
+    public static ArrayList<Album> getCategoryHotAlbums(int category_id) {
+        ArrayList<Album> albums = new ArrayList<Album>();
+        String message = getMessageFromServer("GET", "/api/v1/albums/hot_albums.json?category_id=" + category_id, null);
+        if (message == null) {
+            return null;
+        } else {
+            return parseAlbums(message, albums);
+        }
+    }
+
     public static ArrayList<Album> getSingerAlbums(int singer_id) {
         ArrayList<Album> albums = new ArrayList<Album>();
         String message = getMessageFromServer("GET", "/api/v1/albums.json?singer_id=" + singer_id, null);
+        if (message == null) {
+            return null;
+        } else {
+            return parseAlbums(message, albums);
+        }
+    }
+
+    public static ArrayList<Album> getNewAlbums(int page) {
+        ArrayList<Album> albums = new ArrayList<Album>();
+        String message = getMessageFromServer("GET", "/api/v1/albums/new_albums.json?page=" + page, null);
         if (message == null) {
             return null;
         } else {
