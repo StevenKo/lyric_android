@@ -36,6 +36,72 @@ public class LyricAPI {
     public static final String  TAG   = "LyricAPI";
     public static final boolean DEBUG = true;
 
+    // all the page start from 1 except google youtube and news api from 0
+
+    public static ArrayList<Singer> searchSinger(String query, int page) {
+        try {
+            query = URLEncoder.encode(query, "utf-8");
+        } catch (UnsupportedEncodingException e1) {
+            e1.printStackTrace();
+            return null;
+        }
+        String message = getMessageFromServer("GET", "/api/v1/singers/search.json?keyword=" + query + "&page=" + page, null, null);
+        ArrayList<Singer> singers = new ArrayList<Singer>();
+        if (message == null) {
+            return null;
+        } else {
+            return parseSingers(message, singers);
+        }
+    }
+
+    public static ArrayList<Album> searchAlbum(String query, int page) {
+        try {
+            query = URLEncoder.encode(query, "utf-8");
+        } catch (UnsupportedEncodingException e1) {
+            e1.printStackTrace();
+            return null;
+        }
+        ArrayList<Album> albums = new ArrayList<Album>();
+        String message = getMessageFromServer("GET", "/api/v1/albums/search.json?keyword=" + query + "&page=" + page, null, null);
+        if (message == null) {
+            return null;
+        } else {
+            return parseAlbums(message, albums);
+        }
+    }
+
+    public static ArrayList<Song> searchSongLyric(String query, int page) {
+        try {
+            query = URLEncoder.encode(query, "utf-8");
+        } catch (UnsupportedEncodingException e1) {
+            e1.printStackTrace();
+            return null;
+        }
+        String message = getMessageFromServer("GET", "/api/v1/songs/search_lyric.json?keyword=" + query + "&page=" + page, null, null);
+        ArrayList<Song> songs = new ArrayList<Song>();
+        if (message == null) {
+            return null;
+        } else {
+            return parseSongs(message, songs);
+        }
+    }
+
+    public static ArrayList<Song> searchSongName(String query, int page) {
+        try {
+            query = URLEncoder.encode(query, "utf-8");
+        } catch (UnsupportedEncodingException e1) {
+            e1.printStackTrace();
+            return null;
+        }
+        String message = getMessageFromServer("GET", "/api/v1/songs/search_name.json?keyword=" + query + "&page=" + page, null, null);
+        ArrayList<Song> songs = new ArrayList<Song>();
+        if (message == null) {
+            return null;
+        } else {
+            return parseSongs(message, songs);
+        }
+    }
+
     public static ArrayList<Video> getHotVideos() {
         String message = getMessageFromServer("GET", "/api/v1/videos.json", null, null);
         ArrayList<Video> videos = new ArrayList<Video>();
@@ -96,7 +162,7 @@ public class LyricAPI {
     }
 
     // perpage has 8 results
-    // page start from 0
+    // this page start from 0
     public static ArrayList<SingerNews> getNews(String query, int page) {
         ArrayList<SingerNews> newses = new ArrayList<SingerNews>();
 
