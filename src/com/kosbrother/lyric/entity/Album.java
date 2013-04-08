@@ -7,15 +7,17 @@ public class Album {
     int    id;
     String name;
     Date   release_time;
+    String description;
 
     public Album() {
-        this(1, "", new Date());
+        this(1, "", new Date(), "");
     }
 
-    public Album(int id, String name, Date date) {
+    public Album(int id, String name, Date date, String description) {
         this.id = id;
         this.name = name;
         this.release_time = date;
+        this.description = description;
     }
 
     public int getId() {
@@ -28,6 +30,10 @@ public class Album {
 
     public Date getDate() {
         return release_time;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
 }
