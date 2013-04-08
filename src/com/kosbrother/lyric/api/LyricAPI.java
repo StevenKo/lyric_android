@@ -28,12 +28,23 @@ import com.kosbrother.lyric.entity.SingerNews;
 import com.kosbrother.lyric.entity.SingerSearchWay;
 import com.kosbrother.lyric.entity.SingerSearchWayItem;
 import com.kosbrother.lyric.entity.Song;
+import com.kosbrother.lyric.entity.Video;
 import com.kosbrother.lyric.entity.YoutubeVideo;
 
 public class LyricAPI {
     final static String         HOST  = "http://106.187.102.167";
     public static final String  TAG   = "LyricAPI";
     public static final boolean DEBUG = true;
+
+    public static ArrayList<Video> getHotVideos() {
+        String message = getMessageFromServer("GET", "/api/v1/videos.json", null, null);
+        ArrayList<Video> videos = new ArrayList<Video>();
+        if (message == null) {
+            return null;
+        } else {
+            return parseVideos(message, videos);
+        }
+    }
 
     public static ArrayList<YoutubeVideo> getYoutubeVideos(String query, int page) {
         ArrayList<YoutubeVideo> videos = new ArrayList<YoutubeVideo>();
@@ -290,6 +301,25 @@ public class LyricAPI {
 
     public static ArrayList<SingerSearchWayItem> getSingerSearchWayItems(int singerSearchWayId) {
         return SingerSearchWayItem.getSingerSearchWayItems(singerSearchWayId);
+    }
+
+    private static ArrayList<Video> parseVideos(String message, ArrayList<Video> videos) {
+        try {
+            JSONArray jArray;
+            jArray = new JSONArray(message.toString());
+            for (int i = 0; i < jArray.length(); i++) {
+
+                String title = jArray.getJSONObject(i).getString("title");
+                String youtube_id = jArray.getJSONObject(i).getString("youtube_id");
+                Video video = new Video(title, youtube_id);
+                videos.add(video);
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return videos;
     }
 
     private static ArrayList<Song> parseSongs(String message, ArrayList<Song> songs) {
