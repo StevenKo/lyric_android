@@ -12,9 +12,9 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/Theme.Sherlock.Light" >
+        android:theme="@style/AppBaseTheme" >
         <activity
-            android:name=".FragmentTabsPager"
+            android:name=".MainTabActivty"
             android:label="@string/app_name" 
             android:screenOrientation="portrait"
             >
@@ -24,8 +24,24 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name="com.kosbrother.lyric.TabHotActivity"
             android:screenOrientation="portrait" 
+            >
+        </activity>
+        <activity
+            android:name="com.kosbrother.lyric.TabSingerActivity"
+            android:screenOrientation="portrait" 
+            >
+        </activity>
+        <activity
+            android:name="com.kosbrother.lyric.TabSearchActivity"
+            android:screenOrientation="portrait" 
+            >
+        </activity>
+        <activity
+            android:name="com.kosbrother.lyric.TabCollectActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/StyledIndicators"
             >
         </activity>
     </application>
