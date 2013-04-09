@@ -10,30 +10,27 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
+import android.widget.TextView;
 
-import com.costum.android.widget.LoadMoreListView;
-import com.costum.android.widget.LoadMoreListView.OnLoadMoreListener;
 import com.kosbrother.lyric.R;
 import com.kosbrother.lyric.api.LyricAPI;
 import com.kosbrother.lyric.entity.Song;
-import com.kosbrother.lyric.entity.YoutubeVideo;
-import com.taiwan.imageload.ListSongAdapter;
-import com.taiwan.imageload.ListVideoAdapter;
 
-public class SingerVideoFragment extends Fragment {
+public class SongLyricFragment extends Fragment {
 	
 	private LinearLayout progressLayout;
 	private LinearLayout reloadLayout;
-	private LoadMoreListView myList;
+	private ScrollView myScroll;
 	private Button buttonReload;
-	private ListVideoAdapter mdapter;
-	private ArrayList<YoutubeVideo> mVideos = new ArrayList<YoutubeVideo>();
-	private static String singerName;
+	private TextView mTextView;
+	private Song mSong;
+	private static int songId;
 	
-    public static SingerVideoFragment newInstance(String singer_name) {
+    public static SongLyricFragment newInstance(int song_id) {
 
-    	SingerVideoFragment fragment = new SingerVideoFragment();
-    	singerName = singer_name;
+    	SongLyricFragment fragment = new SongLyricFragment();
+    	songId = song_id;
         return fragment;
 
     }
@@ -46,24 +43,15 @@ public class SingerVideoFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View myFragmentView = inflater.inflate(R.layout.loadmore, container, false);
+        View myFragmentView = inflater.inflate(R.layout.layout_lyric, container, false);
         progressLayout = (LinearLayout) myFragmentView.findViewById(R.id.layout_progress);
     	reloadLayout = (LinearLayout) myFragmentView.findViewById(R.id.layout_reload);
     	buttonReload = (Button) myFragmentView.findViewById(R.id.button_reload);
-    	myList = (LoadMoreListView) myFragmentView.findViewById(R.id.news_list);
-        myList.setOnLoadMoreListener(new OnLoadMoreListener() {
-			public void onLoadMore() {
-				// Do the work to load more items at the end of list
-				myList.onLoadMoreComplete();
-			}
-		});
+    	myScroll = (ScrollView) myFragmentView.findViewById(R.id.scrollview_lyric);
+    	mTextView = (TextView) myFragmentView.findViewById(R.id.textview_lyric);
         
-        if (mdapter != null) {
-            progressLayout.setVisibility(View.GONE);
-            myList.setAdapter(mdapter);
-        } else {
-            new DownloadChannelsTask().execute();
-        }
+        new DownloadChannelsTask().execute();
+       
         
         return myFragmentView;
     }
@@ -81,14 +69,7 @@ public class SingerVideoFragment extends Fragment {
         protected Object doInBackground(Object... params) {
             // TODO Auto-generated method stub
         	
-        	ArrayList<YoutubeVideo> theVideos= LyricAPI.getYoutubeVideos(singerName, 0);
-        	if(theVideos!=null && theVideos.size()!=0){
-        	 for(int i=0; i<theVideos.size(); i++){
-        		if(theVideos.get(i).getTitle()!="null" && theVideos.get(i).getThumbnail()!="null"){
-        		 mVideos.add(theVideos.get(i));
-        		}
-        	 }
-        	}
+        	mSong = LyricAPI.getSong(songId);
             return null;
         }
 
@@ -98,10 +79,9 @@ public class SingerVideoFragment extends Fragment {
             super.onPostExecute(result);
             progressLayout.setVisibility(View.GONE);
                        
-            if(mVideos !=null && mVideos.size()!=0){
+            if(mSong !=null && !mSong.getLyric().equals("null")){
           	  try{
-          		mdapter = new ListVideoAdapter(getActivity(), mVideos);
-          		myList.setAdapter(mdapter);
+          		mTextView.setText(mSong.getLyric());
           	  }catch(Exception e){
           		 
           	  }

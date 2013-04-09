@@ -15,12 +15,10 @@ import com.costum.android.widget.LoadMoreListView;
 import com.costum.android.widget.LoadMoreListView.OnLoadMoreListener;
 import com.kosbrother.lyric.R;
 import com.kosbrother.lyric.api.LyricAPI;
-import com.kosbrother.lyric.entity.Song;
 import com.kosbrother.lyric.entity.YoutubeVideo;
-import com.taiwan.imageload.ListSongAdapter;
 import com.taiwan.imageload.ListVideoAdapter;
 
-public class SingerVideoFragment extends Fragment {
+public class SongVideoFragment extends Fragment {
 	
 	private LinearLayout progressLayout;
 	private LinearLayout reloadLayout;
@@ -28,12 +26,12 @@ public class SingerVideoFragment extends Fragment {
 	private Button buttonReload;
 	private ListVideoAdapter mdapter;
 	private ArrayList<YoutubeVideo> mVideos = new ArrayList<YoutubeVideo>();
-	private static String singerName;
+	private static String songName;
 	
-    public static SingerVideoFragment newInstance(String singer_name) {
+    public static SongVideoFragment newInstance(String song_name) {
 
-    	SingerVideoFragment fragment = new SingerVideoFragment();
-    	singerName = singer_name;
+    	SongVideoFragment fragment = new SongVideoFragment();
+    	songName = song_name;
         return fragment;
 
     }
@@ -81,7 +79,7 @@ public class SingerVideoFragment extends Fragment {
         protected Object doInBackground(Object... params) {
             // TODO Auto-generated method stub
         	
-        	ArrayList<YoutubeVideo> theVideos= LyricAPI.getYoutubeVideos(singerName, 0);
+        	ArrayList<YoutubeVideo> theVideos= LyricAPI.getYoutubeVideos("3小湯 TripleT Good Night", 0);
         	if(theVideos!=null && theVideos.size()!=0){
         	 for(int i=0; i<theVideos.size(); i++){
         		if(theVideos.get(i).getTitle()!="null" && theVideos.get(i).getThumbnail()!="null"){

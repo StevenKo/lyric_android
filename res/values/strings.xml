@@ -3,6 +3,8 @@
 
     <string name="app_name">歌曲王國</string>
     
+    <string name="menu_introduce">簡介</string>
+   
     <string name="likes">喜歡</string>
     <string name="time">長度</string>
     <string name="views">觀看次數</string>

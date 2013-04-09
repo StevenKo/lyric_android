@@ -15,17 +15,17 @@ import com.kosbrother.fragment.SingerAlbumFragment;
 import com.kosbrother.fragment.SingerNewsFragment;
 import com.kosbrother.fragment.SingerSongFragment;
 import com.kosbrother.fragment.SingerVideoFragment;
+import com.kosbrother.fragment.SongLyricFragment;
+import com.kosbrother.fragment.SongVideoFragment;
 import com.viewpagerindicator.TabPageIndicator;
 
-public class SingerActivity extends FragmentActivity{
-	
-	private int ID_INTRODUCE = 88888;
-	
+public class SongActivity extends FragmentActivity{
+		
 	private ViewPager pager;
 	private String[] CONTENT;
 	private Bundle mBundle;
-	private int SingerId;
-	private String SingerName;
+	private int SongId;
+	private String SongName;
 	
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,11 +33,11 @@ public class SingerActivity extends FragmentActivity{
         setContentView(R.layout.simple_tabs);
         
         mBundle = this.getIntent().getExtras();
-        SingerId = mBundle.getInt("SingerId");
-        SingerName = mBundle.getString("SingerName");
+        SongId = mBundle.getInt("SongId");
+        SongName = mBundle.getString("SongName");
         
         Resources res = getResources();
-        CONTENT = res.getStringArray(R.array.singer_tabs);
+        CONTENT = res.getStringArray(R.array.song_tabs);
 
         
         FragmentStatePagerAdapter adapter = new GoogleMusicAdapter(getSupportFragmentManager());
@@ -51,13 +51,9 @@ public class SingerActivity extends FragmentActivity{
     }
 	
 	
-	
-	@SuppressLint("NewApi")
 	@Override
     public boolean onCreateOptionsMenu(Menu menu) {
     	getMenuInflater().inflate(R.menu.main, menu);
-    	menu.add(0, ID_INTRODUCE, 0, getResources().getString(R.string.menu_introduce)).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-   	
     	return true;
     }
 	
@@ -70,13 +66,9 @@ public class SingerActivity extends FragmentActivity{
         public Fragment getItem(int position) {
         	Fragment kk = new Fragment();
         	if(position==0){
-            	kk = SingerAlbumFragment.newInstance(SingerId);
+            	kk = SongLyricFragment.newInstance(SongId);
         	}else if(position == 1){
-        		kk = SingerSongFragment.newInstance(SingerId);
-        	}else if(position == 2){
-        		kk = SingerNewsFragment.newInstance(SingerName);
-        	}else if(position == 3){
-        		kk = SingerVideoFragment.newInstance(SingerName);
+        		kk = SongVideoFragment.newInstance(SongName);
         	}
             return kk;
         }

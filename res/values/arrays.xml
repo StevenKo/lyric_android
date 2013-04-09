@@ -26,4 +26,8 @@
 　　     <item>歌手新聞</item>
 		<item>歌手影音</item>
 　　 </string-array>
+	<string-array name="song_tabs">
+　　     <item>歌詞</item>
+　　     <item>影音</item>
+　　 </string-array>
 </resources>

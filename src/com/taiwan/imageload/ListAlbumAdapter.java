@@ -4,13 +4,16 @@ import java.util.ArrayList;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.kosbrother.lyric.AlbumActivity;
 import com.kosbrother.lyric.R;
 import com.kosbrother.lyric.entity.Album;
 
@@ -39,7 +42,7 @@ public class ListAlbumAdapter extends BaseAdapter {
         return position;
     }
     
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
 //        View vi= new View();      
         View vi = inflater.inflate(R.layout.item_album_list, null);
 	    TextView text_name=(TextView)vi.findViewById(R.id.text_album_name);
@@ -49,6 +52,18 @@ public class ListAlbumAdapter extends BaseAdapter {
 	    text_name.setText("專輯名稱: "+data.get(position).getName());
 	    text_time.setText("發片日期: "+data.get(position).getDate());
 	    text_description.setText(data.get(position).getDescription());
+	    
+	    vi.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(activity, AlbumActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putInt("AlbumId", data.get(position).getId());
+                bundle.putString("AlbumName", data.get(position).getName());
+                intent.putExtras(bundle);
+                activity.startActivity(intent);
+            }
+        });
 	        
         return vi;
     }

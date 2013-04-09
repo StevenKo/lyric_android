@@ -132,12 +132,30 @@ public class LyricAPI {
                 JSONObject feedObject = object.getJSONObject("feed");
                 JSONArray videoArray = feedObject.getJSONArray("entry");
                 for (int i = 0; i < videoArray.length(); i++) {
-                    String title = videoArray.getJSONObject(i).getJSONObject("title").getString("$t");
-                    String link = videoArray.getJSONObject(i).getJSONArray("link").getJSONObject(0).getString("href");
-                    String thumbnail = videoArray.getJSONObject(i).getJSONObject("media$group").getJSONArray("media$thumbnail").getJSONObject(0)
-                            .getString("url");
-                    int duration = videoArray.getJSONObject(i).getJSONObject("media$group").getJSONObject("yt$duration").getInt("seconds");
-                    int viewCount = videoArray.getJSONObject(i).getJSONObject("yt$statistics").getInt("viewCount");
+                	
+                	String title = "null";
+                	String link = "null";
+                	String thumbnail = "null";
+                	
+                	try{
+	                    title = videoArray.getJSONObject(i).getJSONObject("title").getString("$t");
+	                    link = videoArray.getJSONObject(i).getJSONArray("link").getJSONObject(0).getString("href");
+	                    thumbnail = videoArray.getJSONObject(i).getJSONObject("media$group").getJSONArray("media$thumbnail").getJSONObject(0)
+	                            .getString("url");
+                	}catch(Exception e){
+                		
+                	}
+                	
+                    int duration = 0;
+                    int viewCount = 0;
+                    
+                    try{
+                        duration = videoArray.getJSONObject(i).getJSONObject("media$group").getJSONObject("yt$duration").getInt("seconds");
+                        viewCount = videoArray.getJSONObject(i).getJSONObject("yt$statistics").getInt("viewCount");
+                    }catch(Exception e){
+                    	
+                    }
+                    
                     int likes = -1;
 
                     try {
