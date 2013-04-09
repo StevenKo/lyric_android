@@ -139,11 +139,12 @@ public class LyricAPI {
                     int duration = videoArray.getJSONObject(i).getJSONObject("media$group").getJSONObject("yt$duration").getInt("seconds");
                     int viewCount = videoArray.getJSONObject(i).getJSONObject("yt$statistics").getInt("viewCount");
                     int likes = -1;
-                    
-                    try{
-                     likes = videoArray.getJSONObject(i).getJSONObject("yt$rating").getInt("numLikes");
-                    }catch(Exception e){}
-                    
+
+                    try {
+                        likes = videoArray.getJSONObject(i).getJSONObject("yt$rating").getInt("numLikes");
+                    } catch (Exception e) {
+                    }
+
                     // int dislikes = videoArray.getJSONObject(i).getJSONObject("yt$rating").getInt("numDislikes");
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
                     Date uploadTime = null;
@@ -192,12 +193,13 @@ public class LyricAPI {
 
                     String title = newsArray.getJSONObject(i).getString("title");
                     String source = newsArray.getJSONObject(i).getString("publisher");
-                    
+
                     String pic_link = "null";
-                    try{
-                    	pic_link = newsArray.getJSONObject(i).getJSONObject("image").getString("tbUrl");
-                    }catch(Exception e){}
-                    
+                    try {
+                        pic_link = newsArray.getJSONObject(i).getJSONObject("image").getString("tbUrl");
+                    } catch (Exception e) {
+                    }
+
                     String link = newsArray.getJSONObject(i).getString("unescapedUrl");
                     SimpleDateFormat format = new SimpleDateFormat("EEE, dd MMM yyyy kk:mm:ss Z", Locale.ENGLISH);
                     Date releaseTime = null;
@@ -243,6 +245,16 @@ public class LyricAPI {
                 e.printStackTrace();
                 return null;
             }
+        }
+    }
+
+    public static ArrayList<Song> getAlbumSongs(int album_id) {
+        String message = getMessageFromServer("GET", "/api/v1/songs/album_songs.json?album_id=" + album_id, null, null);
+        ArrayList<Song> songs = new ArrayList<Song>();
+        if (message == null) {
+            return null;
+        } else {
+            return parseSongs(message, songs);
         }
     }
 
