@@ -16,12 +16,6 @@ import com.kosbrother.lyric.R;
 public class CollectAlbumFragment extends Fragment {
 	
 	private FragmentTabHost mTabHost;
-	
-	String[] tabs ={
-			"收藏歌曲",
-			"收藏專輯",
-			"收藏歌手"			
-	};
 
     public static CollectAlbumFragment newInstance() {
 
@@ -38,7 +32,7 @@ public class CollectAlbumFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View myFragmentView = inflater.inflate(R.layout.layout_collect, container, false);
+        View myFragmentView = inflater.inflate(R.layout.layout_listview, container, false);
              
         return myFragmentView;
     }

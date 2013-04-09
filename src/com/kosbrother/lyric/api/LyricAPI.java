@@ -138,7 +138,12 @@ public class LyricAPI {
                             .getString("url");
                     int duration = videoArray.getJSONObject(i).getJSONObject("media$group").getJSONObject("yt$duration").getInt("seconds");
                     int viewCount = videoArray.getJSONObject(i).getJSONObject("yt$statistics").getInt("viewCount");
-                    // int likes = videoArray.getJSONObject(i).getJSONObject("yt$rating").getInt("numLikes");
+                    int likes = -1;
+                    
+                    try{
+                     likes = videoArray.getJSONObject(i).getJSONObject("yt$rating").getInt("numLikes");
+                    }catch(Exception e){}
+                    
                     // int dislikes = videoArray.getJSONObject(i).getJSONObject("yt$rating").getInt("numDislikes");
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
                     Date uploadTime = null;
@@ -148,7 +153,7 @@ public class LyricAPI {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
                     }
-                    YoutubeVideo video = new YoutubeVideo(title, link, thumbnail, uploadTime, viewCount, duration);
+                    YoutubeVideo video = new YoutubeVideo(title, link, thumbnail, uploadTime, viewCount, duration, likes);
                     videos.add(video);
                 }
 
@@ -173,7 +178,7 @@ public class LyricAPI {
             return null;
         }
 
-        String url = "https://ajax.googleapis.com/ajax/services/search/news?v=1.0&q=" + query + "&start=" + page * 8 + "&rsz=8";
+        String url = "https://ajax.googleapis.com/ajax/services/search/news?v=1.0&q=" + query + "&start=" + page * 8 + "&rsz=8&ned=tw";
         String message = getMessageFromServer("GET", null, null, url);
 
         if (message == null) {
@@ -187,7 +192,12 @@ public class LyricAPI {
 
                     String title = newsArray.getJSONObject(i).getString("title");
                     String source = newsArray.getJSONObject(i).getString("publisher");
-                    String pic_link = newsArray.getJSONObject(i).getJSONObject("image").getString("tbUrl");
+                    
+                    String pic_link = "null";
+                    try{
+                    	pic_link = newsArray.getJSONObject(i).getJSONObject("image").getString("tbUrl");
+                    }catch(Exception e){}
+                    
                     String link = newsArray.getJSONObject(i).getString("unescapedUrl");
                     SimpleDateFormat format = new SimpleDateFormat("EEE, dd MMM yyyy kk:mm:ss Z", Locale.ENGLISH);
                     Date releaseTime = null;

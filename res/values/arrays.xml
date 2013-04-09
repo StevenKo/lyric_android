@@ -20,4 +20,10 @@
 　　     <item>收藏專輯</item>
 　　     <item>收藏歌手</item>
 　　 </string-array>
+	<string-array name="singer_tabs">
+　　     <item>專輯列表</item>
+　　     <item>歌曲列表</item>
+　　     <item>歌手新聞</item>
+		<item>歌手影音</item>
+　　 </string-array>
 </resources>

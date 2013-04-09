@@ -18,7 +18,7 @@
     </style>
     
     
-    <style name="StyledIndicators" parent="@android:style/Theme.Light">
+    <style name="StyledIndicators" parent="android:Theme.Light">
         <item name="vpiTabPageIndicatorStyle">@style/CustomTabPageIndicator</item>   
     </style>
     

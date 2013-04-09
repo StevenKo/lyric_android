@@ -44,6 +44,41 @@
             android:theme="@style/StyledIndicators"
             >
         </activity>
+        <activity
+            android:name=".NewAlbumActivity"
+            android:screenOrientation="portrait"
+            >
+        </activity>
+        <activity
+            android:name=".HotAlbumActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/StyledIndicators"
+            >
+        </activity>
+        <activity
+            android:name=".HotSongActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/StyledIndicators"
+            >
+        </activity>
+        <activity
+            android:name="com.kosbrother.lyric.SingerCategoryActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/StyledIndicators"
+            >
+        </activity>
+        <activity
+            android:name="com.kosbrother.lyric.CategoryWayResultActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/StyledIndicators"
+            >
+        </activity>
+        <activity
+            android:name="com.kosbrother.lyric.SingerActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/StyledIndicators"
+            >
+        </activity>
     </application>
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />

@@ -33,7 +33,7 @@ public class TabHotActivity extends Activity {
         mListView = (ListView) findViewById(R.id.list_tab_hot);
         ListAdapter mdapter = new ListAdapter(TabHotActivity.this, mStrings, mImageIds);
         YappsCircleGallery yappsGallery = (YappsCircleGallery) findViewById(R.id.gallery);
-        mListView.setAdapter(mdapter);
+        mListView.setAdapter(mdapter);  
         
     }
 }

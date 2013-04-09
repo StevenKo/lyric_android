@@ -1,11 +1,6 @@
 package com.taiwan.imageload;
 
-
 import java.util.ArrayList;
-
-import com.kosbrother.lyric.R;
-import com.kosbrother.lyric.SingerCategoryActivity;
-import com.kosbrother.lyric.entity.SingerCategory;
 
 import android.app.Activity;
 import android.content.Context;
@@ -13,19 +8,23 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-public class GridViewAdapter extends BaseAdapter {
+import com.kosbrother.lyric.CategoryWayResultActivity;
+import com.kosbrother.lyric.R;
+import com.kosbrother.lyric.entity.SingerSearchWayItem;
+
+public class GridViewSearchWayAdapter extends BaseAdapter {
 
     private final Activity         activity;
-    private final ArrayList<SingerCategory> data;
+    private final ArrayList<SingerSearchWayItem> data;
     private static LayoutInflater  inflater = null;
     public ImageLoader             imageLoader;
 
-    public GridViewAdapter(Activity a, ArrayList<SingerCategory> d) {
+    public GridViewSearchWayAdapter(Activity a, ArrayList<SingerSearchWayItem> d) {
         activity = a;
         data = d;
         inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -69,10 +68,10 @@ public class GridViewAdapter extends BaseAdapter {
         vi.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(activity, SingerCategoryActivity.class);
+                Intent intent = new Intent(activity, CategoryWayResultActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putInt("SingerCategoryId", data.get(position).getId());
-                bundle.putString("SingerCategoryName", data.get(position).getName());
+                bundle.putInt("SearchWayId", data.get(position).getId());
+                bundle.putString("SearchWayName", data.get(position).getName());
                 intent.putExtras(bundle);
                 activity.startActivity(intent);
 

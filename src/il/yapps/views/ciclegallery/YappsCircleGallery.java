@@ -42,12 +42,12 @@ public class YappsCircleGallery extends Gallery
 			public void onItemSelected(AdapterView<?> arg0, View selectedView,
 					int position, long id) 
 			{	
-				if(lastSelectedView!=null){
-					lastSelectedView.setLayoutParams(new Gallery.LayoutParams(350, 250));
-				}
-								
-				selectedView.setLayoutParams(new Gallery.LayoutParams(600, 350));
-				lastSelectedView=selectedView;
+//				if(lastSelectedView!=null){
+//					lastSelectedView.setLayoutParams(new Gallery.LayoutParams(350, 250));
+//				}
+//								
+//				selectedView.setLayoutParams(new Gallery.LayoutParams(450, 350));
+//				lastSelectedView=selectedView;
 				
 			}
 
@@ -103,7 +103,7 @@ public class YappsCircleGallery extends Gallery
 	        ImageView i = new ImageView(mContext); 
 	        position= getPosition(position); 
 	        i.setImageResource(mImageIds[position]); 
-	        i.setLayoutParams(new Gallery.LayoutParams(350, 250)); 
+	        i.setLayoutParams(new Gallery.LayoutParams(450, 250)); 
 	        i.setScaleType(ImageView.ScaleType.FIT_XY); 
 	        return i; 
 	    } 
