@@ -5,8 +5,8 @@
 	<item android:state_selected="true">
         <shape android:shape="rectangle">
             <gradient   
-                android:startColor="@color/red"  
-                android:endColor="@color/red_selected"  
+                android:startColor="@color/grid_dark_red"  
+                android:endColor="@color/grid_light_red"  
                 android:angle="270" />
             <padding 
                 android:left="2dp"

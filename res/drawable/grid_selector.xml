@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android">  
     <item android:state_pressed="true" >  
         <shape>  
-            <solid android:color="@color/red_selected"/> 
+            <solid android:color="@color/red"/> 
             <corners 
                 android:radius="2dp" />  
         </shape>  
@@ -18,8 +18,11 @@
         </shape>  
     </item>  
     <item>        
-        <shape>  
-            <solid android:color="#ffffff"/>
+        <shape>
+            <stroke  
+                android:width="2dp"  
+                android:color="@color/grid_light_red" />  
+            <solid android:color="#e0e0e0"/>
             <corners  
                 android:radius="2dp" /> 
         </shape>  

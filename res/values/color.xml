@@ -7,8 +7,10 @@
     <color name="lightgrey">#d3d3d3</color>
     <color name="main_color_grey_dark">#dddddd</color>
     <color name="red_selected">#55FF8282</color>
-    <color name="red">#B30000</color>
-    <color name="tab_grey">#727272</color>
+    <color name="red">#B31010</color>
+    <color name="grid_light_red">#931010</color>
+    <color name="grid_dark_red">#5e1010</color>
+    <color name="tab_grey">#828282</color>
    
     <!-- Add for VPON -->
     <color name="contents_text">#ff000000</color>
