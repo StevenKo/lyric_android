@@ -4,7 +4,7 @@
 	<!-- When selected, use grey -->
 	<item android:state_selected="true">
 		<shape>
-			<solid android:color="@color/lightsteelblue" />
+			<solid android:color="#FFA1A1" />
 			<corners 
 				android:topLeftRadius="10dp" 
 				android:topRightRadius="10dp" />

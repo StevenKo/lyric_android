@@ -6,6 +6,7 @@
     <color name="lightsteelblue">#dfb0c4de</color>
     <color name="lightgrey">#d3d3d3</color>
     <color name="main_color_grey_dark">#dddddd</color>
+    <color name="red_selected">#55FF8282</color>
    
     <!-- Add for VPON -->
     <color name="contents_text">#ff000000</color>

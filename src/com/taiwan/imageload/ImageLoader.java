@@ -68,7 +68,7 @@ public class ImageLoader {
         this.width = width;
         
         if(bitmap!=null) {
-            imageView.setImageBitmap(bitmap);
+            
         
             //Ben Test
         	double height = (double)(width * ((double)bitmap.getHeight() / (double)bitmap.getWidth()));
@@ -77,6 +77,8 @@ public class ImageLoader {
         	imageView.getLayoutParams().width = width;
         	
         	imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+        	
+        	imageView.setImageBitmap(bitmap);
 
         }
         else {
@@ -95,8 +97,8 @@ public class ImageLoader {
     
     private void queuePhoto(String url, ImageView imageView, int width)
     {
-        PhotoToLoad p=new PhotoToLoad(url, imageView);
-        executorService.submit(new PhotosLoader(p));
+    	FillPhotoToLoad p=new FillPhotoToLoad(url, imageView, width);
+        executorService.submit(new FillPhotosLoader(p));
     }
     
     public Bitmap getBitmap(String url) 

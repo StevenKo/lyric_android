@@ -1,17 +1,30 @@
 package com.kosbrother.lyric;
 
 
-import il.yapps.views.ciclegallery.YappsCircleGallery;
+import java.util.ArrayList;
 
+import com.kosbrother.circlegallery.CircleGalleryAdapter;
+import com.kosbrother.lyric.api.LyricAPI;
+import com.kosbrother.lyric.entity.Video;
 import com.taiwan.imageload.ListAdapter;
+import com.taiwan.imageload.ListAlbumAdapter;
 
 import android.app.Activity;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Gallery;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 public class TabHotActivity extends Activity {
 
 	private ListView mListView;
+	private Gallery mGallery;
+	private LinearLayout linearDownLoading;
+	private LinearLayout linearNetwork;
+	private ArrayList<Video> mHotVideos;
+	private CircleGalleryAdapter mCircleAdapter;
 	
 	private Integer[] mImageIds = { 
 			R.drawable.icon_list_new,
@@ -30,10 +43,58 @@ public class TabHotActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_hot);
+        linearDownLoading = (LinearLayout) findViewById(R.id.linear_downloading);
+        linearNetwork = (LinearLayout) findViewById(R.id.linear_network);
+        mGallery = (Gallery) findViewById(R.id.gallery);
+        
+        
         mListView = (ListView) findViewById(R.id.list_tab_hot);
-        ListAdapter mdapter = new ListAdapter(TabHotActivity.this, mStrings, mImageIds);
-        YappsCircleGallery yappsGallery = (YappsCircleGallery) findViewById(R.id.gallery);
+        ListAdapter mdapter = new ListAdapter(TabHotActivity.this, mStrings, mImageIds);        
         mListView.setAdapter(mdapter);  
         
+        
+        new DownloadChannelsTask().execute();
+        
+        
+    }
+    
+    private class DownloadChannelsTask extends AsyncTask {
+
+        @Override
+        protected Object doInBackground(Object... params) {
+            // TODO Auto-generated method stub
+        	
+        	mHotVideos = LyricAPI.getHotVideos();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Object result) {
+            // TODO Auto-generated method stub
+            super.onPostExecute(result);
+            linearDownLoading.setVisibility(View.GONE);
+                       
+            if(mHotVideos !=null && mHotVideos.size()!=0){
+          	  try{
+          		mCircleAdapter = new CircleGalleryAdapter(TabHotActivity.this, mHotVideos);
+          		mGallery.setAdapter(mCircleAdapter);
+          		//To select the xSelected one -> 0 is the first.
+                int xSelected=0;
+                //To make the view go to the middle of our 'endless' array
+                mGallery.setSelection(Integer.MAX_VALUE/2+(Integer.MAX_VALUE/2)%5-1+xSelected);
+          	  }catch(Exception e){
+          		 
+          	  }
+            }else{
+            	linearNetwork.setVisibility(View.VISIBLE);
+            }
+
+        }
+    }
+    
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
     }
 }

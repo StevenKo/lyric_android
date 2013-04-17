@@ -56,13 +56,12 @@ public class ListVideoAdapter extends BaseAdapter {
 
     public View getView(final int position, View convertView, ViewGroup parent) {
         View vi = convertView;
-        if (convertView == null)
-          vi = inflater.inflate(R.layout.item_video_list, null);
+        vi = inflater.inflate(R.layout.item_video_list, null);
         
         // set view onClick Listener
 	        vi.setClickable(true);
 	        vi.setFocusable(true);
-	        vi.setBackgroundResource(android.R.drawable.menuitem_background);
+//	        vi.setBackgroundResource(android.R.drawable.menuitem_background);
 	        vi.setOnClickListener(new OnClickListener() {
 	
 	            @Override
@@ -74,9 +73,7 @@ public class ListVideoAdapter extends BaseAdapter {
 	
 	        });
         
-	        
-	   
-        
+	              
         TextView text = (TextView) vi.findViewById(R.id.text_news_list);
         ImageView image = (ImageView) vi.findViewById(R.id.image_news_list);
         TextView textDate = (TextView) vi.findViewById(R.id.text_list_date);
