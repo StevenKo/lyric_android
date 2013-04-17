@@ -1,5 +1,6 @@
 package com.taiwan.imageload;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import android.app.Activity;
@@ -8,8 +9,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
@@ -18,16 +19,15 @@ import com.kosbrother.lyric.R;
 import com.kosbrother.lyric.entity.Album;
 
 public class ListAlbumAdapter extends BaseAdapter {
-    
-    private Activity activity;
-    private ArrayList<Album> data;
-    private static LayoutInflater inflater=null;
-   
-    
+
+    private final Activity         activity;
+    private final ArrayList<Album> data;
+    private static LayoutInflater  inflater = null;
+
     public ListAlbumAdapter(Activity a, ArrayList<Album> d) {
         activity = a;
-        data=d;
-        inflater = (LayoutInflater)activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        data = d;
+        inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     public int getCount() {
@@ -41,19 +41,18 @@ public class ListAlbumAdapter extends BaseAdapter {
     public long getItemId(int position) {
         return position;
     }
-    
+
     public View getView(final int position, View convertView, ViewGroup parent) {
-//        View vi= new View();      
+        // View vi= new View();
         View vi = inflater.inflate(R.layout.item_album_list, null);
-	    TextView text_name=(TextView)vi.findViewById(R.id.text_album_name);
-	    TextView text_time=(TextView)vi.findViewById(R.id.text_album_time);
-	    TextView text_description=(TextView)vi.findViewById(R.id.text_album_description);
-	        
-	    text_name.setText("專輯名稱: "+data.get(position).getName());
-	    text_time.setText("發片日期: "+data.get(position).getDate());
-	    text_description.setText(data.get(position).getDescription());
-	    
-	    vi.setOnClickListener(new OnClickListener() {
+        TextView text_name = (TextView) vi.findViewById(R.id.text_album_name);
+        TextView text_time = (TextView) vi.findViewById(R.id.text_album_time);
+
+        text_name.setText(data.get(position).getName());
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy MMM");
+        text_time.setText(formatter.format(data.get(position).getDate()));
+
+        vi.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(activity, AlbumActivity.class);
@@ -64,7 +63,7 @@ public class ListAlbumAdapter extends BaseAdapter {
                 activity.startActivity(intent);
             }
         });
-	        
+
         return vi;
     }
 }
