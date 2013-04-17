@@ -45,7 +45,8 @@
         android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:cacheColorHint="#FFFFFF"
+        android:divider="@color/grid_light_red"
+        android:dividerHeight="1dp"
         android:fastScrollEnabled="true"
         />
 
