@@ -56,8 +56,9 @@ public class HotAlbumActivity extends FragmentActivity{
 
         @Override
         public Fragment getItem(int position) {
-        	Fragment kk = new Fragment();        	
-        	kk = HotAlbumFragment.newInstance(mCategory.get(position).getId());
+//        	Fragment kk = new Fragment();        	
+//        	kk = new HotAlbumFragment.newInstance(mCategory.get(position).getId());
+        	HotAlbumFragment kk = new HotAlbumFragment(mCategory.get(position).getId());
             return kk;
         }
        

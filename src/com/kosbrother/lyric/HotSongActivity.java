@@ -54,7 +54,8 @@ public class HotSongActivity extends FragmentActivity{
         public Fragment getItem(int position) {
 //        	Fragment kk = new Fragment();        	
 //        	kk = HotSongFragment.newInstance(mCategory.get(position).getId());
-            return HotSongFragment.newInstance(mCategory.get(position).getId());
+        	HotSongFragment kk = new HotSongFragment(mCategory.get(position).getId());
+            return kk;
         }
        
 

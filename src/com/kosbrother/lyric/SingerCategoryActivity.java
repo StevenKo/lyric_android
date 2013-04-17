@@ -11,7 +11,7 @@ import android.support.v4.view.ViewPager;
 import android.view.Menu;
 
 import com.kosbrother.fragment.HotSongFragment;
-import com.kosbrother.fragment.SingerCategoryRomeFragment;
+import com.kosbrother.fragment.SingerCategoryFragment;
 import com.kosbrother.lyric.api.LyricAPI;
 import com.kosbrother.lyric.entity.SingerSearchWay;
 import com.viewpagerindicator.TabPageIndicator;
@@ -59,9 +59,9 @@ public class SingerCategoryActivity extends FragmentActivity{
 
         @Override
         public Fragment getItem(int position) {
-//        	Fragment kk = new Fragment();        	
-//        	kk = HotSongFragment.newInstance(mCategory.get(position).getId());
-            return SingerCategoryRomeFragment.newInstance(mCategory.get(position).getId());
+
+        	SingerCategoryFragment kk = new SingerCategoryFragment(mCategory.get(position).getId());
+            return kk;
         }
        
 

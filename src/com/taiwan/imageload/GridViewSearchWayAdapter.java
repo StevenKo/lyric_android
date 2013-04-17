@@ -23,6 +23,7 @@ public class GridViewSearchWayAdapter extends BaseAdapter {
     private final ArrayList<SingerSearchWayItem> data;
     private static LayoutInflater  inflater = null;
     public ImageLoader             imageLoader;
+    
 
     public GridViewSearchWayAdapter(Activity a, ArrayList<SingerSearchWayItem> d) {
         activity = a;

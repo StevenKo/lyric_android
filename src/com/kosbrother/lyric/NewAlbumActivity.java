@@ -25,7 +25,7 @@ public class NewAlbumActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.loadmore);
-        setTitle("最新專輯");
+        setTitle("最新熱門專輯");
         mListView = (LoadMoreListView) findViewById(R.id.news_list);
         progressLayout = (LinearLayout) findViewById(R.id.layout_progress);
     	reloadLayout = (LinearLayout) findViewById(R.id.layout_reload);
