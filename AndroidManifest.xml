@@ -91,6 +91,12 @@
             android:theme="@style/StyledIndicators"
             >
         </activity>
+        <activity
+            android:name="com.kosbrother.lyric.HotSingerActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/StyledIndicators"
+            >
+        </activity>
     </application>
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />

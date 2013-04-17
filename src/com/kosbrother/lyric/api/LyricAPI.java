@@ -316,15 +316,15 @@ public class LyricAPI {
 
     }
 
-    public static ArrayList<Singer> getHotSingers() {
-        String message = getMessageFromServer("GET", "/api/v1/singers/all_hot_singers.json", null, null);
-        ArrayList<Singer> singers = new ArrayList<Singer>();
-        if (message == null) {
-            return null;
-        } else {
-            return parseSingersWithCategoryID(message, singers);
-        }
-    }
+    // public static ArrayList<Singer> getHotSingers() {
+    // String message = getMessageFromServer("GET", "/api/v1/singers/all_hot_singers.json", null, null);
+    // ArrayList<Singer> singers = new ArrayList<Singer>();
+    // if (message == null) {
+    // return null;
+    // } else {
+    // return parseSingersWithCategoryID(message, singers);
+    // }
+    // }
 
     public static ArrayList<Singer> getCategoryHotSingers(int singer_category_id, int page) {
         String message = getMessageFromServer("GET", "/api/v1/singers/hot_singers.json?singer_category_id=" + singer_category_id + "&page=" + page, null, null);
