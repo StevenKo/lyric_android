@@ -132,30 +132,29 @@ public class LyricAPI {
                 JSONObject feedObject = object.getJSONObject("feed");
                 JSONArray videoArray = feedObject.getJSONArray("entry");
                 for (int i = 0; i < videoArray.length(); i++) {
-                	
-                	String title = "null";
-                	String link = "null";
-                	String thumbnail = "null";
-                	
-                	try{
-	                    title = videoArray.getJSONObject(i).getJSONObject("title").getString("$t");
-	                    link = videoArray.getJSONObject(i).getJSONArray("link").getJSONObject(0).getString("href");
-	                    thumbnail = videoArray.getJSONObject(i).getJSONObject("media$group").getJSONArray("media$thumbnail").getJSONObject(0)
-	                            .getString("url");
-                	}catch(Exception e){
-                		
-                	}
-                	
+
+                    String title = "null";
+                    String link = "null";
+                    String thumbnail = "null";
+
+                    try {
+                        title = videoArray.getJSONObject(i).getJSONObject("title").getString("$t");
+                        link = videoArray.getJSONObject(i).getJSONArray("link").getJSONObject(0).getString("href");
+                        thumbnail = videoArray.getJSONObject(i).getJSONObject("media$group").getJSONArray("media$thumbnail").getJSONObject(0).getString("url");
+                    } catch (Exception e) {
+
+                    }
+
                     int duration = 0;
                     int viewCount = 0;
-                    
-                    try{
+
+                    try {
                         duration = videoArray.getJSONObject(i).getJSONObject("media$group").getJSONObject("yt$duration").getInt("seconds");
                         viewCount = videoArray.getJSONObject(i).getJSONObject("yt$statistics").getInt("viewCount");
-                    }catch(Exception e){
-                    	
+                    } catch (Exception e) {
+
                     }
-                    
+
                     int likes = -1;
 
                     try {
@@ -317,6 +316,16 @@ public class LyricAPI {
 
     }
 
+    public static ArrayList<Singer> getHotSingers() {
+        String message = getMessageFromServer("GET", "/api/v1/singers/all_hot_singers.json", null, null);
+        ArrayList<Singer> singers = new ArrayList<Singer>();
+        if (message == null) {
+            return null;
+        } else {
+            return parseSingersWithCategoryID(message, singers);
+        }
+    }
+
     public static ArrayList<Singer> getCategoryHotSingers(int singer_category_id, int page) {
         String message = getMessageFromServer("GET", "/api/v1/singers/hot_singers.json?singer_category_id=" + singer_category_id + "&page=" + page, null, null);
         ArrayList<Singer> singers = new ArrayList<Singer>();
@@ -450,6 +459,26 @@ public class LyricAPI {
             return null;
         }
         return songs;
+    }
+
+    private static ArrayList<Singer> parseSingersWithCategoryID(String message, ArrayList<Singer> singers) {
+        try {
+            JSONArray jArray;
+            jArray = new JSONArray(message.toString());
+            for (int i = 0; i < jArray.length(); i++) {
+
+                int id = jArray.getJSONObject(i).getInt("id");
+                String name = jArray.getJSONObject(i).getString("name");
+                int categor_id = jArray.getJSONObject(i).getInt("singer_category_id");
+                singers.add(new Singer(id, name, "null", categor_id));
+
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return singers;
     }
 
     private static ArrayList<Singer> parseSingers(String message, ArrayList<Singer> singers) {
