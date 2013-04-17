@@ -22,24 +22,23 @@ import com.taiwan.imageload.GridViewAdapter;
 import com.taiwan.imageload.GridViewSearchWayAdapter;
 import com.taiwan.imageload.ListSongAdapter;
 
-public class SingerCategoryRomeFragment extends Fragment {
+public class SingerCategoryFragment extends Fragment {
 	
-//	private LinearLayout progressLayout;
-//	private LinearLayout reloadLayout;
-//	private LoadMoreListView myList;
-//	private Button buttonReload;
 //	private ListSongAdapter mdapter;
 	private ArrayList<SingerSearchWayItem> mSearchways;
-	private static int singerSearchWayId;
+	private int singerSearchWayId;
 	private GridView mGridView;
 	private GridViewSearchWayAdapter mdapter;
+	private LinearLayout progressLayout;
+	private LinearLayout reloadLayout;
+	private Button buttonReload;
 	
 	
-    public static SingerCategoryRomeFragment newInstance(int search_way_id) {
+    public SingerCategoryFragment(int search_way_id) {
 
-    	SingerCategoryRomeFragment fragment = new SingerCategoryRomeFragment();
+//    	SingerCategoryFragment fragment = new SingerCategoryFragment();
     	singerSearchWayId = search_way_id;
-        return fragment;
+//        return fragment;
 
     }
 
@@ -51,11 +50,11 @@ public class SingerCategoryRomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View myFragmentView = inflater.inflate(R.layout.layout_category_rome, container, false);
-//        progressLayout = (LinearLayout) myFragmentView.findViewById(R.id.layout_progress);
-//    	  reloadLayout = (LinearLayout) myFragmentView.findViewById(R.id.layout_reload);
+        View myFragmentView = inflater.inflate(R.layout.layout_category, container, false);
+        progressLayout = (LinearLayout) myFragmentView.findViewById(R.id.layout_progress);
+    	reloadLayout = (LinearLayout) myFragmentView.findViewById(R.id.layout_reload);
         mGridView = (GridView) myFragmentView.findViewById(R.id.grid_search_way);
-//    	buttonReload = (Button) myFragmentView.findViewById(R.id.button_reload);
+    	buttonReload = (Button) myFragmentView.findViewById(R.id.button_reload);
         
         if (mdapter != null) {
 //            progressLayout.setVisibility(View.GONE);
@@ -88,7 +87,7 @@ public class SingerCategoryRomeFragment extends Fragment {
         protected void onPostExecute(Object result) {
             // TODO Auto-generated method stub
             super.onPostExecute(result);
-//            progressLayout.setVisibility(View.GONE);
+            progressLayout.setVisibility(View.GONE);
                        
             if(mSearchways !=null && mSearchways.size()!=0){
           	  try{
@@ -98,7 +97,7 @@ public class SingerCategoryRomeFragment extends Fragment {
           		 
           	  }
             }else{
-//            	reloadLayout.setVisibility(View.VISIBLE);
+            	reloadLayout.setVisibility(View.VISIBLE);
             }
 
         }

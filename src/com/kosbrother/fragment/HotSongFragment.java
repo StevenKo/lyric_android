@@ -28,11 +28,9 @@ public class HotSongFragment extends Fragment {
 	private ArrayList<Song> mSongs;
 	private static int categoryId;
 	
-    public static HotSongFragment newInstance(int category_id) {
+    public HotSongFragment(int category_id) {
 
-    	HotSongFragment fragment = new HotSongFragment();
     	categoryId = category_id;
-        return fragment;
 
     }
 

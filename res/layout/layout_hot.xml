@@ -5,16 +5,29 @@
     android:orientation="vertical"
     >
 
-    <TextView
+    <LinearLayout 
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="熱門 MV" 
-        android:gravity="center"
-        android:textColor="#B30000"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="2dp"
-        android:textSize="18dp"
-        />
+	    android:layout_height="wrap_content"
+	    android:gravity="center"
+	    android:layout_marginTop="5dp"
+	    android:layout_marginBottom="2dp"
+        >
+        <ImageView 
+            android:layout_width="20dp"
+	    	android:layout_height="20dp"
+	    	android:background="@drawable/icon_play"
+            />
+	    <TextView
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="熱門 MV" 
+	        android:gravity="center"
+	        android:textColor="#B30000"	        
+	        android:textSize="18dp"
+	        android:layout_marginLeft="5dp"
+	        />
+    </LinearLayout>
+    
     <LinearLayout 
         android:layout_width="fill_parent"
         android:layout_height="3dp"
@@ -60,6 +73,7 @@
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
 	            android:text=" 下載中, 請稍候.."
+	            android:textColor="#B0B0B0"
 	             />
         </LinearLayout>
 	    <Gallery

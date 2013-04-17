@@ -27,13 +27,13 @@ public class HotAlbumFragment extends Fragment {
 	private Button buttonReload;
 	private ListAlbumAdapter mdapter;
 	private ArrayList<Album> mAlbums;
-	private static int categoryId;
+	private int categoryId;
 	
-    public static HotAlbumFragment newInstance(int category_id) {
+    public HotAlbumFragment (int category_id) {
 
-    	HotAlbumFragment fragment = new HotAlbumFragment();
+//    	HotAlbumFragment fragment = new HotAlbumFragment();
     	categoryId = category_id;
-        return fragment;
+//      return fragment;
 
     }
 

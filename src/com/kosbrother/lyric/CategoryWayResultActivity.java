@@ -5,7 +5,10 @@ import java.util.ArrayList;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.GridView;
+import android.widget.LinearLayout;
 
 import com.kosbrother.lyric.api.LyricAPI;
 import com.kosbrother.lyric.entity.Singer;
@@ -19,13 +22,18 @@ public class CategoryWayResultActivity extends Activity {
 	private int searchWayId;
 	private String searchWayName;
 	private GridViewSingersAdapter mdapter;
-	
+	private LinearLayout progressLayout;
+	private LinearLayout reloadLayout;
+	private Button buttonReload;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_singer);
         mGridView = (GridView) findViewById(R.id.grid_singers);
+        progressLayout = (LinearLayout) findViewById(R.id.layout_progress);
+    	reloadLayout = (LinearLayout) findViewById(R.id.layout_reload);
+    	buttonReload = (Button) findViewById(R.id.button_reload);
         
         mBundle = this.getIntent().getExtras();
         searchWayId = mBundle.getInt("SearchWayId");
@@ -57,7 +65,7 @@ public class CategoryWayResultActivity extends Activity {
         protected void onPostExecute(Object result) {
             // TODO Auto-generated method stub
             super.onPostExecute(result);
-//            progressLayout.setVisibility(View.GONE);
+            	progressLayout.setVisibility(View.GONE);
                        
             if(mSingers !=null && mSingers.size()!=0){
           	  try{        		
@@ -67,7 +75,7 @@ public class CategoryWayResultActivity extends Activity {
           		 
           	  }
             }else{
-//            	reloadLayout.setVisibility(View.VISIBLE);
+            	reloadLayout.setVisibility(View.VISIBLE);
             }
 
         }
