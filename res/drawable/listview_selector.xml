@@ -15,7 +15,7 @@
     </item>  
     <item>        
         <shape>
-            <solid android:color="#e0e0e0"/>
+            <solid android:color="#E6E3E3"/>
         </shape>  
     </item>  
 </selector> 
