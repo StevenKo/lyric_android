@@ -65,10 +65,13 @@ public class TabSearchActivity extends Activity {
             	if(mEditText.getText().toString().equals("") || mEditText.getText().toString().equals(0) ){
             		Toast.makeText(TabSearchActivity.this, "請輸入搜索文字", Toast.LENGTH_SHORT).show();
             	}else{
-            		int type = mRadioGroup.getCheckedRadioButtonId();
+            		int radioButtonID = mRadioGroup.getCheckedRadioButtonId();
+                    View radioButton = mRadioGroup.findViewById(radioButtonID);
+                    int idx = mRadioGroup.indexOfChild(radioButton);
+                    
             		Bundle bundle = new Bundle();
                     bundle.putString("SearchKeyword", mEditText.getText().toString());
-                    bundle.putInt("SearchTypeId", type);
+                    bundle.putInt("SearchTypeId", idx);
                     Intent intent = new Intent();
                     intent.setClass(TabSearchActivity.this, SearchActivity.class);
                     intent.putExtras(bundle);
