@@ -4,12 +4,16 @@ import java.util.ArrayList;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.Gallery;
 import android.widget.LinearLayout;
@@ -59,6 +63,17 @@ public class TabHotActivity extends Activity {
             }		
         });
         
+        mGallery.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+				// TODO Auto-generated method stub
+				position= getPosition(position);
+				Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(mHotVideos.get(position).getYoutubeLink()));
+                startActivity(browserIntent);
+			}
+
+        });
+        
         new DownloadChannelsTask().execute();
 
     }
@@ -96,7 +111,15 @@ public class TabHotActivity extends Activity {
 
         }
     }
-
+    
+    int getPosition(int position)
+    {
+    	 if (position >= mHotVideos.size()) { 
+	            position = position % mHotVideos.size(); 
+	        } 
+	     return position; 
+    }
+    
     public boolean isOnline() {
 	    ConnectivityManager cm =
 	        (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);

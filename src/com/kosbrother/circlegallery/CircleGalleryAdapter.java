@@ -61,7 +61,7 @@ public class CircleGalleryAdapter extends BaseAdapter {
         TextView txt = (TextView) vi.findViewById(R.id.text_gallery);
         
         
-        final int  myposition= getPosition(position);
+        position= getPosition(position);
 //        vi.setLayoutParams(new Gallery.LayoutParams(450, 250));
 //        img.setLayoutParams(new LayoutParams(450, 250));
 //        i.setScaleType(View.s); 
@@ -74,14 +74,7 @@ public class CircleGalleryAdapter extends BaseAdapter {
         	
         }
         
-        vi.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(data.get(myposition).getYoutubeLink()));
-                mActivity.startActivity(browserIntent);
-            }
-
-        });
+        
         
         return vi; 
     } 
