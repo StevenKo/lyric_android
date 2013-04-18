@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -51,6 +52,16 @@ public class SongLyricFragment extends Fragment {
     	myScroll = (ScrollView) myFragmentView.findViewById(R.id.scrollview_lyric);
     	mTextView = (TextView) myFragmentView.findViewById(R.id.textview_lyric);
         
+    	
+    	buttonReload.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                progressLayout.setVisibility(View.VISIBLE);
+                reloadLayout.setVisibility(View.GONE);
+                new DownloadChannelsTask().execute();
+            }
+        });
+    	
         new DownloadChannelsTask().execute();
        
         

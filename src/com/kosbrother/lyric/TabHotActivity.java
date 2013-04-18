@@ -3,12 +3,18 @@ package com.kosbrother.lyric;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.Gallery;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.kosbrother.circlegallery.CircleGalleryAdapter;
 import com.kosbrother.lyric.api.LyricAPI;
@@ -23,6 +29,7 @@ public class TabHotActivity extends Activity {
     private LinearLayout         linearNetwork;
     private ArrayList<Video>     mHotVideos;
     private CircleGalleryAdapter mCircleAdapter;
+    private Button btnReload;
 
     private final Integer[]      mImageIds = { R.drawable.icon_list_new, R.drawable.icon_list_hot, R.drawable.icon_list_song, R.drawable.hot_singer };
     private final String[]       mStrings  = { "最新熱門", "熱門專輯", "熱門歌曲", "熱門歌手" };
@@ -38,7 +45,20 @@ public class TabHotActivity extends Activity {
         mListView = (ListView) findViewById(R.id.list_tab_hot);
         ListAdapter mdapter = new ListAdapter(TabHotActivity.this, mStrings, mImageIds);
         mListView.setAdapter(mdapter);
-
+        
+        btnReload = (Button) findViewById(R.id.btn_promotion_reload);
+        
+        btnReload.setOnClickListener(new OnClickListener(){  
+            public void onClick(View v) {
+            	if(isOnline()){
+	            	linearNetwork.setVisibility(View.GONE);
+	            	new DownloadChannelsTask().execute();
+            	}else{
+            		Toast.makeText(getApplicationContext(), "無網路連線!", Toast.LENGTH_SHORT).show();
+            	}
+            }		
+        });
+        
         new DownloadChannelsTask().execute();
 
     }
@@ -77,6 +97,16 @@ public class TabHotActivity extends Activity {
         }
     }
 
+    public boolean isOnline() {
+	    ConnectivityManager cm =
+	        (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+	    NetworkInfo netInfo = cm.getActiveNetworkInfo();
+	    if (netInfo != null && netInfo.isConnectedOrConnecting()) {
+	        return true;
+	    }
+	    return false;
+	}
+    
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);

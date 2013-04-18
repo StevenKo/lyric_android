@@ -45,10 +45,14 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:cacheColorHint="#FFFFFF"
-        android:numColumns="3"
+        android:numColumns="2"
         android:stretchMode="columnWidth"
         android:verticalSpacing="2dp"
         android:horizontalSpacing="2dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
         />
     
     <LinearLayout 

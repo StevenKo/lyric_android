@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
@@ -55,6 +56,15 @@ public class SingerAlbumFragment extends Fragment {
 				myList.onLoadMoreComplete();
 			}
 		});
+        
+        buttonReload.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                progressLayout.setVisibility(View.VISIBLE);
+                reloadLayout.setVisibility(View.GONE);
+                new DownloadChannelsTask().execute();
+            }
+        });
         
         if (mdapter != null) {
             progressLayout.setVisibility(View.GONE);

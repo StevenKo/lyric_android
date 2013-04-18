@@ -21,6 +21,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -72,6 +73,15 @@ public class AlbumActivity extends Activity {
 				myList.onLoadMoreComplete();
 			}
 		});
+        
+        buttonReload.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                progressLayout.setVisibility(View.VISIBLE);
+                reloadLayout.setVisibility(View.GONE);
+                new DownloadChannelsTask().execute();
+            }
+        });
          
       new DownloadChannelsTask().execute();    
         

@@ -8,8 +8,10 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.costum.android.widget.LoadMoreListView;
 import com.costum.android.widget.LoadMoreListView.OnLoadMoreListener;
@@ -19,13 +21,16 @@ import com.kosbrother.lyric.entity.Song;
 import com.taiwan.imageload.ListSongAdapter;
 
 public class HotSongFragment extends Fragment {
-
+		
+	public  int myPage = 1;
+	private Boolean checkLoad = true;
     private LinearLayout     progressLayout;
     private LinearLayout     reloadLayout;
     private LoadMoreListView myList;
     private Button           buttonReload;
     private ListSongAdapter  mdapter;
     private ArrayList<Song>  mSongs;
+    private ArrayList<Song>  moreSongs = new ArrayList<Song>();
     private static int       categoryId;
 
     public HotSongFragment(int category_id) {
@@ -48,11 +53,24 @@ public class HotSongFragment extends Fragment {
         myList = (LoadMoreListView) myFragmentView.findViewById(R.id.news_list);
         myList.setOnLoadMoreListener(new OnLoadMoreListener() {
             public void onLoadMore() {
-                // Do the work to load more items at the end of list
-                myList.onLoadMoreComplete();
+            	if(checkLoad){
+					myPage = myPage +1;
+					new LoadMoreTask().execute();
+				}else{
+					myList.onLoadMoreComplete();
+				}
             }
         });
-
+        
+        buttonReload.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                progressLayout.setVisibility(View.VISIBLE);
+                reloadLayout.setVisibility(View.GONE);
+                new DownloadChannelsTask().execute();
+            }
+        });
+        
         if (mdapter != null) {
             progressLayout.setVisibility(View.GONE);
             myList.setAdapter(mdapter);
@@ -76,7 +94,7 @@ public class HotSongFragment extends Fragment {
         protected Object doInBackground(Object... params) {
             // TODO Auto-generated method stub
 
-            mSongs = LyricAPI.getCategoryHotSongs(categoryId, 1);
+            mSongs = LyricAPI.getCategoryHotSongs(categoryId, myPage);
             return null;
         }
 
@@ -99,7 +117,42 @@ public class HotSongFragment extends Fragment {
 
         }
     }
+    
+    private class LoadMoreTask extends AsyncTask {
 
+        @Override
+        protected Object doInBackground(Object... params) {
+            // TODO Auto-generated method stub
+        	
+        	moreSongs.clear();
+        	moreSongs = LyricAPI.getCategoryHotSongs(categoryId, myPage);
+        	if(moreSongs!= null){
+	        	for(int i=0; i<moreSongs.size();i++){	        		
+	        		mSongs.add(moreSongs.get(i));
+	            }
+        	}
+        	
+        	
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Object result) {
+            // TODO Auto-generated method stub
+            super.onPostExecute(result);
+            
+            if(moreSongs!= null && moreSongs.size()!=0){
+            	mdapter.notifyDataSetChanged();	                
+            }else{
+                checkLoad= false;
+                Toast.makeText(getActivity(), "no more data", Toast.LENGTH_SHORT).show();            	
+            }       
+          	myList.onLoadMoreComplete();
+          	
+          	
+        }
+    }
+    
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);

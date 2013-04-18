@@ -4,9 +4,12 @@ import java.util.ArrayList;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.BaseAdapter;
 import android.widget.Gallery;
@@ -52,20 +55,17 @@ public class CircleGalleryAdapter extends BaseAdapter {
 
     public View getView(int position, View convertView, ViewGroup parent) 
     {
-//        ImageView i = new ImageView(mActivity);
                
         View vi= inflater.inflate(R.layout.item_gallery, null);
         ImageView img = (ImageView) vi.findViewById(R.id.image_gallery);
         TextView txt = (TextView) vi.findViewById(R.id.text_gallery);
         
         
-        position= getPosition(position);
+        final int  myposition= getPosition(position);
 //        vi.setLayoutParams(new Gallery.LayoutParams(450, 250));
 //        img.setLayoutParams(new LayoutParams(450, 250));
 //        i.setScaleType(View.s); 
  
-        
-//        i.setImageResource(mImageIds[position]);
         txt.setText(data.get(position).getTitle());
         
         try{
@@ -74,12 +74,17 @@ public class CircleGalleryAdapter extends BaseAdapter {
         	
         }
         
+        vi.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(data.get(myposition).getYoutubeLink()));
+                mActivity.startActivity(browserIntent);
+            }
+
+        });
+        
         return vi; 
     } 
-
-//    public int checkPosition(int position) { 
-//        return getPosition(position); 
-//    }
     
     int getPosition(int position)
     {

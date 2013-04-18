@@ -8,8 +8,10 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.costum.android.widget.LoadMoreListView;
 import com.costum.android.widget.LoadMoreListView.OnLoadMoreListener;
@@ -20,12 +22,15 @@ import com.taiwan.imageload.ListVideoAdapter;
 
 public class SongVideoFragment extends Fragment {
 	
+	public  int myPage = 0;
+	private Boolean checkLoad = true;
 	private LinearLayout progressLayout;
 	private LinearLayout reloadLayout;
 	private LoadMoreListView myList;
 	private Button buttonReload;
 	private ListVideoAdapter mdapter;
 	private ArrayList<YoutubeVideo> mVideos = new ArrayList<YoutubeVideo>();
+	private ArrayList<YoutubeVideo> moreVideos = new ArrayList<YoutubeVideo>();
 	private static String songName;
 	
     public static SongVideoFragment newInstance(String song_name) {
@@ -49,12 +54,26 @@ public class SongVideoFragment extends Fragment {
     	reloadLayout = (LinearLayout) myFragmentView.findViewById(R.id.layout_reload);
     	buttonReload = (Button) myFragmentView.findViewById(R.id.button_reload);
     	myList = (LoadMoreListView) myFragmentView.findViewById(R.id.news_list);
-        myList.setOnLoadMoreListener(new OnLoadMoreListener() {
+    	myList.setOnLoadMoreListener(new OnLoadMoreListener() {
 			public void onLoadMore() {
 				// Do the work to load more items at the end of list
-				myList.onLoadMoreComplete();
+				if(checkLoad){
+					myPage = myPage +1;
+					new LoadMoreTask().execute();
+				}else{
+					myList.onLoadMoreComplete();
+				}
 			}
 		});
+    	
+    	buttonReload.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                progressLayout.setVisibility(View.VISIBLE);
+                reloadLayout.setVisibility(View.GONE);
+                new DownloadChannelsTask().execute();
+            }
+        });
         
         if (mdapter != null) {
             progressLayout.setVisibility(View.GONE);
@@ -79,7 +98,7 @@ public class SongVideoFragment extends Fragment {
         protected Object doInBackground(Object... params) {
             // TODO Auto-generated method stub
         	
-        	ArrayList<YoutubeVideo> theVideos= LyricAPI.getYoutubeVideos("3小湯 TripleT Good Night", 0);
+        	ArrayList<YoutubeVideo> theVideos= LyricAPI.getYoutubeVideos(songName, myPage);
         	if(theVideos!=null && theVideos.size()!=0){
         	 for(int i=0; i<theVideos.size(); i++){
         		if(theVideos.get(i).getTitle()!="null" && theVideos.get(i).getThumbnail()!="null"){
@@ -107,6 +126,43 @@ public class SongVideoFragment extends Fragment {
             	reloadLayout.setVisibility(View.VISIBLE);
             }
 
+        }
+    }
+    
+    private class LoadMoreTask extends AsyncTask {
+
+        @Override
+        protected Object doInBackground(Object... params) {
+            // TODO Auto-generated method stub
+        	
+        	moreVideos.clear();
+        	moreVideos = LyricAPI.getYoutubeVideos(songName, myPage);
+        	if(moreVideos!= null){
+	        	for(int i=0; i<moreVideos.size();i++){
+	        		if(moreVideos.get(i).getTitle()!="null" && moreVideos.get(i).getThumbnail()!="null"){
+	           		 	mVideos.add(moreVideos.get(i));
+	           		}
+	            }
+        	}
+        	
+        	
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Object result) {
+            // TODO Auto-generated method stub
+            super.onPostExecute(result);
+            
+            if(moreVideos!= null && moreVideos.size()!=0){
+            	mdapter.notifyDataSetChanged();	                
+            }else{
+                checkLoad= false;
+                Toast.makeText(getActivity(), "no more data", Toast.LENGTH_SHORT).show();            	
+            }       
+          	myList.onLoadMoreComplete();
+          	
+          	
         }
     }
     

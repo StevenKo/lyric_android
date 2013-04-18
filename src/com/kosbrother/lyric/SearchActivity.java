@@ -13,29 +13,31 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.GridView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.costum.android.widget.LoadMoreListView;
 import com.costum.android.widget.LoadMoreListView.OnLoadMoreListener;
 import com.kosbrother.lyric.api.LyricAPI;
-import com.kosbrother.lyric.db.SQLiteLyric;
 import com.kosbrother.lyric.entity.Album;
 import com.kosbrother.lyric.entity.Singer;
 import com.kosbrother.lyric.entity.Song;
 import com.taiwan.imageload.GridViewSingersAdapter;
 import com.taiwan.imageload.ListAlbumAdapter;
 import com.taiwan.imageload.ListSongAdapter;
+import com.taiwan.imageload.LoadMoreGridView;
 
 public class SearchActivity extends Activity {
-
+	
+	private Boolean          checkLoad  = true;
+    private int       myPage     = 1;
 	private LinearLayout progressLayout;
 	private LinearLayout reloadLayout;
+	private LinearLayout     loadmoreLayout;
 	private LoadMoreListView myList;
-	private GridView myGrid;
+	private LoadMoreGridView       mGridView;
 	private Button buttonReload;
 	private ListSongAdapter mSongAdapter;
 	private ListAlbumAdapter mAlbumAdapter;
@@ -43,6 +45,9 @@ public class SearchActivity extends Activity {
 	private ArrayList<Song> mSongs;
 	private ArrayList<Album> mAlbums;
 	private ArrayList<Singer> mSingers;
+	private ArrayList<Song> moreSongs = new ArrayList<Song>();
+	private ArrayList<Album> moreAlbums = new ArrayList<Album>();
+	private ArrayList<Singer> moreSingers = new ArrayList<Singer>();
 	
 	private Bundle mBundle;
 	private int searchTypeId;
@@ -67,6 +72,16 @@ public class SearchActivity extends Activity {
         	reloadLayout = (LinearLayout) findViewById(R.id.layout_reload);
         	buttonReload = (Button) findViewById(R.id.button_reload);
         	myList = (LoadMoreListView) findViewById(R.id.news_list);
+        	myList.setOnLoadMoreListener(new OnLoadMoreListener() {
+                public void onLoadMore() {
+                	if(checkLoad){
+    					myPage = myPage +1;
+    					new LoadMoreTask().execute();
+    				}else{
+    					myList.onLoadMoreComplete();
+    				}
+                }
+            });
         }else if(searchTypeId == 1){
         	setContentView(R.layout.loadmore);
         	setTitle("專輯搜索 >"+searchName);
@@ -74,15 +89,49 @@ public class SearchActivity extends Activity {
         	reloadLayout = (LinearLayout) findViewById(R.id.layout_reload);
         	buttonReload = (Button) findViewById(R.id.button_reload);
         	myList = (LoadMoreListView) findViewById(R.id.news_list);
+        	myList.setOnLoadMoreListener(new OnLoadMoreListener() {
+                public void onLoadMore() {
+                	if(checkLoad){
+    					myPage = myPage +1;
+    					new LoadMoreTask().execute();
+    				}else{
+    					myList.onLoadMoreComplete();
+    				}
+                }
+            });
+        	
         }else if(searchTypeId == 2){
-        	setContentView(R.layout.layout_collect_grid);
+        	setContentView(R.layout.loadmore_grid);
         	setTitle("歌手搜索 >"+searchName);
         	// 還沒寫
         	progressLayout = (LinearLayout) findViewById(R.id.layout_progress);
         	reloadLayout = (LinearLayout) findViewById(R.id.layout_reload);
+        	loadmoreLayout = (LinearLayout) findViewById(R.id.load_more_grid);
         	buttonReload = (Button) findViewById(R.id.button_reload);
-        	myGrid = (GridView) findViewById(R.id.gridview_collect);
+        	mGridView = (LoadMoreGridView) findViewById(R.id.grid_loadmore);       	
+        	mGridView.setOnLoadMoreListener(new LoadMoreGridView.OnLoadMoreListener() {
+                public void onLoadMore() {
+                    // Do the work to load more items at the end of list
+
+                    if (checkLoad) {
+                        myPage = myPage + 1;
+                        loadmoreLayout.setVisibility(View.VISIBLE);
+                        new LoadMoreTask().execute();
+                    } else {
+                    	mGridView.onLoadMoreComplete();
+                    }
+                }
+            });
         }
+        
+        buttonReload.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                progressLayout.setVisibility(View.VISIBLE);
+                reloadLayout.setVisibility(View.GONE);
+                new DownloadChannelsTask().execute();
+            }
+        });
         
       new DownloadChannelsTask().execute();    
         
@@ -176,16 +225,98 @@ public class SearchActivity extends Activity {
   	            	reloadLayout.setVisibility(View.VISIBLE);
   	            }
             }else if(searchTypeId == 2){
+            	loadmoreLayout.setVisibility(View.GONE);
             	if(mSingers !=null && mSingers.size()!=0){
     	          	try{
     	          		mSingerAdapter = new GridViewSingersAdapter(SearchActivity.this, mSingers);
-    	          		myGrid.setAdapter(mSingerAdapter);
+    	          		mGridView.setAdapter(mSingerAdapter);
     	          	}catch(Exception e){
     	          		 
     	          	}
     	        }else{
     	            reloadLayout.setVisibility(View.VISIBLE);
     	        }
+            }
+
+        }
+    }
+    
+    private class LoadMoreTask extends AsyncTask {
+
+        @Override
+        protected void onPreExecute() {
+            // TODO Auto-generated method stub
+            super.onPreExecute();
+
+        }
+
+        @Override
+        protected Object doInBackground(Object... params) {
+            // TODO Auto-generated method stub
+        	
+        	
+        	if(searchTypeId == 0){       
+        		moreSongs = LyricAPI.searchSongName(searchName, myPage);
+            	if (moreSongs != null && moreSongs.size()!=0) {
+                    for (int i = 0; i < moreSongs.size(); i++) {
+                    	mSongs.add(moreSongs.get(i));
+                    }
+                }
+            }else if(searchTypeId == 1){
+            	moreAlbums = LyricAPI.searchAlbum(searchName, myPage);
+            	if (moreAlbums != null && moreAlbums.size()!=0) {
+                    for (int i = 0; i < moreAlbums.size(); i++) {
+                    	mAlbums.add(moreAlbums.get(i));
+                    }
+                }
+            }else if(searchTypeId == 2){
+            	moreSingers = LyricAPI.searchSinger(searchName, myPage);
+                if (moreSingers != null && moreSingers.size()!=0) {
+                    for (int i = 0; i < moreSingers.size(); i++) {
+                    	mSingers.add(moreSingers.get(i));
+                    }
+                }
+            }
+        	
+        	
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Object result) {
+            // TODO Auto-generated method stub
+            super.onPostExecute(result);
+            
+            
+            if(searchTypeId == 0){       
+            	if(moreSongs!= null && moreSongs.size()!=0){
+            		mSongAdapter.notifyDataSetChanged();	                
+                }else{
+                    checkLoad= false;
+                    Toast.makeText(SearchActivity.this, "no more data", Toast.LENGTH_SHORT).show();            	
+                }       
+              	myList.onLoadMoreComplete();
+            }else if(searchTypeId == 1){
+           	
+            	if(moreAlbums!= null && moreAlbums.size()!=0){
+            		mAlbumAdapter.notifyDataSetChanged();	                
+                }else{
+                    checkLoad= false;
+                    Toast.makeText(SearchActivity.this, "no more data", Toast.LENGTH_SHORT).show();            	
+                }       
+              	myList.onLoadMoreComplete();
+            	
+            }else if(searchTypeId == 2){
+            	loadmoreLayout.setVisibility(View.GONE);
+
+                if (moreSingers != null && moreSingers.size()!=0) {
+                	mSingerAdapter.notifyDataSetChanged();
+                } else {
+                    checkLoad = false;
+                    Toast.makeText(SearchActivity.this, "no more data", Toast.LENGTH_SHORT).show();
+                }
+                mGridView.onLoadMoreComplete();
             }
 
         }

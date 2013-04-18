@@ -8,8 +8,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -32,7 +32,7 @@ public class HotSingerFragment extends Fragment {
     private LinearLayout     loadmoreLayout;
     private Button                 buttonReload;
     private Boolean          checkLoad  = true;
-    private static int       myPage     = 1;
+    private int       myPage     = 1;
 
     public HotSingerFragment(int category_id) {
 
@@ -68,6 +68,15 @@ public class HotSingerFragment extends Fragment {
                 } else {
                 	mGridView.onLoadMoreComplete();
                 }
+            }
+        });
+        
+        buttonReload.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                progressLayout.setVisibility(View.VISIBLE);
+                reloadLayout.setVisibility(View.GONE);
+                new DownloadChannelsTask().execute();
             }
         });
         
