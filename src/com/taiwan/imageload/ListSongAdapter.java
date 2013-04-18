@@ -3,18 +3,25 @@ package com.taiwan.imageload;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+import android.widget.AdapterView.OnItemLongClickListener;
 
 import com.kosbrother.lyric.R;
+import com.kosbrother.lyric.SingerActivity;
 import com.kosbrother.lyric.SongActivity;
+import com.kosbrother.lyric.db.SQLiteLyric;
 import com.kosbrother.lyric.entity.Song;
 
 public class ListSongAdapter extends BaseAdapter {
@@ -27,6 +34,7 @@ public class ListSongAdapter extends BaseAdapter {
         activity = a;
         data = d;
         inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+       
     }
 
     public int getCount() {
@@ -58,7 +66,47 @@ public class ListSongAdapter extends BaseAdapter {
                 activity.startActivity(intent);
             }
         });
+        
+        
+//        if (enableLongClick){
+//	        vi.setOnLongClickListener(new OnLongClickListener() {   	
+//				@Override
+//				public boolean onLongClick(View v) {
+//					// TODO Auto-generated method stub
+//					final String[] ListStr = { "欣賞歌曲", "刪除", "取消" };           	
+//	            	AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+//	            	builder.setTitle(data.get(position).getName());
+//	            	builder.setItems(ListStr, new DialogInterface.OnClickListener() {
+//	                    public void onClick(DialogInterface dialog, int item) {
+//	                        if (item == 0 ) {
+//	                            // to song activity
+//	                        	Intent intent = new Intent(activity, SongActivity.class);
+//	                            Bundle bundle = new Bundle();
+//	                            bundle.putInt("SongId", data.get(position).getId());
+//	                            bundle.putString("SongName", data.get(position).getName());
+//	                            intent.putExtras(bundle);
+//	                            activity.startActivity(intent);
+//	                        } else if(item == 1){
+//	                            // delete
+//	                        	SQLiteLyric db = new SQLiteLyric(activity);
+//	                        	db.deleteSong(data.get(position));
+//	                        	
+//	                        } else if(item == 2){
+//	                        	dialog.cancel();
+//	                        }
+//	                    }
+//	                });
+//	            	alert = builder.create();
+//	            	if(!alert.isShowing()){
+//	            		alert.show();
+//	            	}
+//					return false;
+//				}
+//	        });
+//        }
+    	
 
+        
         return vi;
     }
 }

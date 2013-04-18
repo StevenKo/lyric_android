@@ -1,14 +1,12 @@
 package com.kosbrother.lyric;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 import com.costum.android.widget.LoadMoreListView;
 import com.costum.android.widget.LoadMoreListView.OnLoadMoreListener;
 import com.kosbrother.lyric.api.LyricAPI;
 import com.kosbrother.lyric.db.SQLiteLyric;
 import com.kosbrother.lyric.entity.Album;
-import com.kosbrother.lyric.entity.Singer;
 import com.kosbrother.lyric.entity.Song;
 import com.taiwan.imageload.ListSongAdapter;
 

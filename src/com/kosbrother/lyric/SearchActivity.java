@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -34,6 +35,7 @@ public class SearchActivity extends Activity {
 	private LinearLayout progressLayout;
 	private LinearLayout reloadLayout;
 	private LoadMoreListView myList;
+	private GridView myGrid;
 	private Button buttonReload;
 	private ListSongAdapter mSongAdapter;
 	private ListAlbumAdapter mAlbumAdapter;
@@ -56,7 +58,7 @@ public class SearchActivity extends Activity {
         
         mBundle = this.getIntent().getExtras();
         searchTypeId = mBundle.getInt("SearchTypeId");
-        searchName = mBundle.getString("SearchName");
+        searchName = mBundle.getString("SearchKeyword");
         
         if(searchTypeId == 0){       
         	setContentView(R.layout.loadmore);
@@ -76,13 +78,12 @@ public class SearchActivity extends Activity {
         	setContentView(R.layout.layout_collect_grid);
         	setTitle("歌手搜索 >"+searchName);
         	// 還沒寫
+        	progressLayout = (LinearLayout) findViewById(R.id.layout_progress);
+        	reloadLayout = (LinearLayout) findViewById(R.id.layout_reload);
+        	buttonReload = (Button) findViewById(R.id.button_reload);
+        	myGrid = (GridView) findViewById(R.id.gridview_collect);
         }
         
-        
-        
-        
-        
-         
       new DownloadChannelsTask().execute();    
         
       setAboutUsDialog();
@@ -178,7 +179,7 @@ public class SearchActivity extends Activity {
             	if(mSingers !=null && mSingers.size()!=0){
     	          	try{
     	          		mSingerAdapter = new GridViewSingersAdapter(SearchActivity.this, mSingers);
-    	          		myList.setAdapter(mSingerAdapter);
+    	          		myGrid.setAdapter(mSingerAdapter);
     	          	}catch(Exception e){
     	          		 
     	          	}

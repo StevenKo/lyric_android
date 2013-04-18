@@ -55,11 +55,11 @@ public class TabCollectActivity extends FragmentActivity{
         public Fragment getItem(int position) {
         	Fragment kk = new Fragment();        	
         	if(position==0){
-            	kk = CollectSongFragment.newInstance();
+            	kk = CollectSongFragment.newInstance(TabCollectActivity.this);
         	}else if(position == 1){
-        		kk = CollectAlbumFragment.newInstance();
+        		kk = CollectAlbumFragment.newInstance(TabCollectActivity.this);
         	}else if(position == 2){        		
-        		kk = CollectSingerFragment.newInstance();
+        		kk = CollectSingerFragment.newInstance(TabCollectActivity.this);
         	}
             return kk;
         }
