@@ -61,6 +61,15 @@ public class MainTabActivty extends TabActivity {
     }
     
     @Override
+    public void onBackPressed() {
+        if (mTabHost.getCurrentTab() ==0) {
+            finish();
+        } else {
+        	mTabHost.setCurrentTab(0);
+        }
+    }
+    
+    @Override
     public boolean onMenuItemSelected(int featureId, MenuItem item) {
 
         int itemId = item.getItemId();

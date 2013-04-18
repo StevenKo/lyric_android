@@ -1,21 +1,27 @@
 package com.kosbrother.fragment;
 
+import java.util.ArrayList;
+
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.app.FragmentTabHost;
-import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import com.kosbrother.lyric.R;
+import com.kosbrother.lyric.db.SQLiteLyric;
+import com.kosbrother.lyric.entity.Album;
+import com.taiwan.imageload.ListAlbumAdapter;
 
 public class CollectAlbumFragment extends Fragment {
 	
-	private FragmentTabHost mTabHost;
+	private LinearLayout progressLayout;
+	private LinearLayout noDataLayout;
+	private ListView myList;
+	private ListAlbumAdapter mdapter;
+	private ArrayList<Album> mAlbums;
 
     public static CollectAlbumFragment newInstance() {
 
@@ -31,8 +37,19 @@ public class CollectAlbumFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-        View myFragmentView = inflater.inflate(R.layout.layout_listview, container, false);
+    	
+    	View myFragmentView = inflater.inflate(R.layout.layout_collect, container, false);
+    	progressLayout = (LinearLayout) myFragmentView.findViewById(R.id.layout_progress);
+        noDataLayout = (LinearLayout) myFragmentView.findViewById(R.id.layout_no_data);
+        
+    	myList = (ListView) myFragmentView.findViewById(R.id.listview_collect);
+        
+        if (mdapter != null) {
+            progressLayout.setVisibility(View.GONE);
+            myList.setAdapter(mdapter);
+        } else {
+            new DownloadChannelsTask().execute();
+        }
              
         return myFragmentView;
     }
@@ -47,6 +64,44 @@ public class CollectAlbumFragment extends Fragment {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
+    }
+    
+    private class DownloadChannelsTask extends AsyncTask {
+
+        @Override
+        protected void onPreExecute() {
+            // TODO Auto-generated method stub
+            super.onPreExecute();
+            
+        }
+
+        @Override
+        protected Object doInBackground(Object... params) {
+            // TODO Auto-generated method stub
+        	// get DB Song data
+        	SQLiteLyric db = new SQLiteLyric(getActivity());         
+        	mAlbums = db.getAllAlbums();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Object result) {
+            // TODO Auto-generated method stub
+            super.onPostExecute(result);
+            progressLayout.setVisibility(View.GONE);
+                       
+            if(mAlbums !=null && mAlbums.size()!=0){
+          	  try{
+          		mdapter = new ListAlbumAdapter(getActivity(), mAlbums);
+          		myList.setAdapter(mdapter);
+          	  }catch(Exception e){
+          		 
+          	  }
+            }else{
+            	noDataLayout.setVisibility(View.VISIBLE);
+            }
+
+        }
     }
 
 

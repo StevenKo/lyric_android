@@ -175,6 +175,27 @@ public class SQLiteLyric extends SQLiteOpenHelper {
         }
         return singers;
     }
+    
+    public Boolean isSingerCollected(int singer_id) {
+        Cursor cursor = db.rawQuery("SELECT * FROM " + SingerSchema.TABLE_NAME + " where id = " + singer_id, null);
+        boolean exists = (cursor.getCount() > 0);
+        cursor.close();
+        return exists;
+    }
+    
+    public Boolean isSongCollected(int song_id) {
+        Cursor cursor = db.rawQuery("SELECT * FROM " + SongSchema.TABLE_NAME + " where id = " + song_id, null);
+        boolean exists = (cursor.getCount() > 0);
+        cursor.close();
+        return exists;
+    }
+    
+    public Boolean isAlbumCollected(int album_id) {
+        Cursor cursor = db.rawQuery("SELECT * FROM " + AlbumSchema.TABLE_NAME + " where id = " + album_id, null);
+        boolean exists = (cursor.getCount() > 0);
+        cursor.close();
+        return exists;
+    }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {

@@ -1,6 +1,9 @@
 package com.kosbrother.lyric;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,13 +13,12 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
-import com.kosbrother.fragment.SingerAlbumFragment;
-import com.kosbrother.fragment.SingerNewsFragment;
-import com.kosbrother.fragment.SingerSongFragment;
-import com.kosbrother.fragment.SingerVideoFragment;
 import com.kosbrother.fragment.SongLyricFragment;
 import com.kosbrother.fragment.SongVideoFragment;
+import com.kosbrother.lyric.db.SQLiteLyric;
+import com.kosbrother.lyric.entity.Song;
 import com.viewpagerindicator.TabPageIndicator;
 
 public class SongActivity extends FragmentActivity{
@@ -26,6 +28,10 @@ public class SongActivity extends FragmentActivity{
 	private Bundle mBundle;
 	private int SongId;
 	private String SongName;
+	public static Song theSong;
+	
+	private final int ID_COLLECT   = 777777;
+	private AlertDialog.Builder aboutUsDialog;
 	
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +41,7 @@ public class SongActivity extends FragmentActivity{
         mBundle = this.getIntent().getExtras();
         SongId = mBundle.getInt("SongId");
         SongName = mBundle.getString("SongName");
+        theSong = new Song(SongId, SongName, "null", 0);
         
         Resources res = getResources();
         CONTENT = res.getStringArray(R.array.song_tabs);
@@ -48,14 +55,61 @@ public class SongActivity extends FragmentActivity{
         TabPageIndicator indicator = (TabPageIndicator)findViewById(R.id.indicator);
         indicator.setViewPager(pager);
         
+        setAboutUsDialog();
     }
 	
 	
+	@SuppressLint("NewApi")
 	@Override
     public boolean onCreateOptionsMenu(Menu menu) {
     	getMenuInflater().inflate(R.menu.main, menu);
+    	menu.add(0, ID_COLLECT, 1, getResources().getString(R.string.menu_collect_song)).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
     	return true;
     }
+	
+	
+	public boolean onMenuItemSelected(int featureId, MenuItem item) {
+
+	    int itemId = item.getItemId();
+	    switch (itemId) {
+	    case android.R.id.home:
+	        // Toast.makeText(this, "home pressed", Toast.LENGTH_LONG).show();
+	        break;
+	    case R.id.action_settings:
+	    	
+	        break;
+	    case R.id.action_about:
+	    	aboutUsDialog.show();
+	        break;
+	    case R.id.action_contact:
+	    	final Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
+	    	emailIntent.setType("plain/text");
+	    	emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{"brotherkos@gmail.com"});
+	    	emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "聯絡我們 from 歌曲王國");
+	    	emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, "");
+	    	startActivity(Intent.createChooser(emailIntent, "Send mail..."));
+	        break;
+	    case R.id.action_grade:
+//	    	Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getResources().getString(R.string.recommend_url)));
+//			startActivity(browserIntent);
+	        break;
+	    case ID_COLLECT:
+	    	if(!theSong.getLyric().equals("null")){
+		    	SQLiteLyric db = new SQLiteLyric(SongActivity.this);
+		    	if(db.isSongCollected(theSong.getId())){
+		    		db.deleteSong(theSong);
+		    		Toast.makeText(SongActivity.this, "已刪除此歌曲收藏", Toast.LENGTH_SHORT).show();
+		    	}else{
+		    		db.insertSong(theSong);
+		    		Toast.makeText(SongActivity.this, "已加入此歌曲收藏", Toast.LENGTH_SHORT).show();
+		    	}
+	    	}else{
+	    		Toast.makeText(SongActivity.this, "讀取中,請稍候", Toast.LENGTH_SHORT).show();
+	    	}
+	        break;
+	    }
+	    return true;
+	}
 	
 	class GoogleMusicAdapter extends FragmentStatePagerAdapter {
         public GoogleMusicAdapter(FragmentManager fm) {
@@ -83,5 +137,17 @@ public class SongActivity extends FragmentActivity{
         public int getCount() {
         	return CONTENT.length;
         }
+    }
+	
+	private void setAboutUsDialog() {
+        // TODO Auto-generated method stub
+        aboutUsDialog = new AlertDialog.Builder(this).setTitle(getResources().getString(R.string.about_us_string)).setIcon(R.drawable.play_store_icon)
+                .setMessage(getResources().getString(R.string.about_us))
+                .setPositiveButton(getResources().getString(R.string.yes_string), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
     }
 }

@@ -34,4 +34,9 @@ public class TabSingerActivity extends Activity {
         progressLayout.setVisibility(View.GONE);
         
     }
+    
+    @Override
+    public void onBackPressed() {
+		this.getParent().onBackPressed(); 
+    }
 }

@@ -14,6 +14,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.kosbrother.lyric.R;
+import com.kosbrother.lyric.SongActivity;
 import com.kosbrother.lyric.api.LyricAPI;
 import com.kosbrother.lyric.entity.Song;
 
@@ -82,6 +83,7 @@ public class SongLyricFragment extends Fragment {
             if(mSong !=null && !mSong.getLyric().equals("null")){
           	  try{
           		mTextView.setText(mSong.getLyric());
+          		SongActivity.theSong = mSong;
           	  }catch(Exception e){
           		 
           	  }

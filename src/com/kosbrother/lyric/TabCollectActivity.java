@@ -1,5 +1,7 @@
 package com.kosbrother.lyric;
 
+import com.kosbrother.fragment.CollectAlbumFragment;
+import com.kosbrother.fragment.CollectSingerFragment;
 import com.kosbrother.fragment.CollectSongFragment;
 import com.viewpagerindicator.TabPageIndicator;
 
@@ -10,13 +12,14 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.view.Display;
 import android.view.Menu;
 
 public class TabCollectActivity extends FragmentActivity{
 	
 	private String[] CONTENT;
 	private ViewPager pager;
+	private FragmentStatePagerAdapter adapter;
+	private TabPageIndicator indicator;
 	
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,12 +29,12 @@ public class TabCollectActivity extends FragmentActivity{
         Resources res = getResources();
         CONTENT = res.getStringArray(R.array.tabs);
         
-        FragmentStatePagerAdapter adapter = new GoogleMusicAdapter(getSupportFragmentManager());
+        adapter = new GoogleMusicAdapter(getSupportFragmentManager());
 
         pager = (ViewPager)findViewById(R.id.pager);
         pager.setAdapter(adapter);
 
-        TabPageIndicator indicator = (TabPageIndicator)findViewById(R.id.indicator);
+        indicator = (TabPageIndicator)findViewById(R.id.indicator);
         indicator.setViewPager(pager);
         
     }
@@ -54,9 +57,9 @@ public class TabCollectActivity extends FragmentActivity{
         	if(position==0){
             	kk = CollectSongFragment.newInstance();
         	}else if(position == 1){
-        		kk = CollectSongFragment.newInstance();
-        	}else if(position == 2){
-        		kk = CollectSongFragment.newInstance();
+        		kk = CollectAlbumFragment.newInstance();
+        	}else if(position == 2){        		
+        		kk = CollectSingerFragment.newInstance();
         	}
             return kk;
         }
@@ -72,5 +75,23 @@ public class TabCollectActivity extends FragmentActivity{
             return CONTENT.length;
         }
     }
+	
+	public void onResume(){
+		super.onResume();
+		if(adapter!=null && pager!=null){
+			int int_page = pager.getCurrentItem();
+			adapter = new GoogleMusicAdapter(getSupportFragmentManager());
+			pager.setAdapter(adapter);
+			indicator.setViewPager(pager);
+			pager.setCurrentItem(int_page);
+			indicator.setCurrentItem(int_page);
+		}		
+	}
+	
+	@Override
+    public void onBackPressed() {
+		this.getParent().onBackPressed(); 
+    }
+	
 	
 }

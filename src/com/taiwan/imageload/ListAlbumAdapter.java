@@ -49,8 +49,12 @@ public class ListAlbumAdapter extends BaseAdapter {
         TextView text_time = (TextView) vi.findViewById(R.id.text_album_time);
 
         text_name.setText(data.get(position).getName());
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy MMM");
-        text_time.setText(formatter.format(data.get(position).getDate()));
+        try {
+        	SimpleDateFormat formatter = new SimpleDateFormat("yyyy MMM");
+        	text_time.setText(formatter.format(data.get(position).getDate()));
+        }catch(Exception e){
+        	
+        }
 
         vi.setOnClickListener(new OnClickListener() {
             @Override

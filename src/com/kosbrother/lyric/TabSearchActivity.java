@@ -12,4 +12,9 @@ public class TabSearchActivity extends Activity {
         setContentView(R.layout.layout_search);
         
     }
+    
+    @Override
+    public void onBackPressed() {
+		this.getParent().onBackPressed(); 
+    }
 }

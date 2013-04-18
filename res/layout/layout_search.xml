@@ -24,6 +24,8 @@
 		android:layout_weight="1"
 		android:layout_margin="2dp"
 		android:hint="輸入關鍵文字"
+		android:textSize="18dp"
+		android:maxLines="1"
 		/>
 		
 		<ImageView

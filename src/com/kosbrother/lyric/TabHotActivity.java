@@ -82,4 +82,9 @@ public class TabHotActivity extends Activity {
         super.onSaveInstanceState(outState);
 
     }
+    
+    @Override
+    public void onBackPressed() {
+    	this.getParent().onBackPressed(); 
+    }
 }
