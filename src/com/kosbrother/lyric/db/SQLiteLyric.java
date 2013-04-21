@@ -29,14 +29,16 @@ public class SQLiteLyric extends SQLiteOpenHelper {
         String NAME         = "name";
         String RELEASE_TIME = "release_time";
         String DESCRIPTION  = "description";
+        String SINGER_NAME  = "singer_name";
     }
 
     public interface SongSchema {
-        String TABLE_NAME = "songs";
-        String ID         = "id";
-        String NAME       = "name";
-        String LYRIC      = "lyric";
-        String ALBUM_ID   = "album_id";
+        String TABLE_NAME  = "songs";
+        String ID          = "id";
+        String NAME        = "name";
+        String LYRIC       = "lyric";
+        String ALBUM_ID    = "album_id";
+        String SINGER_NAME = "singer_name";
     }
 
     public interface SingerSchema {
@@ -57,9 +59,11 @@ public class SQLiteLyric extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE IF NOT EXISTS " + AlbumSchema.TABLE_NAME + " (" + AlbumSchema.ID + " INTEGER PRIMARY KEY" + "," + AlbumSchema.NAME
-                + " TEXT NOT NULL" + "," + AlbumSchema.RELEASE_TIME + " TEXT NOT NULL" + "," + AlbumSchema.DESCRIPTION + " TEXT NOT NULL" + ");");
+                + " TEXT NOT NULL" + "," + AlbumSchema.RELEASE_TIME + " TEXT NOT NULL" + "," + AlbumSchema.DESCRIPTION + " TEXT NOT NULL" + ","
+                + AlbumSchema.SINGER_NAME + " TEXT NOT NULL" + ");");
         db.execSQL("CREATE TABLE IF NOT EXISTS " + SongSchema.TABLE_NAME + " (" + SongSchema.ID + " INTEGER PRIMARY KEY" + "," + SongSchema.NAME
-                + " TEXT NOT NULL" + "," + SongSchema.LYRIC + " TEXT NOT NULL" + "," + SongSchema.ALBUM_ID + " INTEGER NOT NULL" + ");");
+                + " TEXT NOT NULL" + "," + SongSchema.LYRIC + " TEXT NOT NULL" + "," + SongSchema.ALBUM_ID + " INTEGER NOT NULL" + "," + SongSchema.SINGER_NAME
+                + " TEXT NOT NULL" + ");");
         db.execSQL("CREATE TABLE IF NOT EXISTS " + SingerSchema.TABLE_NAME + " (" + SingerSchema.ID + " INTEGER PRIMARY KEY" + "," + SingerSchema.NAME
                 + " TEXT NOT NULL" + "," + SingerSchema.DESCRIPTION + " TEXT NOT NULL" + ");");
 
@@ -92,6 +96,7 @@ public class SQLiteLyric extends SQLiteOpenHelper {
         args.put(SongSchema.ALBUM_ID, song.getAlbumId());
         args.put(SongSchema.LYRIC, song.getLyric());
         args.put(SongSchema.NAME, song.getName());
+        args.put(SongSchema.SINGER_NAME, song.getSingerName());
         return db.insert(SongSchema.TABLE_NAME, null, args);
     }
 
@@ -105,6 +110,7 @@ public class SQLiteLyric extends SQLiteOpenHelper {
             args.put(AlbumSchema.RELEASE_TIME, dateFormat.format(album.getDate()));
         else
             args.put(AlbumSchema.RELEASE_TIME, "null");
+        args.put(AlbumSchema.SINGER_NAME, album.getSingerName());
 
         return db.insert(AlbumSchema.TABLE_NAME, null, args);
     }
@@ -127,8 +133,9 @@ public class SQLiteLyric extends SQLiteOpenHelper {
             String name = cursor.getString(1);
             String lyric = cursor.getString(2);
             int album_id = cursor.getInt(3);
+            String singer_name = cursor.getString(4);
 
-            Song song = new Song(id, name, lyric, album_id);
+            Song song = new Song(id, name, lyric, album_id, singer_name);
             songs.add(song);
         }
         return songs;
@@ -155,8 +162,9 @@ public class SQLiteLyric extends SQLiteOpenHelper {
                 }
             }
             String description = cursor.getString(3);
+            String singer_name = cursor.getString(4);
 
-            Album album = new Album(id, name, release, description);
+            Album album = new Album(id, name, release, description, singer_name);
             albums.add(album);
         }
         return albums;
@@ -175,21 +183,21 @@ public class SQLiteLyric extends SQLiteOpenHelper {
         }
         return singers;
     }
-    
+
     public Boolean isSingerCollected(int singer_id) {
         Cursor cursor = db.rawQuery("SELECT * FROM " + SingerSchema.TABLE_NAME + " where id = " + singer_id, null);
         boolean exists = (cursor.getCount() > 0);
         cursor.close();
         return exists;
     }
-    
+
     public Boolean isSongCollected(int song_id) {
         Cursor cursor = db.rawQuery("SELECT * FROM " + SongSchema.TABLE_NAME + " where id = " + song_id, null);
         boolean exists = (cursor.getCount() > 0);
         cursor.close();
         return exists;
     }
-    
+
     public Boolean isAlbumCollected(int album_id) {
         Cursor cursor = db.rawQuery("SELECT * FROM " + AlbumSchema.TABLE_NAME + " where id = " + album_id, null);
         boolean exists = (cursor.getCount() > 0);

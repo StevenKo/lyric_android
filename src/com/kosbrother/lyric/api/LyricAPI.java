@@ -257,7 +257,12 @@ public class LyricAPI {
                 if (!nObject.isNull("album_id"))
                     album_id = nObject.getInt("album_id");
 
-                return new Song(id, name, lyric, album_id);
+                String singer = "null";
+                if (nObject.has("singer_name")) {
+                    singer = nObject.getString("singer_name");
+                }
+
+                return new Song(id, name, lyric, album_id, singer);
             } catch (JSONException e) {
                 e.printStackTrace();
                 return null;
@@ -365,7 +370,12 @@ public class LyricAPI {
                     release_time = createFormatter.parse(release);
                 }
 
-                return new Album(id, name, release_time, description);
+                String singer = "null";
+                if (nObject.has("singer_name")) {
+                    singer = nObject.getString("singer_name");
+                }
+
+                return new Album(id, name, release_time, description, singer);
             } catch (JSONException e) {
                 e.printStackTrace();
                 return null;
@@ -450,7 +460,12 @@ public class LyricAPI {
                 if (!jArray.getJSONObject(i).isNull("album_id"))
                     album_id = jArray.getJSONObject(i).getInt("album_id");
 
-                songs.add(new Song(id, name, "null", album_id));
+                String singer = "null";
+                if (jArray.getJSONObject(i).has("singer_name")) {
+                    singer = jArray.getJSONObject(i).getString("singer_name");
+                }
+
+                songs.add(new Song(id, name, "null", album_id, singer));
 
             }
 
@@ -510,13 +525,18 @@ public class LyricAPI {
                 String name = jArray.getJSONObject(i).getString("name");
                 String release = jArray.getJSONObject(i).getString("release_time");
 
+                String singer = "null";
+                if (jArray.getJSONObject(i).has("singer_name")) {
+                    singer = jArray.getJSONObject(i).getString("singer_name");
+                }
+
                 if (!release.equals("null")) {
                     SimpleDateFormat createFormatter = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss'Z'");
                     Date release_time = createFormatter.parse(release);
-                    Album album = new Album(id, name, release_time, "null");
+                    Album album = new Album(id, name, release_time, "null", singer);
                     albums.add(album);
                 } else {
-                    Album album = new Album(id, name, null, "null");
+                    Album album = new Album(id, name, null, "null", singer);
                     albums.add(album);
                 }
 

@@ -21,125 +21,122 @@ import com.kosbrother.lyric.db.SQLiteLyric;
 import com.kosbrother.lyric.entity.Song;
 import com.viewpagerindicator.TabPageIndicator;
 
-public class SongActivity extends FragmentActivity{
-		
-	private ViewPager pager;
-	private String[] CONTENT;
-	private Bundle mBundle;
-	private int SongId;
-	private String SongName;
-	public static Song theSong;
-	
-	private final int ID_COLLECT   = 777777;
-	private AlertDialog.Builder aboutUsDialog;
-	
-	@Override
+public class SongActivity extends FragmentActivity {
+
+    private ViewPager           pager;
+    private String[]            CONTENT;
+    private Bundle              mBundle;
+    private int                 SongId;
+    private String              SongName;
+    public static Song          theSong;
+
+    private final int           ID_COLLECT = 777777;
+    private AlertDialog.Builder aboutUsDialog;
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.simple_tabs);
-        
+
         mBundle = this.getIntent().getExtras();
         SongId = mBundle.getInt("SongId");
         SongName = mBundle.getString("SongName");
-        theSong = new Song(SongId, SongName, "null", 0);
-        
+        theSong = new Song(SongId, SongName, "null", 0, "");
+
         Resources res = getResources();
         CONTENT = res.getStringArray(R.array.song_tabs);
 
-        
         FragmentStatePagerAdapter adapter = new GoogleMusicAdapter(getSupportFragmentManager());
 
-        pager = (ViewPager)findViewById(R.id.pager);
+        pager = (ViewPager) findViewById(R.id.pager);
         pager.setAdapter(adapter);
 
-        TabPageIndicator indicator = (TabPageIndicator)findViewById(R.id.indicator);
+        TabPageIndicator indicator = (TabPageIndicator) findViewById(R.id.indicator);
         indicator.setViewPager(pager);
-        
+
         setAboutUsDialog();
     }
-	
-	
-	@SuppressLint("NewApi")
-	@Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-    	getMenuInflater().inflate(R.menu.main, menu);
-    	menu.add(0, ID_COLLECT, 1, getResources().getString(R.string.menu_collect_song)).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-    	return true;
-    }
-	
-	
-	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 
-	    int itemId = item.getItemId();
-	    switch (itemId) {
-	    case android.R.id.home:
-	        // Toast.makeText(this, "home pressed", Toast.LENGTH_LONG).show();
-	        break;
-	    case R.id.action_settings:
-	    	
-	        break;
-	    case R.id.action_about:
-	    	aboutUsDialog.show();
-	        break;
-	    case R.id.action_contact:
-	    	final Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
-	    	emailIntent.setType("plain/text");
-	    	emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{"brotherkos@gmail.com"});
-	    	emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "聯絡我們 from 歌曲王國");
-	    	emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, "");
-	    	startActivity(Intent.createChooser(emailIntent, "Send mail..."));
-	        break;
-	    case R.id.action_grade:
-//	    	Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getResources().getString(R.string.recommend_url)));
-//			startActivity(browserIntent);
-	        break;
-	    case ID_COLLECT:
-	    	if(!theSong.getLyric().equals("null")){
-		    	SQLiteLyric db = new SQLiteLyric(SongActivity.this);
-		    	if(db.isSongCollected(theSong.getId())){
-		    		db.deleteSong(theSong);
-		    		Toast.makeText(SongActivity.this, "已刪除此歌曲收藏", Toast.LENGTH_SHORT).show();
-		    	}else{
-		    		db.insertSong(theSong);
-		    		Toast.makeText(SongActivity.this, "已加入此歌曲收藏", Toast.LENGTH_SHORT).show();
-		    	}
-	    	}else{
-	    		Toast.makeText(SongActivity.this, "讀取中,請稍候", Toast.LENGTH_SHORT).show();
-	    	}
-	        break;
-	    }
-	    return true;
-	}
-	
-	class GoogleMusicAdapter extends FragmentStatePagerAdapter {
+    @SuppressLint("NewApi")
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        menu.add(0, ID_COLLECT, 1, getResources().getString(R.string.menu_collect_song)).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        return true;
+    }
+
+    @Override
+    public boolean onMenuItemSelected(int featureId, MenuItem item) {
+
+        int itemId = item.getItemId();
+        switch (itemId) {
+        case android.R.id.home:
+            // Toast.makeText(this, "home pressed", Toast.LENGTH_LONG).show();
+            break;
+        case R.id.action_settings:
+
+            break;
+        case R.id.action_about:
+            aboutUsDialog.show();
+            break;
+        case R.id.action_contact:
+            final Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
+            emailIntent.setType("plain/text");
+            emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[] { "brotherkos@gmail.com" });
+            emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "聯絡我們 from 歌曲王國");
+            emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, "");
+            startActivity(Intent.createChooser(emailIntent, "Send mail..."));
+            break;
+        case R.id.action_grade:
+            // Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getResources().getString(R.string.recommend_url)));
+            // startActivity(browserIntent);
+            break;
+        case ID_COLLECT:
+            if (!theSong.getLyric().equals("null")) {
+                SQLiteLyric db = new SQLiteLyric(SongActivity.this);
+                if (db.isSongCollected(theSong.getId())) {
+                    db.deleteSong(theSong);
+                    Toast.makeText(SongActivity.this, "已刪除此歌曲收藏", Toast.LENGTH_SHORT).show();
+                } else {
+                    db.insertSong(theSong);
+                    Toast.makeText(SongActivity.this, "已加入此歌曲收藏", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Toast.makeText(SongActivity.this, "讀取中,請稍候", Toast.LENGTH_SHORT).show();
+            }
+            break;
+        }
+        return true;
+    }
+
+    class GoogleMusicAdapter extends FragmentStatePagerAdapter {
         public GoogleMusicAdapter(FragmentManager fm) {
             super(fm);
         }
 
         @Override
         public Fragment getItem(int position) {
-        	Fragment kk = new Fragment();
-        	if(position==0){
-            	kk = SongLyricFragment.newInstance(SongId);
-        	}else if(position == 1){
-        		kk = SongVideoFragment.newInstance(SongName);
-        	}
+            Fragment kk = new Fragment();
+            if (position == 0) {
+                kk = SongLyricFragment.newInstance(SongId);
+            } else if (position == 1) {
+                kk = SongVideoFragment.newInstance(SongName);
+            }
             return kk;
         }
-       
 
         @Override
         public CharSequence getPageTitle(int position) {
-        	return CONTENT[position % CONTENT.length];
+            return CONTENT[position % CONTENT.length];
         }
 
         @Override
         public int getCount() {
-        	return CONTENT.length;
+            return CONTENT.length;
         }
     }
-	
-	private void setAboutUsDialog() {
+
+    private void setAboutUsDialog() {
         // TODO Auto-generated method stub
         aboutUsDialog = new AlertDialog.Builder(this).setTitle(getResources().getString(R.string.about_us_string)).setIcon(R.drawable.play_store_icon)
                 .setMessage(getResources().getString(R.string.about_us))

@@ -39,7 +39,7 @@
 	</LinearLayout>
     
     
-	<!-- <LinearLayout 
+　　　<LinearLayout 
    	 	android:id="@+id/layout_no_data"
    	 	android:layout_width="fill_parent"
    	 	android:layout_height="fill_parent"
@@ -59,7 +59,7 @@
    	 		android:layout_marginLeft="5dp"
    	 		android:textColor="#6E6E6E"
 	        />
-	</LinearLayout> -->
+	</LinearLayout>
 	
 	<GridView 
 	    android:id="@+id/gridview_collect"

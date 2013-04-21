@@ -50,10 +50,10 @@ public class ListAlbumAdapter extends BaseAdapter {
 
         text_name.setText(data.get(position).getName());
         try {
-        	SimpleDateFormat formatter = new SimpleDateFormat("yyyy MMM");
-        	text_time.setText(formatter.format(data.get(position).getDate()));
-        }catch(Exception e){
-        	
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy MMM");
+            text_time.setText(formatter.format(data.get(position).getDate()));
+        } catch (Exception e) {
+
         }
 
         vi.setOnClickListener(new OnClickListener() {
@@ -63,6 +63,7 @@ public class ListAlbumAdapter extends BaseAdapter {
                 Bundle bundle = new Bundle();
                 bundle.putInt("AlbumId", data.get(position).getId());
                 bundle.putString("AlbumName", data.get(position).getName());
+                bundle.putString("SingerNmae", data.get(position).getSingerName());
                 intent.putExtras(bundle);
                 activity.startActivity(intent);
             }

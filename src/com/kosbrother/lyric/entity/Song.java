@@ -5,16 +5,22 @@ public class Song {
     String name;
     String lyric;
     int    album_id;
+    String singer_name;
 
     public Song() {
-        this(1, "", "", 1);
+        this(1, "", "", 1, "");
     }
 
-    public Song(int id, String name, String lyric, int album_id) {
+    public Song(int id, String name, String lyric, int album_id, String singer_name) {
         this.id = id;
         this.name = name;
         this.album_id = album_id;
         this.lyric = lyric;
+        this.singer_name = singer_name;
+    }
+
+    public String getSingerName() {
+        return singer_name;
     }
 
     public int getId() {

@@ -8,16 +8,22 @@ public class Album {
     String name;
     Date   release_time;
     String description;
+    String singer_name;
 
     public Album() {
-        this(1, "", new Date(), "");
+        this(1, "", new Date(), "", "");
     }
 
-    public Album(int id, String name, Date date, String description) {
+    public Album(int id, String name, Date date, String description, String singer_name) {
         this.id = id;
         this.name = name;
         this.release_time = date;
         this.description = description;
+        this.singer_name = singer_name;
+    }
+
+    public String getSingerName() {
+        return singer_name;
     }
 
     public int getId() {
