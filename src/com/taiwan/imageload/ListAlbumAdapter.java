@@ -47,7 +47,14 @@ public class ListAlbumAdapter extends BaseAdapter {
         View vi = inflater.inflate(R.layout.item_album_list, null);
         TextView text_name = (TextView) vi.findViewById(R.id.text_album_name);
         TextView text_time = (TextView) vi.findViewById(R.id.text_album_time);
-
+        TextView text_singer = (TextView) vi.findViewById(R.id.singer_name);
+        text_singer.setText(data.get(position).getSingerName());
+        String name = data.get(position).getSingerName();
+        if (name.indexOf("(") != -1) {
+            String name2 = name.substring(0, name.indexOf("("));
+            name = name2;
+        }
+        text_singer.setText(name);
         text_name.setText(data.get(position).getName());
         try {
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy MMM");

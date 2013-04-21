@@ -5,42 +5,64 @@
     android:orientation="vertical" 
     android:background="@drawable/listview_selector">
     
-    
-      <LinearLayout 
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginTop="2dp"
-        android:layout_marginBottom="2dp"
-        >
-    
-    	<TextView 
-            android:layout_width="fill_parent"
-        	android:layout_height="wrap_content"
-        	android:text="專輯名稱："
-        	android:maxLines="2"
-        	android:layout_marginLeft="10dp"
-        	android:textSize="10dp"
-            android:textColor="#999999"
-            android:typeface="serif"
-            />
-        
-      <TextView android:id="@+id/text_album_name"
+      <RelativeLayout 
+          android:layout_width="fill_parent"
+          android:layout_height="wrap_content">
+          
+          <TextView android:id="@+id/singer_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="5dp"
+                android:maxLines="2"                
+                android:textSize="14dp"
+                android:textColor="#891919"
+                android:typeface="serif"
+                android:textStyle="bold"
+                android:text="楊宗緯"
+                />
+          
+          <LinearLayout 
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:maxLines="2"
-            android:layout_marginLeft="25dp"
-            android:textSize="22dp"
-            android:textColor="#494949"
-            android:typeface="serif"
-            android:textStyle="bold"
-            />
+            android:orientation="vertical"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="2dp"
+            android:layout_toLeftOf="@+id/singer_name"
+            >
+        
+        	<TextView 
+                android:layout_width="fill_parent"
+            	android:layout_height="wrap_content"
+            	android:text="專輯名稱："
+            	android:maxLines="2"
+            	android:layout_marginLeft="10dp"
+            	android:textSize="10dp"
+                android:textColor="#999999"
+                android:typeface="serif"
+                />
+            
+          <TextView android:id="@+id/text_album_name"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="2"
+                android:layout_marginLeft="25dp"
+                android:textSize="22dp"
+                android:textColor="#494949"
+                android:typeface="serif"
+                android:textStyle="bold"
+                />
+           </LinearLayout>
     
-    
+        </RelativeLayout>
         
         
         
-        <RelativeLayout android:layout_width="wrap_content"
+               
+
+	
+    <RelativeLayout android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_marginRight="10px"
@@ -74,8 +96,5 @@
                 >
                 </TextView>
                 </LinearLayout>
-            </RelativeLayout>
-               
-
-	</LinearLayout>
+    </RelativeLayout>
 </LinearLayout>

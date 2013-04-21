@@ -6,11 +6,27 @@
     
     <RelativeLayout
         android:layout_width="fill_parent"
-	    android:layout_height="50dp"
+	    android:layout_height="wrap_content"
           android:orientation="vertical"
 	    android:background="@drawable/listview_selector"
           android:padding="5dp"
          >
+         <TextView android:id="@+id/singer_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="5dp"
+                android:maxLines="2"                
+                android:textSize="14dp"
+                android:textColor="#891919"
+                android:typeface="serif"
+                android:textStyle="bold"
+                android:text="楊宗緯"
+                />
+         <RelativeLayout 
+             android:layout_width="fill_parent"
+             android:layout_height="wrap_content"
+             android:layout_toLeftOf="@+id/singer_name">
          <TextView
             android:id="@+id/song_tip"
             android:layout_width="wrap_content"
@@ -33,6 +49,9 @@
             android:layout_below="@+id/song_tip"
             android:layout_toRightOf="@+id/song_tip"
 	        />
+        
+        </RelativeLayout>
+          
     </RelativeLayout>
 
 </LinearLayout>
