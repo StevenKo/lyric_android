@@ -21,6 +21,7 @@
                 android:textColor="#891919"
                 android:typeface="serif"
                 android:textStyle="bold"
+                android:layout_marginTop="15dp"
                 android:text="楊宗緯"
                 />
          <RelativeLayout 
