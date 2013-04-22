@@ -10,6 +10,7 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -129,6 +130,12 @@ public class TabHotActivity extends Activity {
 	    }
 	    return false;
 	}
+    
+    @Override
+    public boolean onMenuItemSelected(int featureId, MenuItem item) {
+		this.getParent().onMenuItemSelected(featureId, item);
+        return true;
+    }
     
     @Override
     public void onSaveInstanceState(Bundle outState) {

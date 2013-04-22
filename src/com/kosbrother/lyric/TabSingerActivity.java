@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.GridView;
 import android.widget.LinearLayout;
@@ -33,6 +34,12 @@ public class TabSingerActivity extends Activity {
         progressLayout = (LinearLayout) findViewById(R.id.layout_progress);
         progressLayout.setVisibility(View.GONE);
         
+    }
+    
+    @Override
+    public boolean onMenuItemSelected(int featureId, MenuItem item) {
+		this.getParent().onMenuItemSelected(featureId, item);
+        return true;
     }
     
     @Override

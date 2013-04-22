@@ -8,6 +8,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
@@ -47,7 +48,8 @@ public class AlbumActivity extends Activity {
     private ProgressDialog      progressDialog = null;
     private String              singerNmae;
 
-    @Override
+    @SuppressLint("NewApi")
+	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.loadmore);
@@ -61,6 +63,10 @@ public class AlbumActivity extends Activity {
 
         if (albumName != null && !albumName.equals("null") && !albumName.equals("")) {
             setTitle(albumName);
+        }
+        int sdkVersion = android.os.Build.VERSION.SDK_INT; 
+        if(sdkVersion > 10){
+        	getActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
         progressLayout = (LinearLayout) findViewById(R.id.layout_progress);
@@ -104,11 +110,11 @@ public class AlbumActivity extends Activity {
         int itemId = item.getItemId();
         switch (itemId) {
         case android.R.id.home:
-            // Toast.makeText(this, "home pressed", Toast.LENGTH_LONG).show();
+            finish();
             break;
-        case R.id.action_settings:
-
-            break;
+//        case R.id.action_settings:
+//
+//            break;
         case R.id.action_about:
             aboutUsDialog.show();
             break;
@@ -121,8 +127,8 @@ public class AlbumActivity extends Activity {
             startActivity(Intent.createChooser(emailIntent, "Send mail..."));
             break;
         case R.id.action_grade:
-            // Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getResources().getString(R.string.recommend_url)));
-            // startActivity(browserIntent);
+             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getResources().getString(R.string.recommend_url)));
+             startActivity(browserIntent);
             break;
         case ID_INTRODUCE:
             if (mAlbum.getDescription().equals("null")) {
@@ -186,7 +192,7 @@ public class AlbumActivity extends Activity {
 
     private void setAboutUsDialog() {
         // TODO Auto-generated method stub
-        aboutUsDialog = new AlertDialog.Builder(this).setTitle(getResources().getString(R.string.about_us_string)).setIcon(R.drawable.play_store_icon)
+        aboutUsDialog = new AlertDialog.Builder(this).setTitle(getResources().getString(R.string.about_us_string)).setIcon(R.drawable.app_icon_72)
                 .setMessage(getResources().getString(R.string.about_us))
                 .setPositiveButton(getResources().getString(R.string.yes_string), new DialogInterface.OnClickListener() {
                     @Override

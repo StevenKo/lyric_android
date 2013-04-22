@@ -1,7 +1,10 @@
 package com.kosbrother.lyric;
 
+import android.app.AlertDialog;
 import android.app.TabActivity;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -19,6 +22,7 @@ import com.kosbrother.lyric.db.SQLiteLyric;
 public class MainTabActivty extends TabActivity {
 
     private TabHost mTabHost;
+    private AlertDialog.Builder aboutUsDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +40,8 @@ public class MainTabActivty extends TabActivity {
         setupTab(TabSingerActivity.class, "歌手列表", R.drawable.icon_tab_singer);
         setupTab(TabSearchActivity.class, "搜索", R.drawable.icon_tab_search);
         setupTab(TabCollectActivity.class, "收藏", R.drawable.icon_tab_box);
+        
+        setAboutUsDialog();
 
     }
 
@@ -74,25 +80,40 @@ public class MainTabActivty extends TabActivity {
 
         int itemId = item.getItemId();
         switch (itemId) {
-        case R.id.action_settings: // setting
-            Toast.makeText(MainTabActivty.this, "SEARCH", Toast.LENGTH_SHORT).show();
-            // Intent intent = new Intent(MainActivity.this, SettingActivity.class);
-            // startActivity(intent);
-            break;
+//        case R.id.action_settings: // setting
+//            Toast.makeText(MainTabActivty.this, "SEARCH", Toast.LENGTH_SHORT).show();
+//            Intent intent = new Intent(MainActivity.this, SettingActivity.class);
+//            startActivity(intent);
+//            break;
         case R.id.action_about:
-            Toast.makeText(MainTabActivty.this, "SEARCH", Toast.LENGTH_SHORT).show();
-            // aboutUsDialog.show();
+            aboutUsDialog.show();
             break;
         case R.id.action_contact:
-            Toast.makeText(MainTabActivty.this, "SEARCH", Toast.LENGTH_SHORT).show();
-            // Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getResources().getString(R.string.recommend_url)));
-            // startActivity(browserIntent);
+            final Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
+            emailIntent.setType("plain/text");
+            emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[] { "brotherkos@gmail.com" });
+            emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "聯絡我們 from 歌曲王國");
+            emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, "");
+            startActivity(Intent.createChooser(emailIntent, "Send mail..."));
             break;
-        case R.id.action_grade: // response
-            // Toast.makeText(MainActivity.this, "SEARCH", Toast.LENGTH_SHORT).show();
+        case R.id.action_grade:
+             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getResources().getString(R.string.recommend_url)));
+             startActivity(browserIntent);
             break;
         }
         return true;
+    }
+    
+    private void setAboutUsDialog() {
+        // TODO Auto-generated method stub
+        aboutUsDialog = new AlertDialog.Builder(this).setTitle(getResources().getString(R.string.about_us_string)).setIcon(R.drawable.app_icon_72)
+                .setMessage(getResources().getString(R.string.about_us))
+                .setPositiveButton(getResources().getString(R.string.yes_string), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
     }
 
 }

@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -44,6 +45,7 @@ public class SingerActivity extends FragmentActivity{
 	private AlertDialog.Builder introduceDialog;
 	private ProgressDialog progressDialog   = null;
 	
+	@SuppressLint("NewApi")
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +55,13 @@ public class SingerActivity extends FragmentActivity{
         SingerId = mBundle.getInt("SingerId");
         SingerName = mBundle.getString("SingerName");
         theSinger = new Singer(SingerId, SingerName, "null");
+        
+        
+        setTitle(SingerName);
+        int sdkVersion = android.os.Build.VERSION.SDK_INT; 
+        if(sdkVersion > 10){
+        	getActionBar().setDisplayHomeAsUpEnabled(true);
+        }
         
         Resources res = getResources();
         CONTENT = res.getStringArray(R.array.singer_tabs);
@@ -86,10 +95,7 @@ public class SingerActivity extends FragmentActivity{
 	    int itemId = item.getItemId();
 	    switch (itemId) {
 	    case android.R.id.home:
-	        // Toast.makeText(this, "home pressed", Toast.LENGTH_LONG).show();
-	        break;
-	    case R.id.action_settings:
-	    	
+	        finish();
 	        break;
 	    case R.id.action_about:
 	    	aboutUsDialog.show();
@@ -103,8 +109,8 @@ public class SingerActivity extends FragmentActivity{
 	    	startActivity(Intent.createChooser(emailIntent, "Send mail..."));
 	        break;
 	    case R.id.action_grade:
-//	    	Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getResources().getString(R.string.recommend_url)));
-//			startActivity(browserIntent);
+	    	Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getResources().getString(R.string.recommend_url)));
+			startActivity(browserIntent);
 	        break;
 	    case ID_INTRODUCE:
 	    	if(theSinger.getDescription().equals("null")){
@@ -198,7 +204,7 @@ public class SingerActivity extends FragmentActivity{
 	
 	private void setAboutUsDialog() {
         // TODO Auto-generated method stub
-        aboutUsDialog = new AlertDialog.Builder(this).setTitle(getResources().getString(R.string.about_us_string)).setIcon(R.drawable.play_store_icon)
+        aboutUsDialog = new AlertDialog.Builder(this).setTitle(getResources().getString(R.string.about_us_string)).setIcon(R.drawable.app_icon_72)
                 .setMessage(getResources().getString(R.string.about_us))
                 .setPositiveButton(getResources().getString(R.string.yes_string), new DialogInterface.OnClickListener() {
                     @Override
@@ -209,7 +215,7 @@ public class SingerActivity extends FragmentActivity{
     }
 	
 	private void setIntroduceDialog(){
-		introduceDialog = new AlertDialog.Builder(this).setTitle(getResources().getString(R.string.singer_introduce_title)).setIcon(R.drawable.app_icon)
+		introduceDialog = new AlertDialog.Builder(this).setTitle(getResources().getString(R.string.singer_introduce_title))
                 .setMessage(theSinger.getDescription())
                 .setPositiveButton(getResources().getString(R.string.yes_string), new DialogInterface.OnClickListener() {
                     @Override

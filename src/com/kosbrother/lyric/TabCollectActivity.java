@@ -5,7 +5,9 @@ import com.kosbrother.fragment.CollectSingerFragment;
 import com.kosbrother.fragment.CollectSongFragment;
 import com.viewpagerindicator.TabPageIndicator;
 
+import android.content.Intent;
 import android.content.res.Resources;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -13,6 +15,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
+import android.view.MenuItem;
 
 public class TabCollectActivity extends FragmentActivity{
 	
@@ -44,6 +47,12 @@ public class TabCollectActivity extends FragmentActivity{
     public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
+    }
+	
+	@Override
+    public boolean onMenuItemSelected(int featureId, MenuItem item) {
+		this.getParent().onMenuItemSelected(featureId, item);
+        return true;
     }
 	
 	class GoogleMusicAdapter extends FragmentStatePagerAdapter {

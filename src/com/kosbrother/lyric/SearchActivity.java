@@ -8,6 +8,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
@@ -29,6 +30,7 @@ import com.taiwan.imageload.ListAlbumAdapter;
 import com.taiwan.imageload.ListSongAdapter;
 import com.taiwan.imageload.LoadMoreGridView;
 
+@SuppressLint("NewApi")
 public class SearchActivity extends Activity {
 	
 	private Boolean          checkLoad  = true;
@@ -57,7 +59,7 @@ public class SearchActivity extends Activity {
 	private AlertDialog.Builder aboutUsDialog;
 	private ProgressDialog progressDialog   = null;
 	
-    @Override
+	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
@@ -84,7 +86,7 @@ public class SearchActivity extends Activity {
             });
         }else if(searchTypeId == 1){
         	setContentView(R.layout.loadmore);
-        	setTitle("專輯搜索 >"+searchName);
+        	setTitle("歌詞搜索 >"+searchName);
         	progressLayout = (LinearLayout) findViewById(R.id.layout_progress);
         	reloadLayout = (LinearLayout) findViewById(R.id.layout_reload);
         	buttonReload = (Button) findViewById(R.id.button_reload);
@@ -101,6 +103,24 @@ public class SearchActivity extends Activity {
             });
         	
         }else if(searchTypeId == 2){
+        	setContentView(R.layout.loadmore);
+        	setTitle("專輯搜索 >"+searchName);
+        	progressLayout = (LinearLayout) findViewById(R.id.layout_progress);
+        	reloadLayout = (LinearLayout) findViewById(R.id.layout_reload);
+        	buttonReload = (Button) findViewById(R.id.button_reload);
+        	myList = (LoadMoreListView) findViewById(R.id.news_list);
+        	myList.setOnLoadMoreListener(new OnLoadMoreListener() {
+                public void onLoadMore() {
+                	if(checkLoad){
+    					myPage = myPage +1;
+    					new LoadMoreTask().execute();
+    				}else{
+    					myList.onLoadMoreComplete();
+    				}
+                }
+            });
+        	
+        }else if(searchTypeId == 3){
         	setContentView(R.layout.loadmore_grid);
         	setTitle("歌手搜索 >"+searchName);
         	// 還沒寫
@@ -122,6 +142,11 @@ public class SearchActivity extends Activity {
                     }
                 }
             });
+        }
+        
+        int sdkVersion = android.os.Build.VERSION.SDK_INT; 
+        if(sdkVersion > 10){
+        	getActionBar().setDisplayHomeAsUpEnabled(true);
         }
         
         buttonReload.setOnClickListener(new OnClickListener() {
@@ -150,10 +175,7 @@ public class SearchActivity extends Activity {
 	    int itemId = item.getItemId();
 	    switch (itemId) {
 	    case android.R.id.home:
-	        // Toast.makeText(this, "home pressed", Toast.LENGTH_LONG).show();
-	        break;
-	    case R.id.action_settings:
-	    	
+	        finish();
 	        break;
 	    case R.id.action_about:
 	    	aboutUsDialog.show();
@@ -167,8 +189,8 @@ public class SearchActivity extends Activity {
 	    	startActivity(Intent.createChooser(emailIntent, "Send mail..."));
 	        break;
 	    case R.id.action_grade:
-//	    	Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getResources().getString(R.string.recommend_url)));
-//			startActivity(browserIntent);
+	    	Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getResources().getString(R.string.recommend_url)));
+			startActivity(browserIntent);
 	        break;
 	    }
 	    return true;
@@ -188,9 +210,11 @@ public class SearchActivity extends Activity {
             // TODO Auto-generated method stub
         	if(searchTypeId == 0){       
         		mSongs = LyricAPI.searchSongName(searchName, 1);
-            }else if(searchTypeId == 1){
-            	mAlbums = LyricAPI.searchAlbum(searchName, 1);
+            }else if(searchTypeId == 1){       
+        		mSongs = LyricAPI.searchSongLyric(searchName, 1);
             }else if(searchTypeId == 2){
+            	mAlbums = LyricAPI.searchAlbum(searchName, 1);
+            }else if(searchTypeId == 3){
             	mSingers = LyricAPI.searchSinger(searchName, 1);
             }
             return null;
@@ -213,7 +237,18 @@ public class SearchActivity extends Activity {
 	            }else{
 	            	reloadLayout.setVisibility(View.VISIBLE);
 	            }
-            }else if(searchTypeId == 1){
+            }else if(searchTypeId == 1){           
+	            if(mSongs !=null && mSongs.size()!=0){
+		          	  try{
+		          		mSongAdapter = new ListSongAdapter(SearchActivity.this, mSongs);
+		          		myList.setAdapter(mSongAdapter);
+		          	  }catch(Exception e){
+		          		 
+		          	  }
+		            }else{
+		            	reloadLayout.setVisibility(View.VISIBLE);
+		            }
+	        }else if(searchTypeId == 2){
             	if(mAlbums !=null && mAlbums.size()!=0){
   	          	  try{
   	          		mAlbumAdapter = new ListAlbumAdapter(SearchActivity.this, mAlbums);
@@ -224,7 +259,7 @@ public class SearchActivity extends Activity {
   	            }else{
   	            	reloadLayout.setVisibility(View.VISIBLE);
   	            }
-            }else if(searchTypeId == 2){
+            }else if(searchTypeId == 3){
             	loadmoreLayout.setVisibility(View.GONE);
             	if(mSingers !=null && mSingers.size()!=0){
     	          	try{
@@ -263,13 +298,20 @@ public class SearchActivity extends Activity {
                     }
                 }
             }else if(searchTypeId == 1){
+            	moreSongs = LyricAPI.searchSongLyric(searchName, myPage);
+            	if (moreSongs != null && moreSongs.size()!=0) {
+                    for (int i = 0; i < moreSongs.size(); i++) {
+                    	mSongs.add(moreSongs.get(i));
+                    }
+                }
+            }else if(searchTypeId == 2){
             	moreAlbums = LyricAPI.searchAlbum(searchName, myPage);
             	if (moreAlbums != null && moreAlbums.size()!=0) {
                     for (int i = 0; i < moreAlbums.size(); i++) {
                     	mAlbums.add(moreAlbums.get(i));
                     }
                 }
-            }else if(searchTypeId == 2){
+            }else if(searchTypeId == 3){
             	moreSingers = LyricAPI.searchSinger(searchName, myPage);
                 if (moreSingers != null && moreSingers.size()!=0) {
                     for (int i = 0; i < moreSingers.size(); i++) {
@@ -297,7 +339,15 @@ public class SearchActivity extends Activity {
                     Toast.makeText(SearchActivity.this, "no more data", Toast.LENGTH_SHORT).show();            	
                 }       
               	myList.onLoadMoreComplete();
-            }else if(searchTypeId == 1){
+            }else if(searchTypeId == 1){       
+            	if(moreSongs!= null && moreSongs.size()!=0){
+            		mSongAdapter.notifyDataSetChanged();	                
+                }else{
+                    checkLoad= false;
+                    Toast.makeText(SearchActivity.this, "no more data", Toast.LENGTH_SHORT).show();            	
+                }       
+              	myList.onLoadMoreComplete();
+            }else if(searchTypeId == 2){
            	
             	if(moreAlbums!= null && moreAlbums.size()!=0){
             		mAlbumAdapter.notifyDataSetChanged();	                
@@ -307,7 +357,7 @@ public class SearchActivity extends Activity {
                 }       
               	myList.onLoadMoreComplete();
             	
-            }else if(searchTypeId == 2){
+            }else if(searchTypeId == 3){
             	loadmoreLayout.setVisibility(View.GONE);
 
                 if (moreSingers != null && moreSingers.size()!=0) {
@@ -324,7 +374,7 @@ public class SearchActivity extends Activity {
     
     private void setAboutUsDialog() {
         // TODO Auto-generated method stub
-        aboutUsDialog = new AlertDialog.Builder(this).setTitle(getResources().getString(R.string.about_us_string)).setIcon(R.drawable.play_store_icon)
+        aboutUsDialog = new AlertDialog.Builder(this).setTitle(getResources().getString(R.string.about_us_string)).setIcon(R.drawable.app_icon_72)
                 .setMessage(getResources().getString(R.string.about_us))
                 .setPositiveButton(getResources().getString(R.string.yes_string), new DialogInterface.OnClickListener() {
                     @Override
