@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
+import android.view.Display;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,7 +25,18 @@ public class TabSearchActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.layout_search);
+//        setContentView(R.layout.layout_search);
+        
+        Display display = getWindowManager().getDefaultDisplay();
+        int width = display.getWidth(); // deprecated
+        int height = display.getHeight(); // deprecated
+
+        if (width > 480) {
+        	   setContentView(R.layout.layout_search);
+        } else {
+        	   setContentView(R.layout.layout_search_small);
+        }
+        
         mEditText = (EditText) findViewById (R.id.edittext_search);
         mImageButton = (ImageView) findViewById (R.id.imageview_search);
         mRadioGroup = (RadioGroup) findViewById (R.id.radiogroup_search);

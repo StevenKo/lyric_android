@@ -10,7 +10,7 @@
         android:layout_width="fill_parent"
         android:layout_height="100dp"
        	android:gravity="center_vertical"
-       	android:background="@drawable/grid_selector"       
+       	android:background="@drawable/list_video_selector"       
         >
 	    <ImageView android:id="@+id/image_news_list"
 	        android:layout_width="90dp"

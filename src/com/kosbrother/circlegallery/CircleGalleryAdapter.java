@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,26 +56,39 @@ public class CircleGalleryAdapter extends BaseAdapter {
 
     public View getView(int position, View convertView, ViewGroup parent) 
     {
-               
-        View vi= inflater.inflate(R.layout.item_gallery, null);
+        
+    	View vi = convertView;
+    	Display display = mActivity.getWindowManager().getDefaultDisplay();
+        int width = display.getWidth(); // deprecated
+        int height = display.getHeight(); // deprecated
+
+        if (width > 480) {
+            vi = inflater.inflate(R.layout.item_gallery, null);
+        } else {
+            vi = inflater.inflate(R.layout.item_gallery_small, null);
+        }
+    	
         ImageView img = (ImageView) vi.findViewById(R.id.image_gallery);
         TextView txt = (TextView) vi.findViewById(R.id.text_gallery);
         
         
         position= getPosition(position);
-//        vi.setLayoutParams(new Gallery.LayoutParams(450, 250));
-//        img.setLayoutParams(new LayoutParams(450, 250));
-//        i.setScaleType(View.s); 
- 
         txt.setText(data.get(position).getTitle());
         
-        try{
-           imageLoader.DisplayImage(data.get(position).getThumbnail(), img, 550);
-        }catch(Exception e){
-        	
+                
+        if (width > 480) {
+        	try{
+                imageLoader.DisplayImage(data.get(position).getThumbnail(), img, 550);
+             }catch(Exception e){
+             	
+             }
+        } else {
+        	try{
+                imageLoader.DisplayImage(data.get(position).getThumbnail(), img, 350);
+             }catch(Exception e){
+             	
+             }
         }
-        
-        
         
         return vi; 
     } 

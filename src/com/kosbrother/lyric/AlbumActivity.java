@@ -143,10 +143,10 @@ public class AlbumActivity extends Activity {
             SQLiteLyric db = new SQLiteLyric(AlbumActivity.this);
             if (db.isAlbumCollected(mAlbum.getId())) {
                 db.deleteAlbum(mAlbum);
-                Toast.makeText(AlbumActivity.this, "已刪除此歌曲收藏", Toast.LENGTH_SHORT).show();
+                Toast.makeText(AlbumActivity.this, "已刪除此專輯收藏", Toast.LENGTH_SHORT).show();
             } else {
                 db.insertAlbum(mAlbum);
-                Toast.makeText(AlbumActivity.this, "已加入此歌曲收藏", Toast.LENGTH_SHORT).show();
+                Toast.makeText(AlbumActivity.this, "已加入此專輯收藏", Toast.LENGTH_SHORT).show();
             }
             break;
         }
