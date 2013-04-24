@@ -47,6 +47,8 @@ public class AlbumActivity extends Activity {
     private AlertDialog.Builder introduceDialog;
     private ProgressDialog      progressDialog = null;
     private String              singerNmae;
+    
+    private int sdkVersion;
 
     @SuppressLint("NewApi")
 	@Override
@@ -64,7 +66,8 @@ public class AlbumActivity extends Activity {
         if (albumName != null && !albumName.equals("null") && !albumName.equals("")) {
             setTitle(albumName);
         }
-        int sdkVersion = android.os.Build.VERSION.SDK_INT; 
+        
+        sdkVersion = android.os.Build.VERSION.SDK_INT; 
         if(sdkVersion > 10){
         	getActionBar().setDisplayHomeAsUpEnabled(true);
         }
@@ -99,8 +102,14 @@ public class AlbumActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
-        menu.add(0, ID_INTRODUCE, 0, getResources().getString(R.string.menu_introduce)).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-        menu.add(0, ID_COLLECT, 1, getResources().getString(R.string.menu_collect)).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        
+        if (sdkVersion > 10){ 
+        	menu.add(0, ID_INTRODUCE, 0, getResources().getString(R.string.menu_introduce)).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        	menu.add(0, ID_COLLECT, 1, getResources().getString(R.string.menu_collect)).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        }else{
+        	menu.add(0, ID_INTRODUCE, 0, getResources().getString(R.string.menu_introduce));
+        	menu.add(0, ID_COLLECT, 1, getResources().getString(R.string.menu_collect));
+        }
         return true;
     }
 

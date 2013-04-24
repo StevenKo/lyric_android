@@ -33,6 +33,8 @@ public class SongActivity extends FragmentActivity {
 
     private final int           ID_COLLECT = 777777;
     private AlertDialog.Builder aboutUsDialog;
+    
+    private int sdkVersion;
 
 	@SuppressLint("NewApi")
 	@Override
@@ -46,7 +48,8 @@ public class SongActivity extends FragmentActivity {
         theSong = new Song(SongId, SongName, "null", 0, "");
         
         setTitle(SongName);
-        int sdkVersion = android.os.Build.VERSION.SDK_INT; 
+        
+        sdkVersion = android.os.Build.VERSION.SDK_INT; 
         if(sdkVersion > 10){
         	getActionBar().setDisplayHomeAsUpEnabled(true);
         }
@@ -86,7 +89,11 @@ public class SongActivity extends FragmentActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
-        menu.add(0, ID_COLLECT, 1, getResources().getString(R.string.menu_collect_song)).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        if (sdkVersion > 10){ 
+        	menu.add(0, ID_COLLECT, 1, getResources().getString(R.string.menu_collect_song)).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        }else{
+        	menu.add(0, ID_COLLECT, 1, getResources().getString(R.string.menu_collect_song));
+        }
         return true;
     }
 

@@ -29,10 +29,10 @@ public class MainTabActivty extends TabActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tabbarscreen);
 
-        SQLiteLyric db = new SQLiteLyric(this);
-        db.getAllAlbums();
-        db.getAllSingers();
-        db.getAllSongs();
+//        SQLiteLyric db = new SQLiteLyric(this);
+//        db.getAllAlbums();
+//        db.getAllSingers();
+//        db.getAllSongs();
 
         mTabHost = getTabHost();
 
