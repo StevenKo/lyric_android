@@ -15,52 +15,49 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
-import com.kosbrother.fragment.HotAlbumFragment;
 import com.kosbrother.fragment.HotSongFragment;
 import com.kosbrother.lyric.api.LyricAPI;
 import com.kosbrother.lyric.entity.SingerCategory;
 import com.viewpagerindicator.TabPageIndicator;
 
-public class HotSongActivity extends FragmentActivity{
-	
-	private ViewPager pager;
-	private ArrayList<SingerCategory> mCategory;
-	private AlertDialog.Builder aboutUsDialog;
-	
-	@SuppressLint("NewApi")
-	@Override
+public class HotSongActivity extends FragmentActivity {
+
+    private ViewPager                 pager;
+    private ArrayList<SingerCategory> mCategory;
+    private AlertDialog.Builder       aboutUsDialog;
+
+    @SuppressLint("NewApi")
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.simple_tabs);
         setTitle("熱門歌曲");
-        int sdkVersion = android.os.Build.VERSION.SDK_INT; 
-        if(sdkVersion > 10){
-        	getActionBar().setDisplayHomeAsUpEnabled(true);
+        int sdkVersion = android.os.Build.VERSION.SDK_INT;
+        if (sdkVersion > 10) {
+            getActionBar().setDisplayHomeAsUpEnabled(true);
         }
-        
+
         mCategory = LyricAPI.getSingerCategories();
-        
+
         FragmentStatePagerAdapter adapter = new GoogleMusicAdapter(getSupportFragmentManager());
 
-        pager = (ViewPager)findViewById(R.id.pager);
+        pager = (ViewPager) findViewById(R.id.pager);
         pager.setAdapter(adapter);
 
-        TabPageIndicator indicator = (TabPageIndicator)findViewById(R.id.indicator);
+        TabPageIndicator indicator = (TabPageIndicator) findViewById(R.id.indicator);
         indicator.setViewPager(pager);
-        
+
         setAboutUsDialog();
     }
-	
-	
-	@Override
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.main, menu);
-		return true;
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
     }
-	
-	@Override
+
+    @Override
     public boolean onMenuItemSelected(int featureId, MenuItem item) {
 
         int itemId = item.getItemId();
@@ -68,9 +65,9 @@ public class HotSongActivity extends FragmentActivity{
         case android.R.id.home:
             finish();
             break;
-//        case R.id.action_settings:
-//
-//            break;
+        // case R.id.action_settings:
+        //
+        // break;
         case R.id.action_about:
             aboutUsDialog.show();
             break;
@@ -83,26 +80,25 @@ public class HotSongActivity extends FragmentActivity{
             startActivity(Intent.createChooser(emailIntent, "Send mail..."));
             break;
         case R.id.action_grade:
-             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getResources().getString(R.string.recommend_url)));
-             startActivity(browserIntent);
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getResources().getString(R.string.recommend_url)));
+            startActivity(browserIntent);
             break;
         }
         return true;
     }
-	
-	class GoogleMusicAdapter extends FragmentStatePagerAdapter {
+
+    class GoogleMusicAdapter extends FragmentStatePagerAdapter {
         public GoogleMusicAdapter(FragmentManager fm) {
             super(fm);
         }
 
         @Override
         public Fragment getItem(int position) {
-//        	Fragment kk = new Fragment();        	
-//        	kk = HotSongFragment.newInstance(mCategory.get(position).getId());
-        	HotSongFragment kk = new HotSongFragment(mCategory.get(position).getId());
+            // Fragment kk = new Fragment();
+            // kk = HotSongFragment.newInstance(mCategory.get(position).getId());
+            HotSongFragment kk = new HotSongFragment(mCategory.get(position).getId());
             return kk;
         }
-       
 
         @Override
         public CharSequence getPageTitle(int position) {
@@ -111,11 +107,11 @@ public class HotSongActivity extends FragmentActivity{
 
         @Override
         public int getCount() {
-            return mCategory.size();
+            return mCategory.size() - 2;
         }
     }
-	
-	private void setAboutUsDialog() {
+
+    private void setAboutUsDialog() {
         // TODO Auto-generated method stub
         aboutUsDialog = new AlertDialog.Builder(this).setTitle(getResources().getString(R.string.about_us_string)).setIcon(R.drawable.app_icon_72)
                 .setMessage(getResources().getString(R.string.about_us))
