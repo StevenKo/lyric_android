@@ -8,6 +8,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
@@ -46,8 +47,11 @@ public class AlbumActivity extends Activity {
     private AlertDialog.Builder introduceDialog;
     private ProgressDialog      progressDialog = null;
     private String              singerNmae;
+    
+    private int sdkVersion;
 
-    @Override
+    @SuppressLint("NewApi")
+	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.loadmore);
@@ -61,6 +65,11 @@ public class AlbumActivity extends Activity {
 
         if (albumName != null && !albumName.equals("null") && !albumName.equals("")) {
             setTitle(albumName);
+        }
+        
+        sdkVersion = android.os.Build.VERSION.SDK_INT; 
+        if(sdkVersion > 10){
+        	getActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
         progressLayout = (LinearLayout) findViewById(R.id.layout_progress);
@@ -93,8 +102,14 @@ public class AlbumActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
-        menu.add(0, ID_INTRODUCE, 0, getResources().getString(R.string.menu_introduce)).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-        menu.add(0, ID_COLLECT, 1, getResources().getString(R.string.menu_collect)).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        
+        if (sdkVersion > 10){ 
+        	menu.add(0, ID_INTRODUCE, 0, getResources().getString(R.string.menu_introduce)).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        	menu.add(0, ID_COLLECT, 1, getResources().getString(R.string.menu_collect)).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        }else{
+        	menu.add(0, ID_INTRODUCE, 0, getResources().getString(R.string.menu_introduce));
+        	menu.add(0, ID_COLLECT, 1, getResources().getString(R.string.menu_collect));
+        }
         return true;
     }
 
@@ -104,11 +119,11 @@ public class AlbumActivity extends Activity {
         int itemId = item.getItemId();
         switch (itemId) {
         case android.R.id.home:
-            // Toast.makeText(this, "home pressed", Toast.LENGTH_LONG).show();
+            finish();
             break;
-        case R.id.action_settings:
-
-            break;
+//        case R.id.action_settings:
+//
+//            break;
         case R.id.action_about:
             aboutUsDialog.show();
             break;
@@ -121,8 +136,8 @@ public class AlbumActivity extends Activity {
             startActivity(Intent.createChooser(emailIntent, "Send mail..."));
             break;
         case R.id.action_grade:
-            // Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getResources().getString(R.string.recommend_url)));
-            // startActivity(browserIntent);
+             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getResources().getString(R.string.recommend_url)));
+             startActivity(browserIntent);
             break;
         case ID_INTRODUCE:
             if (mAlbum.getDescription().equals("null")) {
@@ -137,10 +152,10 @@ public class AlbumActivity extends Activity {
             SQLiteLyric db = new SQLiteLyric(AlbumActivity.this);
             if (db.isAlbumCollected(mAlbum.getId())) {
                 db.deleteAlbum(mAlbum);
-                Toast.makeText(AlbumActivity.this, "已刪除此歌曲收藏", Toast.LENGTH_SHORT).show();
+                Toast.makeText(AlbumActivity.this, "已刪除此專輯收藏", Toast.LENGTH_SHORT).show();
             } else {
                 db.insertAlbum(mAlbum);
-                Toast.makeText(AlbumActivity.this, "已加入此歌曲收藏", Toast.LENGTH_SHORT).show();
+                Toast.makeText(AlbumActivity.this, "已加入此專輯收藏", Toast.LENGTH_SHORT).show();
             }
             break;
         }
@@ -186,7 +201,7 @@ public class AlbumActivity extends Activity {
 
     private void setAboutUsDialog() {
         // TODO Auto-generated method stub
-        aboutUsDialog = new AlertDialog.Builder(this).setTitle(getResources().getString(R.string.about_us_string)).setIcon(R.drawable.play_store_icon)
+        aboutUsDialog = new AlertDialog.Builder(this).setTitle(getResources().getString(R.string.about_us_string)).setIcon(R.drawable.app_icon_72)
                 .setMessage(getResources().getString(R.string.about_us))
                 .setPositiveButton(getResources().getString(R.string.yes_string), new DialogInterface.OnClickListener() {
                     @Override

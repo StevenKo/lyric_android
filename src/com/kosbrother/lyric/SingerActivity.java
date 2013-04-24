@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -28,6 +29,7 @@ import com.kosbrother.lyric.entity.Singer;
 import com.taiwan.imageload.ListSongAdapter;
 import com.viewpagerindicator.TabPageIndicator;
 
+@SuppressLint("NewApi")
 public class SingerActivity extends FragmentActivity{
 	
 	private final int ID_INTRODUCE = 666666;
@@ -44,6 +46,9 @@ public class SingerActivity extends FragmentActivity{
 	private AlertDialog.Builder introduceDialog;
 	private ProgressDialog progressDialog   = null;
 	
+	private int sdkVersion;
+	
+	@SuppressLint("NewApi")
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +58,13 @@ public class SingerActivity extends FragmentActivity{
         SingerId = mBundle.getInt("SingerId");
         SingerName = mBundle.getString("SingerName");
         theSinger = new Singer(SingerId, SingerName, "null");
+        
+        
+        setTitle(SingerName);
+        sdkVersion = android.os.Build.VERSION.SDK_INT; 
+        if(sdkVersion > 10){
+        	getActionBar().setDisplayHomeAsUpEnabled(true);
+        }
         
         Resources res = getResources();
         CONTENT = res.getStringArray(R.array.singer_tabs);
@@ -72,12 +84,17 @@ public class SingerActivity extends FragmentActivity{
 	
 	
 	
-	@SuppressLint("NewApi")
+	
 	@Override
     public boolean onCreateOptionsMenu(Menu menu) {
     	getMenuInflater().inflate(R.menu.main, menu);
-    	menu.add(0, ID_INTRODUCE, 0, getResources().getString(R.string.menu_introduce)).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-    	menu.add(0, ID_COLLECT, 1, getResources().getString(R.string.menu_collect)).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);  	
+    	if (sdkVersion > 10){    	
+    		menu.add(0, ID_INTRODUCE, 0, getResources().getString(R.string.menu_introduce)).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+    		menu.add(0, ID_COLLECT, 1, getResources().getString(R.string.menu_collect)).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+    	}else{
+    		menu.add(0, ID_INTRODUCE, 0, getResources().getString(R.string.menu_introduce));
+    		menu.add(0, ID_COLLECT, 1, getResources().getString(R.string.menu_collect));
+    	}
     	return true;
     }
 	
@@ -86,10 +103,7 @@ public class SingerActivity extends FragmentActivity{
 	    int itemId = item.getItemId();
 	    switch (itemId) {
 	    case android.R.id.home:
-	        // Toast.makeText(this, "home pressed", Toast.LENGTH_LONG).show();
-	        break;
-	    case R.id.action_settings:
-	    	
+	        finish();
 	        break;
 	    case R.id.action_about:
 	    	aboutUsDialog.show();
@@ -103,8 +117,8 @@ public class SingerActivity extends FragmentActivity{
 	    	startActivity(Intent.createChooser(emailIntent, "Send mail..."));
 	        break;
 	    case R.id.action_grade:
-//	    	Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getResources().getString(R.string.recommend_url)));
-//			startActivity(browserIntent);
+	    	Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getResources().getString(R.string.recommend_url)));
+			startActivity(browserIntent);
 	        break;
 	    case ID_INTRODUCE:
 	    	if(theSinger.getDescription().equals("null")){
@@ -198,7 +212,7 @@ public class SingerActivity extends FragmentActivity{
 	
 	private void setAboutUsDialog() {
         // TODO Auto-generated method stub
-        aboutUsDialog = new AlertDialog.Builder(this).setTitle(getResources().getString(R.string.about_us_string)).setIcon(R.drawable.play_store_icon)
+        aboutUsDialog = new AlertDialog.Builder(this).setTitle(getResources().getString(R.string.about_us_string)).setIcon(R.drawable.app_icon_72)
                 .setMessage(getResources().getString(R.string.about_us))
                 .setPositiveButton(getResources().getString(R.string.yes_string), new DialogInterface.OnClickListener() {
                     @Override
@@ -209,7 +223,7 @@ public class SingerActivity extends FragmentActivity{
     }
 	
 	private void setIntroduceDialog(){
-		introduceDialog = new AlertDialog.Builder(this).setTitle(getResources().getString(R.string.singer_introduce_title)).setIcon(R.drawable.app_icon)
+		introduceDialog = new AlertDialog.Builder(this).setTitle(getResources().getString(R.string.singer_introduce_title))
                 .setMessage(theSinger.getDescription())
                 .setPositiveButton(getResources().getString(R.string.yes_string), new DialogInterface.OnClickListener() {
                     @Override

@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -32,17 +33,33 @@ public class SongActivity extends FragmentActivity {
 
     private final int           ID_COLLECT = 777777;
     private AlertDialog.Builder aboutUsDialog;
+    
+    private int sdkVersion;
 
-    @Override
+	@SuppressLint("NewApi")
+	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.simple_tabs);
-
+               
         mBundle = this.getIntent().getExtras();
         SongId = mBundle.getInt("SongId");
         SongName = mBundle.getString("SongName");
         theSong = new Song(SongId, SongName, "null", 0, "");
-
+        
+        setTitle(SongName);
+        
+        sdkVersion = android.os.Build.VERSION.SDK_INT; 
+        if(sdkVersion > 10){
+        	getActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+        
+//        getActionBar().setHomeButtonEnabled(true);
+//        getActionBar().setDisplayHomeAsUpEnabled(true);
+//        getActionBar().setIcon(R.drawable.app_icon);
+//        getActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+//        setActionBarTitle(SongName);
+        
         Resources res = getResources();
         CONTENT = res.getStringArray(R.array.song_tabs);
 
@@ -56,12 +73,27 @@ public class SongActivity extends FragmentActivity {
 
         setAboutUsDialog();
     }
-
+    
+    
+//    @SuppressLint("NewApi")
+//	private void setActionBarTitle(String songName) {
+//        LayoutInflater inflator = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//        View v = inflator.inflate(R.layout.item_title, null);
+//        TextView titleText = ((TextView) v.findViewById(R.id.title));
+//        titleText.setText(songName);
+//        titleText.setSelected(true);
+//        getActionBar().setCustomView(v);
+//    }
+    
     @SuppressLint("NewApi")
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
-        menu.add(0, ID_COLLECT, 1, getResources().getString(R.string.menu_collect_song)).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        if (sdkVersion > 10){ 
+        	menu.add(0, ID_COLLECT, 1, getResources().getString(R.string.menu_collect_song)).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        }else{
+        	menu.add(0, ID_COLLECT, 1, getResources().getString(R.string.menu_collect_song));
+        }
         return true;
     }
 
@@ -71,26 +103,23 @@ public class SongActivity extends FragmentActivity {
         int itemId = item.getItemId();
         switch (itemId) {
         case android.R.id.home:
-            // Toast.makeText(this, "home pressed", Toast.LENGTH_LONG).show();
-            break;
-        case R.id.action_settings:
-
-            break;
-        case R.id.action_about:
-            aboutUsDialog.show();
-            break;
-        case R.id.action_contact:
-            final Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
-            emailIntent.setType("plain/text");
-            emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[] { "brotherkos@gmail.com" });
-            emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "聯絡我們 from 歌曲王國");
-            emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, "");
-            startActivity(Intent.createChooser(emailIntent, "Send mail..."));
-            break;
-        case R.id.action_grade:
-            // Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getResources().getString(R.string.recommend_url)));
-            // startActivity(browserIntent);
-            break;
+	        finish();
+	        break;
+	    case R.id.action_about:
+	    	aboutUsDialog.show();
+	        break;
+	    case R.id.action_contact:
+	    	final Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
+	    	emailIntent.setType("plain/text");
+	    	emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{"brotherkos@gmail.com"});
+	    	emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "聯絡我們 from 歌曲王國");
+	    	emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, "");
+	    	startActivity(Intent.createChooser(emailIntent, "Send mail..."));
+	        break;
+	    case R.id.action_grade:
+	    	Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getResources().getString(R.string.recommend_url)));
+			startActivity(browserIntent);
+	        break;
         case ID_COLLECT:
             if (!theSong.getLyric().equals("null")) {
                 SQLiteLyric db = new SQLiteLyric(SongActivity.this);
@@ -138,7 +167,7 @@ public class SongActivity extends FragmentActivity {
 
     private void setAboutUsDialog() {
         // TODO Auto-generated method stub
-        aboutUsDialog = new AlertDialog.Builder(this).setTitle(getResources().getString(R.string.about_us_string)).setIcon(R.drawable.play_store_icon)
+        aboutUsDialog = new AlertDialog.Builder(this).setTitle(getResources().getString(R.string.about_us_string)).setIcon(R.drawable.app_icon_72)
                 .setMessage(getResources().getString(R.string.about_us))
                 .setPositiveButton(getResources().getString(R.string.yes_string), new DialogInterface.OnClickListener() {
                     @Override

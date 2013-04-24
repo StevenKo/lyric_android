@@ -17,6 +17,8 @@
     <string name="about_us">嗨, \n\n音樂頻道是一個收集熱門Youtube音樂頻道的第三方App軟體, \n\n我們並不擁有這些影音版權. 如果您的頻道不希望出現在此App, 請Email讓我們知道. \n\n感謝您. \n\nEmail: brotherkos\@gmail.com</string>
     <string name="yes_string">確定</string>
     
+    <string name="recommend_url">https://play.google.com/store/apps/developer?id=KosBrother</string>
+    
     <string name="singer_introduce_title">歌手簡介</string>
     <string name="album_introduce_title">歌手簡介</string>
 
