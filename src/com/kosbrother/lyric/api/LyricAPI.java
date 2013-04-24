@@ -121,7 +121,7 @@ public class LyricAPI {
             return null;
         }
 
-        String url = "http://gdata.youtube.com/feeds/api/videos?q=" + query + "&start-index=" + (page * 10 + 1) + "&max-results=10&v=2&alt=json";
+        String url = "http://gdata.youtube.com/feeds/api/videos?q=" + query + "&start-index=" + (page * 12 + 1) + "&max-results=12&v=2&alt=json";
         String message = getMessageFromServer("GET", null, null, url);
 
         if (message == null) {
@@ -196,7 +196,7 @@ public class LyricAPI {
             return null;
         }
 
-        String url = "https://ajax.googleapis.com/ajax/services/search/news?v=1.0&q=" + query + "&start=" + page * 8 + "&rsz=8&ned=tw";
+        String url = "https://ajax.googleapis.com/ajax/services/search/news?v=1.0&q=" + query + "&start=" + page * 12 + "&rsz=12&ned=tw";
         String message = getMessageFromServer("GET", null, null, url);
 
         if (message == null) {
