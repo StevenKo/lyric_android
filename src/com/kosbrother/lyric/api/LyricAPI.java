@@ -189,6 +189,11 @@ public class LyricAPI {
     public static ArrayList<SingerNews> getNews(String query, int page) {
         ArrayList<SingerNews> newses = new ArrayList<SingerNews>();
 
+        if (query.indexOf("(") != -1) {
+            String name2 = query.substring(0, query.indexOf("("));
+            query = name2;
+        }
+
         try {
             query = URLEncoder.encode(query, "utf-8");
         } catch (UnsupportedEncodingException e1) {
