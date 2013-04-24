@@ -7,8 +7,8 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -21,9 +21,9 @@ import com.kosbrother.lyric.entity.Song;
 import com.taiwan.imageload.ListSongAdapter;
 
 public class HotSongFragment extends Fragment {
-		
-	public  int myPage = 1;
-	private Boolean checkLoad = true;
+
+    public int               myPage    = 1;
+    private Boolean          checkLoad = true;
     private LinearLayout     progressLayout;
     private LinearLayout     reloadLayout;
     private LoadMoreListView myList;
@@ -31,7 +31,7 @@ public class HotSongFragment extends Fragment {
     private ListSongAdapter  mdapter;
     private ArrayList<Song>  mSongs;
     private ArrayList<Song>  moreSongs = new ArrayList<Song>();
-    private static int       categoryId;
+    private final int        categoryId;
 
     public HotSongFragment(int category_id) {
 
@@ -53,15 +53,15 @@ public class HotSongFragment extends Fragment {
         myList = (LoadMoreListView) myFragmentView.findViewById(R.id.news_list);
         myList.setOnLoadMoreListener(new OnLoadMoreListener() {
             public void onLoadMore() {
-            	if(checkLoad){
-					myPage = myPage +1;
-					new LoadMoreTask().execute();
-				}else{
-					myList.onLoadMoreComplete();
-				}
+                if (checkLoad) {
+                    myPage = myPage + 1;
+                    new LoadMoreTask().execute();
+                } else {
+                    myList.onLoadMoreComplete();
+                }
             }
         });
-        
+
         buttonReload.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
@@ -70,7 +70,7 @@ public class HotSongFragment extends Fragment {
                 new DownloadChannelsTask().execute();
             }
         });
-        
+
         if (mdapter != null) {
             progressLayout.setVisibility(View.GONE);
             myList.setAdapter(mdapter);
@@ -117,22 +117,21 @@ public class HotSongFragment extends Fragment {
 
         }
     }
-    
+
     private class LoadMoreTask extends AsyncTask {
 
         @Override
         protected Object doInBackground(Object... params) {
             // TODO Auto-generated method stub
-        	
-        	moreSongs.clear();
-        	moreSongs = LyricAPI.getCategoryHotSongs(categoryId, myPage);
-        	if(moreSongs!= null){
-	        	for(int i=0; i<moreSongs.size();i++){	        		
-	        		mSongs.add(moreSongs.get(i));
-	            }
-        	}
-        	
-        	
+
+            moreSongs.clear();
+            moreSongs = LyricAPI.getCategoryHotSongs(categoryId, myPage);
+            if (moreSongs != null) {
+                for (int i = 0; i < moreSongs.size(); i++) {
+                    mSongs.add(moreSongs.get(i));
+                }
+            }
+
             return null;
         }
 
@@ -140,19 +139,18 @@ public class HotSongFragment extends Fragment {
         protected void onPostExecute(Object result) {
             // TODO Auto-generated method stub
             super.onPostExecute(result);
-            
-            if(moreSongs!= null && moreSongs.size()!=0){
-            	mdapter.notifyDataSetChanged();	                
-            }else{
-                checkLoad= false;
-                Toast.makeText(getActivity(), "no more data", Toast.LENGTH_SHORT).show();            	
-            }       
-          	myList.onLoadMoreComplete();
-          	
-          	
+
+            if (moreSongs != null && moreSongs.size() != 0) {
+                mdapter.notifyDataSetChanged();
+            } else {
+                checkLoad = false;
+                Toast.makeText(getActivity(), "no more data", Toast.LENGTH_SHORT).show();
+            }
+            myList.onLoadMoreComplete();
+
         }
     }
-    
+
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
