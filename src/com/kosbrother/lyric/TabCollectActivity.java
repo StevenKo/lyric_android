@@ -5,9 +5,10 @@ import com.kosbrother.fragment.CollectSingerFragment;
 import com.kosbrother.fragment.CollectSongFragment;
 import com.viewpagerindicator.TabPageIndicator;
 
-import android.content.Intent;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -24,10 +25,18 @@ public class TabCollectActivity extends FragmentActivity{
 	private FragmentStatePagerAdapter adapter;
 	private TabPageIndicator indicator;
 	
+	private SharedPreferences    sharePreference;
+	private String keyDeleteDialog = "KeyDeleteDialog";
+	private String keyPref = "pref";
+	private Boolean showDeleteDialog;
+	
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.simple_tabs);
+        
+        sharePreference = getSharedPreferences(keyPref, 0);
+        showDeleteDialog = sharePreference.getBoolean(keyDeleteDialog, true);
         
         Resources res = getResources();
         CONTENT = res.getStringArray(R.array.tabs);
@@ -40,6 +49,9 @@ public class TabCollectActivity extends FragmentActivity{
         indicator = (TabPageIndicator)findViewById(R.id.indicator);
         indicator.setViewPager(pager);
         
+        if(showDeleteDialog){
+        	showDeleteDialog();
+        }
     }
 	
 	
@@ -53,6 +65,28 @@ public class TabCollectActivity extends FragmentActivity{
     public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		this.getParent().onMenuItemSelected(featureId, item);
         return true;
+    }
+	
+	private void showDeleteDialog() {
+        new AlertDialog.Builder(this).setTitle(getResources().getString(R.string.reminder)).setIcon(R.drawable.app_icon_72)
+                .setMessage(getResources().getString(R.string.delete_item_reminder))
+                .setPositiveButton(getResources().getString(R.string.do_not_reminder), new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1) {
+                    	sharePreference.edit().putBoolean(keyDeleteDialog, false).commit();
+
+                    }
+
+                }).setNegativeButton(getResources().getString(R.string.reminder_next), new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1) {
+
+                    }
+
+                }).show();
+
     }
 	
 	class GoogleMusicAdapter extends FragmentStatePagerAdapter {

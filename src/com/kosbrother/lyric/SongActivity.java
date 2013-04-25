@@ -12,17 +12,26 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.Animation;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.adwhirl.AdWhirlLayout;
+import com.adwhirl.AdWhirlManager;
+import com.adwhirl.AdWhirlTargeting;
+import com.adwhirl.AdWhirlLayout.AdWhirlInterface;
+import com.google.ads.AdView;
 import com.kosbrother.fragment.SongLyricFragment;
 import com.kosbrother.fragment.SongVideoFragment;
 import com.kosbrother.lyric.db.SQLiteLyric;
 import com.kosbrother.lyric.entity.Song;
 import com.viewpagerindicator.TabPageIndicator;
 
-public class SongActivity extends FragmentActivity {
+public class SongActivity extends FragmentActivity implements AdWhirlInterface {
 
     private ViewPager           pager;
     private String[]            CONTENT;
@@ -35,13 +44,19 @@ public class SongActivity extends FragmentActivity {
     private AlertDialog.Builder aboutUsDialog;
     
     private int sdkVersion;
+    private SQLiteLyric db;
+	private MenuItem itemCollect;
+	
+	private final String  adWhirlKey = Setting.adwhirlKey;
+
 
 	@SuppressLint("NewApi")
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.simple_tabs);
-               
+        db = new SQLiteLyric(SongActivity.this);
+        
         mBundle = this.getIntent().getExtras();
         SongId = mBundle.getInt("SongId");
         SongName = mBundle.getString("SongName");
@@ -72,6 +87,18 @@ public class SongActivity extends FragmentActivity {
         indicator.setViewPager(pager);
 
         setAboutUsDialog();
+        
+        try {
+            Display display = getWindowManager().getDefaultDisplay();
+            int width = display.getWidth(); // deprecated
+            int height = display.getHeight(); // deprecated
+
+            if (width > 320) {
+                setAdAdwhirl();
+            }
+        } catch (Exception e) {
+
+        }
     }
     
     
@@ -90,9 +117,19 @@ public class SongActivity extends FragmentActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
         if (sdkVersion > 10){ 
-        	menu.add(0, ID_COLLECT, 1, getResources().getString(R.string.menu_collect_song)).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        	if(db.isSongCollected(theSong.getId())){
+    			itemCollect = menu.add(0, ID_COLLECT, 1, getResources().getString(R.string.menu_collect_cancel));
+    			itemCollect.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+	    	}else{
+	    		itemCollect = menu.add(0, ID_COLLECT, 1, getResources().getString(R.string.menu_collect_song));
+	    		itemCollect.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+	    	}
         }else{
-        	menu.add(0, ID_COLLECT, 1, getResources().getString(R.string.menu_collect_song));
+        	if(db.isSongCollected(theSong.getId())){
+    			itemCollect = menu.add(0, ID_COLLECT, 1, getResources().getString(R.string.menu_collect_cancel));
+	    	}else{
+	    		itemCollect = menu.add(0, ID_COLLECT, 1, getResources().getString(R.string.menu_collect_song));
+	    	}
         }
         return true;
     }
@@ -125,9 +162,11 @@ public class SongActivity extends FragmentActivity {
                 SQLiteLyric db = new SQLiteLyric(SongActivity.this);
                 if (db.isSongCollected(theSong.getId())) {
                     db.deleteSong(theSong);
-                    Toast.makeText(SongActivity.this, "已刪除此歌曲收藏", Toast.LENGTH_SHORT).show();
+                    itemCollect.setTitle(getResources().getString(R.string.menu_collect_song));
+                    Toast.makeText(SongActivity.this, "已取消此歌曲收藏", Toast.LENGTH_SHORT).show();
                 } else {
                     db.insertSong(theSong);
+                    itemCollect.setTitle(getResources().getString(R.string.menu_collect_cancel));
                     Toast.makeText(SongActivity.this, "已加入此歌曲收藏", Toast.LENGTH_SHORT).show();
                 }
             } else {
@@ -175,5 +214,52 @@ public class SongActivity extends FragmentActivity {
 
                     }
                 });
+    }
+    
+    private void setAdAdwhirl() {
+        // TODO Auto-generated method stub
+        AdWhirlManager.setConfigExpireTimeout(1000 * 60);
+        AdWhirlTargeting.setAge(23);
+        AdWhirlTargeting.setGender(AdWhirlTargeting.Gender.MALE);
+        AdWhirlTargeting.setKeywords("online games gaming");
+        AdWhirlTargeting.setPostalCode("94123");
+        AdWhirlTargeting.setTestMode(false);
+
+        AdWhirlLayout adwhirlLayout = new AdWhirlLayout(this, adWhirlKey);
+
+        LinearLayout mainLayout = (LinearLayout) findViewById(R.id.adonView);
+
+        adwhirlLayout.setAdWhirlInterface(this);
+
+        mainLayout.addView(adwhirlLayout);
+
+        mainLayout.invalidate();
+    }
+
+    @Override
+    public void adWhirlGeneric() {
+        // TODO Auto-generated method stub
+
+    }
+
+    public void rotationHoriztion(int beganDegree, int endDegree, AdView view) {
+        final float centerX = 320 / 2.0f;
+        final float centerY = 48 / 2.0f;
+        final float zDepth = -0.50f * view.getHeight();
+
+        Rotate3dAnimation rotation = new Rotate3dAnimation(beganDegree, endDegree, centerX, centerY, zDepth, true);
+        rotation.setDuration(1000);
+        rotation.setInterpolator(new AccelerateInterpolator());
+        rotation.setAnimationListener(new Animation.AnimationListener() {
+            public void onAnimationStart(Animation animation) {
+            }
+
+            public void onAnimationEnd(Animation animation) {
+            }
+
+            public void onAnimationRepeat(Animation animation) {
+            }
+        });
+        view.startAnimation(rotation);
     }
 }

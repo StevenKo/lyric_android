@@ -11,16 +11,24 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.adwhirl.AdWhirlLayout;
+import com.adwhirl.AdWhirlManager;
+import com.adwhirl.AdWhirlTargeting;
+import com.adwhirl.AdWhirlLayout.AdWhirlInterface;
 import com.costum.android.widget.LoadMoreListView;
 import com.costum.android.widget.LoadMoreListView.OnLoadMoreListener;
+import com.google.ads.AdView;
 import com.kosbrother.lyric.api.LyricAPI;
 import com.kosbrother.lyric.entity.Album;
 import com.kosbrother.lyric.entity.Singer;
@@ -31,7 +39,7 @@ import com.taiwan.imageload.ListSongAdapter;
 import com.taiwan.imageload.LoadMoreGridView;
 
 @SuppressLint("NewApi")
-public class SearchActivity extends Activity {
+public class SearchActivity extends Activity implements AdWhirlInterface {
 	
 	private Boolean          checkLoad  = true;
     private int       myPage     = 1;
@@ -58,6 +66,8 @@ public class SearchActivity extends Activity {
 
 	private AlertDialog.Builder aboutUsDialog;
 	private ProgressDialog progressDialog   = null;
+	private final String  adWhirlKey = Setting.adwhirlKey;
+
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -161,6 +171,18 @@ public class SearchActivity extends Activity {
       new DownloadChannelsTask().execute();    
         
       setAboutUsDialog();
+      
+      try {
+          Display display = getWindowManager().getDefaultDisplay();
+          int width = display.getWidth(); // deprecated
+          int height = display.getHeight(); // deprecated
+
+          if (width > 320) {
+              setAdAdwhirl();
+          }
+      } catch (Exception e) {
+
+      }
     }
     
     @SuppressLint("NewApi")
@@ -382,6 +404,53 @@ public class SearchActivity extends Activity {
 
                     }
                 });
+    }
+    
+    private void setAdAdwhirl() {
+        // TODO Auto-generated method stub
+        AdWhirlManager.setConfigExpireTimeout(1000 * 60);
+        AdWhirlTargeting.setAge(23);
+        AdWhirlTargeting.setGender(AdWhirlTargeting.Gender.MALE);
+        AdWhirlTargeting.setKeywords("online games gaming");
+        AdWhirlTargeting.setPostalCode("94123");
+        AdWhirlTargeting.setTestMode(false);
+
+        AdWhirlLayout adwhirlLayout = new AdWhirlLayout(this, adWhirlKey);
+
+        LinearLayout mainLayout = (LinearLayout) findViewById(R.id.adonView);
+
+        adwhirlLayout.setAdWhirlInterface(this);
+
+        mainLayout.addView(adwhirlLayout);
+
+        mainLayout.invalidate();
+    }
+
+    @Override
+    public void adWhirlGeneric() {
+        // TODO Auto-generated method stub
+
+    }
+
+    public void rotationHoriztion(int beganDegree, int endDegree, AdView view) {
+        final float centerX = 320 / 2.0f;
+        final float centerY = 48 / 2.0f;
+        final float zDepth = -0.50f * view.getHeight();
+
+        Rotate3dAnimation rotation = new Rotate3dAnimation(beganDegree, endDegree, centerX, centerY, zDepth, true);
+        rotation.setDuration(1000);
+        rotation.setInterpolator(new AccelerateInterpolator());
+        rotation.setAnimationListener(new Animation.AnimationListener() {
+            public void onAnimationStart(Animation animation) {
+            }
+
+            public void onAnimationEnd(Animation animation) {
+            }
+
+            public void onAnimationRepeat(Animation animation) {
+            }
+        });
+        view.startAnimation(rotation);
     }
 	
 }

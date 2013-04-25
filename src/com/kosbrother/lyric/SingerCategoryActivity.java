@@ -13,16 +13,25 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.Animation;
+import android.widget.LinearLayout;
 
+import com.adwhirl.AdWhirlLayout;
+import com.adwhirl.AdWhirlManager;
+import com.adwhirl.AdWhirlTargeting;
+import com.adwhirl.AdWhirlLayout.AdWhirlInterface;
+import com.google.ads.AdView;
 import com.kosbrother.fragment.SingerCategoryFragment;
 import com.kosbrother.lyric.api.LyricAPI;
 import com.kosbrother.lyric.entity.SingerSearchWay;
 import com.viewpagerindicator.TabPageIndicator;
 
 @SuppressLint("NewApi")
-public class SingerCategoryActivity extends FragmentActivity {
+public class SingerCategoryActivity extends FragmentActivity implements AdWhirlInterface {
 
     private ViewPager                  pager;
     private ArrayList<SingerSearchWay> mCategory;
@@ -30,6 +39,7 @@ public class SingerCategoryActivity extends FragmentActivity {
     private int                        categoryId;
     private String                     categoryName;
     private AlertDialog.Builder        aboutUsDialog;
+    private final String  adWhirlKey = Setting.adwhirlKey;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +69,18 @@ public class SingerCategoryActivity extends FragmentActivity {
         indicator.setCurrentItem(1);
 
         setAboutUsDialog();
+        
+        try {
+            Display display = getWindowManager().getDefaultDisplay();
+            int width = display.getWidth(); // deprecated
+            int height = display.getHeight(); // deprecated
+
+            if (width > 320) {
+                setAdAdwhirl();
+            }
+        } catch (Exception e) {
+
+        }
     }
 
     @Override
@@ -127,5 +149,52 @@ public class SingerCategoryActivity extends FragmentActivity {
 
                     }
                 });
+    }
+    
+    private void setAdAdwhirl() {
+        // TODO Auto-generated method stub
+        AdWhirlManager.setConfigExpireTimeout(1000 * 60);
+        AdWhirlTargeting.setAge(23);
+        AdWhirlTargeting.setGender(AdWhirlTargeting.Gender.MALE);
+        AdWhirlTargeting.setKeywords("online games gaming");
+        AdWhirlTargeting.setPostalCode("94123");
+        AdWhirlTargeting.setTestMode(false);
+
+        AdWhirlLayout adwhirlLayout = new AdWhirlLayout(this, adWhirlKey);
+
+        LinearLayout mainLayout = (LinearLayout) findViewById(R.id.adonView);
+
+        adwhirlLayout.setAdWhirlInterface(this);
+
+        mainLayout.addView(adwhirlLayout);
+
+        mainLayout.invalidate();
+    }
+
+    @Override
+    public void adWhirlGeneric() {
+        // TODO Auto-generated method stub
+
+    }
+
+    public void rotationHoriztion(int beganDegree, int endDegree, AdView view) {
+        final float centerX = 320 / 2.0f;
+        final float centerY = 48 / 2.0f;
+        final float zDepth = -0.50f * view.getHeight();
+
+        Rotate3dAnimation rotation = new Rotate3dAnimation(beganDegree, endDegree, centerX, centerY, zDepth, true);
+        rotation.setDuration(1000);
+        rotation.setInterpolator(new AccelerateInterpolator());
+        rotation.setAnimationListener(new Animation.AnimationListener() {
+            public void onAnimationStart(Animation animation) {
+            }
+
+            public void onAnimationEnd(Animation animation) {
+            }
+
+            public void onAnimationRepeat(Animation animation) {
+            }
+        });
+        view.startAnimation(rotation);
     }
 }

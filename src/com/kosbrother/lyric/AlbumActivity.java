@@ -11,23 +11,31 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.adwhirl.AdWhirlLayout;
+import com.adwhirl.AdWhirlManager;
+import com.adwhirl.AdWhirlTargeting;
+import com.adwhirl.AdWhirlLayout.AdWhirlInterface;
 import com.costum.android.widget.LoadMoreListView;
 import com.costum.android.widget.LoadMoreListView.OnLoadMoreListener;
+import com.google.ads.AdView;
 import com.kosbrother.lyric.api.LyricAPI;
 import com.kosbrother.lyric.db.SQLiteLyric;
 import com.kosbrother.lyric.entity.Album;
 import com.kosbrother.lyric.entity.Song;
 import com.taiwan.imageload.ListSongAdapter;
 
-public class AlbumActivity extends Activity {
+public class AlbumActivity extends Activity implements AdWhirlInterface {
 
     private LinearLayout        progressLayout;
     private LinearLayout        reloadLayout;
@@ -49,13 +57,18 @@ public class AlbumActivity extends Activity {
     private String              singerNmae;
     
     private int sdkVersion;
+    private SQLiteLyric db;
+	private MenuItem itemCollect;
+	
+	private final String  adWhirlKey = Setting.adwhirlKey;
 
     @SuppressLint("NewApi")
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.loadmore);
-
+        db = new SQLiteLyric(AlbumActivity.this);
+        
         mBundle = this.getIntent().getExtras();
         albumId = mBundle.getInt("AlbumId");
         albumName = mBundle.getString("AlbumName");
@@ -96,6 +109,18 @@ public class AlbumActivity extends Activity {
 
         setIntroduceDialog();
         setAboutUsDialog();
+        
+        try {
+            Display display = getWindowManager().getDefaultDisplay();
+            int width = display.getWidth(); // deprecated
+            int height = display.getHeight(); // deprecated
+
+            if (width > 320) {
+                setAdAdwhirl();
+            }
+        } catch (Exception e) {
+
+        }
     }
 
     @SuppressLint("NewApi")
@@ -104,11 +129,22 @@ public class AlbumActivity extends Activity {
         getMenuInflater().inflate(R.menu.main, menu);
         
         if (sdkVersion > 10){ 
-        	menu.add(0, ID_INTRODUCE, 0, getResources().getString(R.string.menu_introduce)).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-        	menu.add(0, ID_COLLECT, 1, getResources().getString(R.string.menu_collect)).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        	menu.add(0, ID_INTRODUCE, 0, getResources().getString(R.string.menu_introduce)).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);       	
+        	if(db.isAlbumCollected(mAlbum.getId())){
+    			itemCollect = menu.add(0, ID_COLLECT, 1, getResources().getString(R.string.menu_collect_cancel));
+    			itemCollect.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+	    	}else{
+	    		itemCollect = menu.add(0, ID_COLLECT, 1, getResources().getString(R.string.menu_collect));
+	    		itemCollect.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+	    	}
         }else{
         	menu.add(0, ID_INTRODUCE, 0, getResources().getString(R.string.menu_introduce));
         	menu.add(0, ID_COLLECT, 1, getResources().getString(R.string.menu_collect));
+        	if(db.isAlbumCollected(mAlbum.getId())){
+    			itemCollect = menu.add(0, ID_COLLECT, 1, getResources().getString(R.string.menu_collect_cancel));
+	    	}else{
+	    		itemCollect = menu.add(0, ID_COLLECT, 1, getResources().getString(R.string.menu_collect));
+	    	}
         }
         return true;
     }
@@ -147,14 +183,14 @@ public class AlbumActivity extends Activity {
                 introduceDialog.show();
             }
             break;
-        case ID_COLLECT:
-
-            SQLiteLyric db = new SQLiteLyric(AlbumActivity.this);
+        case ID_COLLECT:            
             if (db.isAlbumCollected(mAlbum.getId())) {
                 db.deleteAlbum(mAlbum);
-                Toast.makeText(AlbumActivity.this, "已刪除此專輯收藏", Toast.LENGTH_SHORT).show();
+                itemCollect.setTitle(getResources().getString(R.string.menu_collect));
+                Toast.makeText(AlbumActivity.this, "已取消此專輯收藏", Toast.LENGTH_SHORT).show();
             } else {
                 db.insertAlbum(mAlbum);
+                itemCollect.setTitle(getResources().getString(R.string.menu_collect_cancel));
                 Toast.makeText(AlbumActivity.this, "已加入此專輯收藏", Toast.LENGTH_SHORT).show();
             }
             break;
@@ -254,5 +290,52 @@ public class AlbumActivity extends Activity {
             }
 
         }
+    }
+    
+    private void setAdAdwhirl() {
+        // TODO Auto-generated method stub
+        AdWhirlManager.setConfigExpireTimeout(1000 * 60);
+        AdWhirlTargeting.setAge(23);
+        AdWhirlTargeting.setGender(AdWhirlTargeting.Gender.MALE);
+        AdWhirlTargeting.setKeywords("online games gaming");
+        AdWhirlTargeting.setPostalCode("94123");
+        AdWhirlTargeting.setTestMode(false);
+
+        AdWhirlLayout adwhirlLayout = new AdWhirlLayout(this, adWhirlKey);
+
+        LinearLayout mainLayout = (LinearLayout) findViewById(R.id.adonView);
+
+        adwhirlLayout.setAdWhirlInterface(this);
+
+        mainLayout.addView(adwhirlLayout);
+
+        mainLayout.invalidate();
+    }
+
+    @Override
+    public void adWhirlGeneric() {
+        // TODO Auto-generated method stub
+
+    }
+
+    public void rotationHoriztion(int beganDegree, int endDegree, AdView view) {
+        final float centerX = 320 / 2.0f;
+        final float centerY = 48 / 2.0f;
+        final float zDepth = -0.50f * view.getHeight();
+
+        Rotate3dAnimation rotation = new Rotate3dAnimation(beganDegree, endDegree, centerX, centerY, zDepth, true);
+        rotation.setDuration(1000);
+        rotation.setInterpolator(new AccelerateInterpolator());
+        rotation.setAnimationListener(new Animation.AnimationListener() {
+            public void onAnimationStart(Animation animation) {
+            }
+
+            public void onAnimationEnd(Animation animation) {
+            }
+
+            public void onAnimationRepeat(Animation animation) {
+            }
+        });
+        view.startAnimation(rotation);
     }
 }

@@ -14,11 +14,20 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.Animation;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.adwhirl.AdWhirlLayout;
+import com.adwhirl.AdWhirlManager;
+import com.adwhirl.AdWhirlTargeting;
+import com.adwhirl.AdWhirlLayout.AdWhirlInterface;
+import com.google.ads.AdView;
 import com.kosbrother.fragment.SingerAlbumFragment;
 import com.kosbrother.fragment.SingerNewsFragment;
 import com.kosbrother.fragment.SingerSongFragment;
@@ -30,7 +39,7 @@ import com.taiwan.imageload.ListSongAdapter;
 import com.viewpagerindicator.TabPageIndicator;
 
 @SuppressLint("NewApi")
-public class SingerActivity extends FragmentActivity{
+public class SingerActivity extends FragmentActivity implements AdWhirlInterface {
 	
 	private final int ID_INTRODUCE = 666666;
 	private final int ID_COLLECT   = 777777;
@@ -47,12 +56,17 @@ public class SingerActivity extends FragmentActivity{
 	private ProgressDialog progressDialog   = null;
 	
 	private int sdkVersion;
+	private SQLiteLyric db;
+	private MenuItem itemCollect;
+	
+	private final String  adWhirlKey = Setting.adwhirlKey;
 	
 	@SuppressLint("NewApi")
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.simple_tabs);
+        db = new SQLiteLyric(SingerActivity.this);
         
         mBundle = this.getIntent().getExtras();
         SingerId = mBundle.getInt("SingerId");
@@ -80,6 +94,18 @@ public class SingerActivity extends FragmentActivity{
         
         setIntroduceDialog();
         setAboutUsDialog();
+        
+        try {
+            Display display = getWindowManager().getDefaultDisplay();
+            int width = display.getWidth(); // deprecated
+            int height = display.getHeight(); // deprecated
+
+            if (width > 320) {
+                setAdAdwhirl();
+            }
+        } catch (Exception e) {
+
+        }
     }
 	
 	
@@ -88,12 +114,23 @@ public class SingerActivity extends FragmentActivity{
 	@Override
     public boolean onCreateOptionsMenu(Menu menu) {
     	getMenuInflater().inflate(R.menu.main, menu);
-    	if (sdkVersion > 10){    	
-    		menu.add(0, ID_INTRODUCE, 0, getResources().getString(R.string.menu_introduce)).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-    		menu.add(0, ID_COLLECT, 1, getResources().getString(R.string.menu_collect)).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+    	if (sdkVersion > 10){
+    		menu.add(0, ID_INTRODUCE, 0, getResources().getString(R.string.menu_introduce)).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);  
+    		if(db.isSingerCollected(theSinger.getId())){
+    			itemCollect = menu.add(0, ID_COLLECT, 1, getResources().getString(R.string.menu_collect_cancel));
+    			itemCollect.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+	    	}else{
+	    		itemCollect = menu.add(0, ID_COLLECT, 1, getResources().getString(R.string.menu_collect));
+	    		itemCollect.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+	    	}
+    		
     	}else{
     		menu.add(0, ID_INTRODUCE, 0, getResources().getString(R.string.menu_introduce));
-    		menu.add(0, ID_COLLECT, 1, getResources().getString(R.string.menu_collect));
+    		if(db.isSingerCollected(theSinger.getId())){
+    			itemCollect = menu.add(0, ID_COLLECT, 1, getResources().getString(R.string.menu_collect_cancel));
+	    	}else{
+	    		itemCollect = menu.add(0, ID_COLLECT, 1, getResources().getString(R.string.menu_collect));
+	    	}
     	}
     	return true;
     }
@@ -129,12 +166,13 @@ public class SingerActivity extends FragmentActivity{
 	    	}
 	        break;
 	    case ID_COLLECT:
-	    	SQLiteLyric db = new SQLiteLyric(SingerActivity.this);
-	    	if(db.isSingerCollected(theSinger.getId())){
+	    	if(db.isSingerCollected(theSinger.getId())){	    		
 	    		db.deleteSinger(theSinger);
-	    		Toast.makeText(SingerActivity.this, "已刪除此歌手收藏", Toast.LENGTH_SHORT).show();
-	    	}else{
+	    		itemCollect.setTitle(getResources().getString(R.string.menu_collect));
+	    		Toast.makeText(SingerActivity.this, "已取消此歌手收藏", Toast.LENGTH_SHORT).show();
+	    	}else{	    		
 	    		db.insertSinger(theSinger);
+	    		itemCollect.setTitle(getResources().getString(R.string.menu_collect_cancel));
 	    		Toast.makeText(SingerActivity.this, "已加入此歌手收藏", Toast.LENGTH_SHORT).show();
 	    	}
 	        break;
@@ -231,4 +269,51 @@ public class SingerActivity extends FragmentActivity{
                     }
                 });
 	}
+	
+	private void setAdAdwhirl() {
+        // TODO Auto-generated method stub
+        AdWhirlManager.setConfigExpireTimeout(1000 * 60);
+        AdWhirlTargeting.setAge(23);
+        AdWhirlTargeting.setGender(AdWhirlTargeting.Gender.MALE);
+        AdWhirlTargeting.setKeywords("online games gaming");
+        AdWhirlTargeting.setPostalCode("94123");
+        AdWhirlTargeting.setTestMode(false);
+
+        AdWhirlLayout adwhirlLayout = new AdWhirlLayout(this, adWhirlKey);
+
+        LinearLayout mainLayout = (LinearLayout) findViewById(R.id.adonView);
+
+        adwhirlLayout.setAdWhirlInterface(this);
+
+        mainLayout.addView(adwhirlLayout);
+
+        mainLayout.invalidate();
+    }
+
+    @Override
+    public void adWhirlGeneric() {
+        // TODO Auto-generated method stub
+
+    }
+
+    public void rotationHoriztion(int beganDegree, int endDegree, AdView view) {
+        final float centerX = 320 / 2.0f;
+        final float centerY = 48 / 2.0f;
+        final float zDepth = -0.50f * view.getHeight();
+
+        Rotate3dAnimation rotation = new Rotate3dAnimation(beganDegree, endDegree, centerX, centerY, zDepth, true);
+        rotation.setDuration(1000);
+        rotation.setInterpolator(new AccelerateInterpolator());
+        rotation.setAnimationListener(new Animation.AnimationListener() {
+            public void onAnimationStart(Animation animation) {
+            }
+
+            public void onAnimationEnd(Animation animation) {
+            }
+
+            public void onAnimationRepeat(Animation animation) {
+            }
+        });
+        view.startAnimation(rotation);
+    }
 }
