@@ -121,7 +121,8 @@ public class LyricAPI {
             return null;
         }
 
-        String url = "http://gdata.youtube.com/feeds/api/videos?q=" + query + "&start-index=" + (page * 12 + 1) + "&max-results=12&v=2&alt=json";
+        String url = "http://gdata.youtube.com/feeds/api/videos?q=" + query + "&start-index=" + (page * 12 + 1)
+                + "&max-results=12&v=2&alt=json&fields=entry[link/@rel='http://gdata.youtube.com/schemas/2007%23mobile']";
         String message = getMessageFromServer("GET", null, null, url);
 
         if (message == null) {
