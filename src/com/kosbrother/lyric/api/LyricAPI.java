@@ -114,6 +114,10 @@ public class LyricAPI {
 
     public static ArrayList<YoutubeVideo> getYoutubeVideos(String query, int page) {
         ArrayList<YoutubeVideo> videos = new ArrayList<YoutubeVideo>();
+        if (query.indexOf("(") != -1) {
+            String name2 = query.substring(0, query.indexOf("("));
+            query = name2;
+        }
         try {
             query = URLEncoder.encode(query, "utf-8");
         } catch (UnsupportedEncodingException e1) {
