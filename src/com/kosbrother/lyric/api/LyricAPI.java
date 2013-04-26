@@ -87,6 +87,9 @@ public class LyricAPI {
     }
 
     public static ArrayList<Song> searchSongName(String query, int page) {
+        if (query.length() == 1) {
+            query = query + "*";
+        }
         try {
             query = URLEncoder.encode(query, "utf-8");
         } catch (UnsupportedEncodingException e1) {
