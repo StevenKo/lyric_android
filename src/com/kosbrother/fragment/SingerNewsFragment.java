@@ -33,19 +33,20 @@ public class SingerNewsFragment extends Fragment {
 	private ArrayList<SingerNews> mSingerNews;
 	private ArrayList<SingerNews> moreSingerNews = new ArrayList<SingerNews>();
 //	private static int singerId;
-	private static String singerName;
+	private String singerName;
 	
     public static SingerNewsFragment newInstance(String singer_name) {
 
-    	SingerNewsFragment fragment = new SingerNewsFragment();
-//    	singerId = singer_id;
-    	singerName = singer_name;
-        return fragment;
-
+    	SingerNewsFragment f = new SingerNewsFragment();
+    	Bundle bdl = new Bundle();
+        bdl.putString("string", singer_name);
+        f.setArguments(bdl);
+        return f;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+    	singerName = getArguments().getString("string");
         super.onCreate(savedInstanceState);
     }
 
