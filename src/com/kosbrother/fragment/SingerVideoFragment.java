@@ -31,18 +31,21 @@ public class SingerVideoFragment extends Fragment {
 	private ListVideoAdapter mdapter;
 	private ArrayList<YoutubeVideo> mVideos = new ArrayList<YoutubeVideo>();
 	private ArrayList<YoutubeVideo> moreVideos = new ArrayList<YoutubeVideo>();
-	private static String singerName;
+	private String singerName;
 	
     public static SingerVideoFragment newInstance(String singer_name) {
 
-    	SingerVideoFragment fragment = new SingerVideoFragment();
-    	singerName = singer_name;
-        return fragment;
+    	SingerVideoFragment f = new SingerVideoFragment();
+    	Bundle bdl = new Bundle();
+        bdl.putString("string", singer_name);
+        f.setArguments(bdl);
+        return f;
 
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+    	singerName = getArguments().getString("string");
         super.onCreate(savedInstanceState);
     }
 
