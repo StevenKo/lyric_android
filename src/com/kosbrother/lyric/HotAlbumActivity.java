@@ -118,7 +118,7 @@ public class HotAlbumActivity extends FragmentActivity implements AdWhirlInterfa
         public Fragment getItem(int position) {
             // Fragment kk = new Fragment();
             // kk = new HotAlbumFragment.newInstance(mCategory.get(position).getId());
-            HotAlbumFragment kk = new HotAlbumFragment(mCategory.get(position).getId());
+            HotAlbumFragment kk = HotAlbumFragment.newInstance(mCategory.get(position).getId());
             return kk;
         }
 

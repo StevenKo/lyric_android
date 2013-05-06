@@ -118,7 +118,7 @@ public class HotSingerActivity extends FragmentActivity implements AdWhirlInterf
         @Override
         public Fragment getItem(int position) {
 
-            HotSingerFragment kk = new HotSingerFragment(mCategory.get(position).getId());
+            HotSingerFragment kk = HotSingerFragment.newInstance(mCategory.get(position).getId());
             return kk;
         }
 

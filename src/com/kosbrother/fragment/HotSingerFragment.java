@@ -24,7 +24,7 @@ public class HotSingerFragment extends Fragment {
     // private ListSongAdapter mdapter;
     private ArrayList<Singer>      mSingers;
     private ArrayList<Singer>	   moreSingers;
-    private final int              category_id;
+    private int              category_id;
     private LoadMoreGridView       mGridView;
     private GridViewSingersAdapter mdapter;
     private LinearLayout           progressLayout;
@@ -34,16 +34,22 @@ public class HotSingerFragment extends Fragment {
     private Boolean          checkLoad  = true;
     private int       myPage     = 1;
 
-    public HotSingerFragment(int category_id) {
+    public HotSingerFragment() {
 
-        // SingerCategoryFragment fragment = new SingerCategoryFragment();
-        this.category_id = category_id;
-        // return fragment;
-
+    }
+    
+    public static final HotSingerFragment newInstance(int category_id)
+    {
+    	HotSingerFragment f = new HotSingerFragment();
+        Bundle bdl = new Bundle();
+        bdl.putInt("id", category_id);
+        f.setArguments(bdl);
+        return f;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+    	category_id = getArguments().getInt("id");
         super.onCreate(savedInstanceState);
     }
 

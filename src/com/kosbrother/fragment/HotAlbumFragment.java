@@ -14,7 +14,6 @@ import android.widget.LinearLayout;
 
 import com.costum.android.widget.LoadMoreListView;
 import com.costum.android.widget.LoadMoreListView.OnLoadMoreListener;
-import com.kosbrother.lyric.NewAlbumActivity;
 import com.kosbrother.lyric.R;
 import com.kosbrother.lyric.api.LyricAPI;
 import com.kosbrother.lyric.entity.Album;
@@ -30,16 +29,22 @@ public class HotAlbumFragment extends Fragment {
 	private ArrayList<Album> mAlbums;
 	private int categoryId;
 	
-    public HotAlbumFragment (int category_id) {
-
-//    	HotAlbumFragment fragment = new HotAlbumFragment();
-    	categoryId = category_id;
-//      return fragment;
+    public HotAlbumFragment () {
 
     }
 
+    public static final HotAlbumFragment newInstance(int category_id)
+    {
+    	HotAlbumFragment f = new HotAlbumFragment();
+        Bundle bdl = new Bundle();
+        bdl.putInt("id", category_id);
+        f.setArguments(bdl);
+        return f;
+    }
+    
     @Override
     public void onCreate(Bundle savedInstanceState) {
+    	categoryId = getArguments().getInt("id");
         super.onCreate(savedInstanceState);
     }
 
