@@ -31,15 +31,24 @@ public class HotSongFragment extends Fragment {
     private ListSongAdapter  mdapter;
     private ArrayList<Song>  mSongs;
     private ArrayList<Song>  moreSongs = new ArrayList<Song>();
-    private final int        categoryId;
+    private int        categoryId;
 
-    public HotSongFragment(int category_id) {
+    public HotSongFragment() {
 
-        categoryId = category_id;
+    }
+    
+    public static final HotSongFragment newInstance(int category_id)
+    {
+    	HotSongFragment f = new HotSongFragment();
+        Bundle bdl = new Bundle();
+        bdl.putInt("id", category_id);
+        f.setArguments(bdl);
+        return f;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+    	categoryId = getArguments().getInt("id");
         super.onCreate(savedInstanceState);
     }
 

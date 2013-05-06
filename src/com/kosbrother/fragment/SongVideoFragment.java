@@ -22,7 +22,7 @@ import com.taiwan.imageload.ListVideoAdapter;
 
 public class SongVideoFragment extends Fragment {
 	
-	public  int myPage = 0;
+	private int myPage = 0;
 	private Boolean checkLoad = true;
 	private LinearLayout progressLayout;
 	private LinearLayout reloadLayout;
