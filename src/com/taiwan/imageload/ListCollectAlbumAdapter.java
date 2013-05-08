@@ -43,16 +43,17 @@ public class ListCollectAlbumAdapter extends BaseAdapter {
         View vi = inflater.inflate(R.layout.item_album_list, null);
         TextView text_name = (TextView) vi.findViewById(R.id.text_album_name);
         TextView text_time = (TextView) vi.findViewById(R.id.text_album_time);
+        TextView singer_name = (TextView) vi.findViewById(R.id.singer_name);
+        singer_name.setText(data.get(position).getSingerName());
 
         text_name.setText(data.get(position).getName());
         try {
-        	SimpleDateFormat formatter = new SimpleDateFormat("yyyy MMM");
-        	text_time.setText(formatter.format(data.get(position).getDate()));
-        }catch(Exception e){
-        	
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy MMM");
+            text_time.setText(formatter.format(data.get(position).getDate()));
+        } catch (Exception e) {
+
         }
 
         return vi;
     }
 }
-

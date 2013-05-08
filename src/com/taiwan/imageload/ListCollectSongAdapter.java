@@ -41,8 +41,10 @@ public class ListCollectSongAdapter extends BaseAdapter {
 
         View vi = inflater.inflate(R.layout.item_song_list, null);
         TextView text_name = (TextView) vi.findViewById(R.id.text_song_name);
+        TextView singer_name = (TextView) vi.findViewById(R.id.singer_name);
+        singer_name.setText(data.get(position).getSingerName());
         text_name.setText(data.get(position).getName());
-        
+
         return vi;
     }
 }
