@@ -54,6 +54,8 @@ public class ListAlbumAdapter extends BaseAdapter {
             String name2 = name.substring(0, name.indexOf("("));
             name = name2;
         }
+        if (name.equals("null"))
+        	name = "";
         text_singer.setText(name);
         text_name.setText(data.get(position).getName());
         try {

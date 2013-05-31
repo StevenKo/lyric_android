@@ -59,6 +59,8 @@ public class ListSongAdapter extends BaseAdapter {
             // }
             name = name2;
         }
+        if (name.equals("null"))
+        	name = "";
         text_singer.setText(name);
 
         vi.setOnClickListener(new OnClickListener() {

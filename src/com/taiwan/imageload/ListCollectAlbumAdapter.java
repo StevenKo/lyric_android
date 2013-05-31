@@ -44,7 +44,10 @@ public class ListCollectAlbumAdapter extends BaseAdapter {
         TextView text_name = (TextView) vi.findViewById(R.id.text_album_name);
         TextView text_time = (TextView) vi.findViewById(R.id.text_album_time);
         TextView singer_name = (TextView) vi.findViewById(R.id.singer_name);
-        singer_name.setText(data.get(position).getSingerName());
+        String name = data.get(position).getSingerName();
+        if (name.equals("null"))
+        	name = "";
+        singer_name.setText(name);
 
         text_name.setText(data.get(position).getName());
         try {
