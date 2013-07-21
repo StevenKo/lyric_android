@@ -106,10 +106,11 @@
 	</LinearLayout>
 	
     <LinearLayout
-         android:id="@+id/adonView"
+        android:id="@+id/adonView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
+        android:orientation="horizontal"
         />
 
 </LinearLayout>
