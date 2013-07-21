@@ -25,6 +25,7 @@ import com.adwhirl.AdWhirlManager;
 import com.adwhirl.AdWhirlTargeting;
 import com.adwhirl.AdWhirlLayout.AdWhirlInterface;
 import com.google.ads.AdView;
+import com.google.analytics.tracking.android.EasyTracker;
 import com.kosbrother.fragment.HotSingerFragment;
 import com.kosbrother.lyric.api.LyricAPI;
 import com.kosbrother.lyric.entity.SingerCategory;
@@ -190,5 +191,17 @@ public class HotSingerActivity extends FragmentActivity implements AdWhirlInterf
             }
         });
         view.startAnimation(rotation);
+    }
+    
+    @Override
+    public void onStart() {
+      super.onStart();
+      EasyTracker.getInstance().activityStart(this);
+    }
+
+    @Override
+    public void onStop() {
+      super.onStop();
+      EasyTracker.getInstance().activityStop(this);
     }
 }

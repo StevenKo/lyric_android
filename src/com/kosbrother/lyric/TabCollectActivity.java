@@ -13,6 +13,7 @@ import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.analytics.tracking.android.EasyTracker;
 import com.kosbrother.fragment.CollectAlbumFragment;
 import com.kosbrother.fragment.CollectSingerFragment;
 import com.kosbrother.fragment.CollectSongFragment;
@@ -133,6 +134,18 @@ public class TabCollectActivity extends FragmentActivity {
     @Override
     public void onBackPressed() {
         this.getParent().onBackPressed();
+    }
+    
+    @Override
+    public void onStart() {
+      super.onStart();
+      EasyTracker.getInstance().activityStart(this);
+    }
+
+    @Override
+    public void onStop() {
+      super.onStop();
+      EasyTracker.getInstance().activityStop(this);
     }
 
 }

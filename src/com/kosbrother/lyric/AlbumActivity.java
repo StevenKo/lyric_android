@@ -29,6 +29,7 @@ import com.adwhirl.AdWhirlLayout.AdWhirlInterface;
 import com.costum.android.widget.LoadMoreListView;
 import com.costum.android.widget.LoadMoreListView.OnLoadMoreListener;
 import com.google.ads.AdView;
+import com.google.analytics.tracking.android.EasyTracker;
 import com.kosbrother.lyric.api.LyricAPI;
 import com.kosbrother.lyric.db.SQLiteLyric;
 import com.kosbrother.lyric.entity.Album;
@@ -337,5 +338,17 @@ public class AlbumActivity extends Activity implements AdWhirlInterface {
             }
         });
         view.startAnimation(rotation);
+    }
+    
+    @Override
+    public void onStart() {
+      super.onStart();
+      EasyTracker.getInstance().activityStart(this);
+    }
+
+    @Override
+    public void onStop() {
+      super.onStop();
+      EasyTracker.getInstance().activityStop(this);
     }
 }

@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 
+import com.google.analytics.tracking.android.EasyTracker;
 import com.kosbrother.lyric.api.LyricAPI;
 import com.kosbrother.lyric.entity.SingerCategory;
 import com.taiwan.imageload.GridViewAdapter;
@@ -45,5 +46,17 @@ public class TabSingerActivity extends Activity {
     @Override
     public void onBackPressed() {
 		this.getParent().onBackPressed(); 
+    }
+    
+    @Override
+    public void onStart() {
+      super.onStart();
+      EasyTracker.getInstance().activityStart(this);
+    }
+
+    @Override
+    public void onStop() {
+      super.onStop();
+      EasyTracker.getInstance().activityStop(this);
     }
 }

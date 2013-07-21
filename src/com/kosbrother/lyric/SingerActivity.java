@@ -28,6 +28,7 @@ import com.adwhirl.AdWhirlManager;
 import com.adwhirl.AdWhirlTargeting;
 import com.adwhirl.AdWhirlLayout.AdWhirlInterface;
 import com.google.ads.AdView;
+import com.google.analytics.tracking.android.EasyTracker;
 import com.kosbrother.fragment.SingerAlbumFragment;
 import com.kosbrother.fragment.SingerNewsFragment;
 import com.kosbrother.fragment.SingerSongFragment;
@@ -315,5 +316,17 @@ public class SingerActivity extends FragmentActivity implements AdWhirlInterface
             }
         });
         view.startAnimation(rotation);
+    }
+    
+    @Override
+    public void onStart() {
+      super.onStart();
+      EasyTracker.getInstance().activityStart(this);
+    }
+
+    @Override
+    public void onStop() {
+      super.onStop();
+      EasyTracker.getInstance().activityStop(this);
     }
 }

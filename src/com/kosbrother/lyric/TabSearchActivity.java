@@ -1,5 +1,7 @@
 package com.kosbrother.lyric;
 
+import com.google.analytics.tracking.android.EasyTracker;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -103,5 +105,17 @@ public class TabSearchActivity extends Activity {
     @Override
     public void onBackPressed() {
 		this.getParent().onBackPressed(); 
+    }
+    
+    @Override
+    public void onStart() {
+      super.onStart();
+      EasyTracker.getInstance().activityStart(this);
+    }
+
+    @Override
+    public void onStop() {
+      super.onStop();
+      EasyTracker.getInstance().activityStop(this);
     }
 }
