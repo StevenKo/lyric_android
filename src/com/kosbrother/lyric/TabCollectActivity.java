@@ -28,7 +28,7 @@ public class TabCollectActivity extends FragmentActivity {
 
     private SharedPreferences         sharePreference;
     private final String              keyDeleteDialog = "KeyDeleteDialog";
-    private final String              keyPref         = "pref";
+    public final static String              keyPref         = "pref";
     private Boolean                   showDeleteDialog;
 
     @Override

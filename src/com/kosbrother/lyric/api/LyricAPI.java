@@ -15,6 +15,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.StatusLine;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -620,5 +624,27 @@ public class LyricAPI {
             return null;
         }
     }
+
+	public static boolean sendRegistrationId(String regid) {
+		try{
+			DefaultHttpClient httpClient = new DefaultHttpClient();
+			String url = HOST + "/api/v1/users.json?regid="+regid;						
+			if(DEBUG)
+				Log.d(TAG, "URL : " + url);
+
+			HttpPost httpPost = new HttpPost(url);
+			HttpResponse response = httpClient.execute(httpPost);
+
+			StatusLine statusLine =  response.getStatusLine();
+			if (statusLine.getStatusCode() == 200){
+				return true;
+			}else{
+				return false;
+			}
+		} 
+	    catch (Exception e) {
+			return false;
+		} 
+	}
 
 }

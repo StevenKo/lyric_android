@@ -37,7 +37,6 @@ public class SingerCategoryFragment extends Fragment {
 	
     public SingerCategoryFragment(int search_way_id) {
 
-//    	SingerCategoryFragment fragment = new SingerCategoryFragment();
     	singerSearchWayId = search_way_id;
 //        return fragment;
 
