@@ -105,6 +105,19 @@
             >
         </activity>
         
+        <activity
+            android:name="com.kosbrother.lyric.TopListActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/StyledIndicators"
+            >
+        </activity>
+        <activity
+            android:name="com.kosbrother.lyric.TopListSongsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/StyledIndicators"
+            >
+        </activity>
+        
         <activity android:name="com.google.ads.AdActivity"
               android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"/>
         

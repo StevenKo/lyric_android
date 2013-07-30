@@ -18,6 +18,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.Gallery;
+import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -30,7 +31,7 @@ import com.taiwan.imageload.ListAdapter;
 
 public class TabHotActivity extends Activity {
 
-    private ListView             mListView;
+    private GridView             mGridView;
     private Gallery              mGallery;
     private LinearLayout         linearDownLoading;
     private LinearLayout         linearNetwork;
@@ -38,8 +39,8 @@ public class TabHotActivity extends Activity {
     private CircleGalleryAdapter mCircleAdapter;
     private Button btnReload;
 
-    private final Integer[]      mImageIds = { R.drawable.icon_list_new, R.drawable.icon_list_hot, R.drawable.icon_list_song, R.drawable.hot_singer };
-    private final String[]       mStrings  = { "最新熱門", "熱門專輯", "熱門歌曲", "熱門歌手" };
+    private final Integer[]      mImageIds = { R.drawable.icon_list_new, R.drawable.icon_list_hot, R.drawable.icon_list_song, R.drawable.hot_singer, R.drawable.list_num, R.drawable.thumbs_up};
+    private final String[]       mStrings  = { "最新熱門", "熱門專輯", "熱門歌曲", "熱門歌手","歌曲排行","推薦歌曲" };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -59,9 +60,9 @@ public class TabHotActivity extends Activity {
         linearNetwork = (LinearLayout) findViewById(R.id.linear_network);
         mGallery = (Gallery) findViewById(R.id.gallery);
 
-        mListView = (ListView) findViewById(R.id.list_tab_hot);
+        mGridView = (GridView) findViewById(R.id.grid_tab_hot);
         ListAdapter mdapter = new ListAdapter(TabHotActivity.this, mStrings, mImageIds);
-        mListView.setAdapter(mdapter);
+        mGridView.setAdapter(mdapter);
         
         btnReload = (Button) findViewById(R.id.btn_promotion_reload);
         

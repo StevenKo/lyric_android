@@ -306,6 +306,16 @@ public class LyricAPI {
             return parseSongs(message, songs);
         }
     }
+    
+    public static ArrayList<Song> getTopListSongs(int top_list_id) {
+        String message = getMessageFromServer("GET", "/api/v1/songs/top_list_songs.json?list_id=" + top_list_id , null, null);
+        ArrayList<Song> songs = new ArrayList<Song>();
+        if (message == null) {
+            return null;
+        } else {
+            return parseSongs(message, songs);
+        }
+    }
 
     public static ArrayList<Song> getCategoryHotSongs(int singer_category_id, int page) {
         String message = getMessageFromServer("GET", "/api/v1/songs/hot_songs.json?category_id=" + singer_category_id + "&page=" + page, null, null);

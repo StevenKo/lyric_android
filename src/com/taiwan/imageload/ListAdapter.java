@@ -16,6 +16,7 @@ import com.kosbrother.lyric.HotSingerActivity;
 import com.kosbrother.lyric.HotSongActivity;
 import com.kosbrother.lyric.NewAlbumActivity;
 import com.kosbrother.lyric.R;
+import com.kosbrother.lyric.TopListActivity;
 
 public class ListAdapter extends BaseAdapter {
 
@@ -89,6 +90,14 @@ public class ListAdapter extends BaseAdapter {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(activity, HotSingerActivity.class);
+                    activity.startActivity(intent);
+                }
+            });
+        }else if (position == 4) {
+            vi.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(activity, TopListActivity.class);
                     activity.startActivity(intent);
                 }
             });
