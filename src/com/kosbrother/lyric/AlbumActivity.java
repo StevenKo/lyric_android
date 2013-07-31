@@ -107,6 +107,7 @@ public class AlbumActivity extends Activity implements AdWhirlInterface {
         });
 
         new DownloadChannelsTask().execute();
+        new UpdateServerCollectTask().execute();
 
         setIntroduceDialog();
         setAboutUsDialog();
@@ -122,6 +123,17 @@ public class AlbumActivity extends Activity implements AdWhirlInterface {
         } catch (Exception e) {
 
         }
+    }
+    
+    private class UpdateServerCollectTask extends AsyncTask {
+
+		@Override
+		protected Object doInBackground(Object... params) {
+			
+			LyricAPI.sendAlbum(mAlbum.getId(), MainTabActivty.getRegistrationId(AlbumActivity.this));
+			return null;
+		}
+    	
     }
 
     @SuppressLint("NewApi")

@@ -19,9 +19,12 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.kosbrother.lyric.AlbumActivity;
+import com.kosbrother.lyric.MainTabActivty;
 import com.kosbrother.lyric.R;
+import com.kosbrother.lyric.api.LyricAPI;
 import com.kosbrother.lyric.db.SQLiteLyric;
 import com.kosbrother.lyric.entity.Album;
+import com.kosbrother.lyric.entity.Singer;
 import com.taiwan.imageload.ListCollectAlbumAdapter;
 
 public class CollectAlbumFragment extends Fragment {
@@ -160,8 +163,25 @@ public class CollectAlbumFragment extends Fragment {
             } else {
                 noDataLayout.setVisibility(View.VISIBLE);
             }
+            
+            new UpdateServerCollectTask().execute();
 
         }
+    }
+    
+    private class UpdateServerCollectTask extends AsyncTask {
+
+		@Override
+		protected Object doInBackground(Object... params) {
+			String albums = "";
+			for(Album album :mAlbums){
+				albums += album.getId() + ",";
+			}
+			
+			LyricAPI.sendCollectAlbums(albums, MainTabActivty.getRegistrationId(mActivity));
+			return null;
+		}
+    	
     }
 
 }

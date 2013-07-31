@@ -238,7 +238,7 @@ public class MainTabActivty extends TabActivity implements AdWhirlInterface {
     
     // gcm use start from here
     
-    private String getRegistrationId(Context context) {
+    public static String getRegistrationId(Context context) {
         final SharedPreferences prefs = getGCMPreferences(context);
         String registrationId = prefs.getString(PROPERTY_REG_ID, "");
         if (registrationId.length() == 0) {
@@ -249,14 +249,14 @@ public class MainTabActivty extends TabActivity implements AdWhirlInterface {
         // avoid a race condition if GCM sends a message
         int registeredVersion = prefs.getInt(PROPERTY_APP_VERSION, Integer.MIN_VALUE);
         int currentVersion = getAppVersion(context);
-        if (registeredVersion != currentVersion || isRegistrationExpired()) {
+        if (registeredVersion != currentVersion || isRegistrationExpired(context)) {
             Log.v(TAG, "App version changed or registration expired.");
             return "";
         }
         return registrationId;
     }
     
-    private SharedPreferences getGCMPreferences(Context context) {
+    private static SharedPreferences getGCMPreferences(Context context) {
         return context.getSharedPreferences(TabCollectActivity.keyPref, 0);
     }
     
@@ -271,7 +271,7 @@ public class MainTabActivty extends TabActivity implements AdWhirlInterface {
         }
     }
     
-    private boolean isRegistrationExpired() {
+    private static boolean isRegistrationExpired(Context context) {
         final SharedPreferences prefs = getGCMPreferences(context);
         // checks if the information is not stale
         long expirationTime =

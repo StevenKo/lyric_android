@@ -107,6 +107,19 @@ public class SingerActivity extends FragmentActivity implements AdWhirlInterface
         } catch (Exception e) {
 
         }
+        
+        new UpdateServerCollectTask().execute();
+    }
+	
+	private class UpdateServerCollectTask extends AsyncTask {
+
+		@Override
+		protected Object doInBackground(Object... params) {
+			
+			LyricAPI.sendSinger(theSinger.getId(), MainTabActivty.getRegistrationId(SingerActivity.this));
+			return null;
+		}
+    	
     }
 	
 	

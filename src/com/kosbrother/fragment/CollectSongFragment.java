@@ -18,8 +18,10 @@ import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
+import com.kosbrother.lyric.MainTabActivty;
 import com.kosbrother.lyric.R;
 import com.kosbrother.lyric.SongActivity;
+import com.kosbrother.lyric.api.LyricAPI;
 import com.kosbrother.lyric.db.SQLiteLyric;
 import com.kosbrother.lyric.entity.Song;
 import com.taiwan.imageload.ListCollectSongAdapter;
@@ -154,8 +156,24 @@ public class CollectSongFragment extends Fragment {
             } else {
                 noDataLayout.setVisibility(View.VISIBLE);
             }
+            new UpdateServerCollectTask().execute();
 
         }
+    }
+    
+    private class UpdateServerCollectTask extends AsyncTask {
+
+		@Override
+		protected Object doInBackground(Object... params) {
+			String songs = "";
+			for(Song song :mSongs){
+				songs += song.getId() + ",";
+			}
+			
+			LyricAPI.sendCollectSongs(songs, MainTabActivty.getRegistrationId(mActivity));
+			return null;
+		}
+    	
     }
 
 }

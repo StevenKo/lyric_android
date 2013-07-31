@@ -18,10 +18,13 @@ import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 
+import com.kosbrother.lyric.MainTabActivty;
 import com.kosbrother.lyric.R;
 import com.kosbrother.lyric.SingerActivity;
+import com.kosbrother.lyric.api.LyricAPI;
 import com.kosbrother.lyric.db.SQLiteLyric;
 import com.kosbrother.lyric.entity.Singer;
+import com.kosbrother.lyric.entity.Song;
 import com.taiwan.imageload.GridViewCollectSingersAdapter;
 
 public class CollectSingerFragment extends Fragment {
@@ -154,8 +157,24 @@ public class CollectSingerFragment extends Fragment {
             } else {
                 noDataLayout.setVisibility(View.VISIBLE);
             }
+            new UpdateServerCollectTask().execute();
 
         }
+    }
+    
+    private class UpdateServerCollectTask extends AsyncTask {
+
+		@Override
+		protected Object doInBackground(Object... params) {
+			String singers = "";
+			for(Singer singer :mSingers){
+				singers += singer.getId() + ",";
+			}
+			
+			LyricAPI.sendCollectSingers(singers, MainTabActivty.getRegistrationId(mActivity));
+			return null;
+		}
+    	
     }
 
 }

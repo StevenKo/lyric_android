@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -28,6 +29,7 @@ import com.google.ads.AdView;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.kosbrother.fragment.SongLyricFragment;
 import com.kosbrother.fragment.SongVideoFragment;
+import com.kosbrother.lyric.api.LyricAPI;
 import com.kosbrother.lyric.db.SQLiteLyric;
 import com.kosbrother.lyric.entity.Song;
 import com.viewpagerindicator.TabPageIndicator;
@@ -100,6 +102,19 @@ public class SongActivity extends FragmentActivity implements AdWhirlInterface {
         } catch (Exception e) {
 
         }
+        
+        new UpdateServerCollectTask().execute();
+    }
+	
+	private class UpdateServerCollectTask extends AsyncTask {
+
+		@Override
+		protected Object doInBackground(Object... params) {
+			
+			LyricAPI.sendSong(theSong.getId(), MainTabActivty.getRegistrationId(SongActivity.this));
+			return null;
+		}
+    	
     }
     
     

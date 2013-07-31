@@ -18,6 +18,7 @@ import java.util.Locale;
 import org.apache.http.HttpResponse;
 import org.apache.http.StatusLine;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -666,5 +667,142 @@ public class LyricAPI {
 			return false;
 		} 
 	}
+	
+	public static boolean sendCollectSongs(String songs,String regid){
+    	try{
+			DefaultHttpClient httpClient = new DefaultHttpClient();
+			String url = HOST + "/api/v1/users/update_collected_songs.json?songs="+songs+"&regid="+regid;						
+			if(DEBUG)
+				Log.d(TAG, "URL : " + url);
+
+			HttpPut httpPut = new HttpPut(url);
+			HttpResponse response = httpClient.execute(httpPut);
+
+			StatusLine statusLine =  response.getStatusLine();
+			if (statusLine.getStatusCode() == 200){
+				return true;
+			}else{
+				return false;
+			}
+		} 
+	    catch (Exception e) {
+			return false;
+		} 
+
+    }
+	
+	public static boolean sendCollectSingers(String singers,String regid){
+    	try{
+			DefaultHttpClient httpClient = new DefaultHttpClient();
+			String url = HOST + "/api/v1/users/update_collected_singers.json?singers="+singers+"&regid="+regid;						
+			if(DEBUG)
+				Log.d(TAG, "URL : " + url);
+
+			HttpPut httpPut = new HttpPut(url);
+			HttpResponse response = httpClient.execute(httpPut);
+
+			StatusLine statusLine =  response.getStatusLine();
+			if (statusLine.getStatusCode() == 200){
+				return true;
+			}else{
+				return false;
+			}
+		} 
+	    catch (Exception e) {
+			return false;
+		} 
+
+    }
+	
+	public static boolean sendCollectAlbums(String albums,String regid){
+    	try{
+			DefaultHttpClient httpClient = new DefaultHttpClient();
+			String url = HOST + "/api/v1/users/update_collected_albums.json?albums="+albums+"&regid="+regid;						
+			if(DEBUG)
+				Log.d(TAG, "URL : " + url);
+
+			HttpPut httpPut = new HttpPut(url);
+			HttpResponse response = httpClient.execute(httpPut);
+
+			StatusLine statusLine =  response.getStatusLine();
+			if (statusLine.getStatusCode() == 200){
+				return true;
+			}else{
+				return false;
+			}
+		} 
+	    catch (Exception e) {
+			return false;
+		} 
+
+    }
+	public static boolean sendSong(int song,String regid){
+    	try{
+			DefaultHttpClient httpClient = new DefaultHttpClient();
+			String url = HOST + "/api/v1/users/update_looked_songs.json?regid="+regid+"&song="+song;						
+			if(DEBUG)
+				Log.d(TAG, "URL : " + url);
+
+			HttpPut httpPut = new HttpPut(url);
+			HttpResponse response = httpClient.execute(httpPut);
+
+			StatusLine statusLine =  response.getStatusLine();
+			if (statusLine.getStatusCode() == 200){
+				return true;
+			}else{
+				return false;
+			}
+		} 
+	    catch (Exception e) {
+			return false;
+		} 
+
+    }
+	
+	public static boolean sendAlbum(int album,String regid){
+    	try{
+			DefaultHttpClient httpClient = new DefaultHttpClient();
+			String url = HOST + "/api/v1/users/update_looked_albums.json?regid="+regid+"&album="+album;						
+			if(DEBUG)
+				Log.d(TAG, "URL : " + url);
+
+			HttpPut httpPut = new HttpPut(url);
+			HttpResponse response = httpClient.execute(httpPut);
+
+			StatusLine statusLine =  response.getStatusLine();
+			if (statusLine.getStatusCode() == 200){
+				return true;
+			}else{
+				return false;
+			}
+		} 
+	    catch (Exception e) {
+			return false;
+		} 
+
+    }
+	
+	public static boolean sendSinger(int singer,String regid){
+    	try{
+			DefaultHttpClient httpClient = new DefaultHttpClient();
+			String url = HOST + "/api/v1/users/update_looked_singers.json?regid="+regid+"&singer="+singer;						
+			if(DEBUG)
+				Log.d(TAG, "URL : " + url);
+
+			HttpPut httpPut = new HttpPut(url);
+			HttpResponse response = httpClient.execute(httpPut);
+
+			StatusLine statusLine =  response.getStatusLine();
+			if (statusLine.getStatusCode() == 200){
+				return true;
+			}else{
+				return false;
+			}
+		} 
+	    catch (Exception e) {
+			return false;
+		} 
+
+    }
 
 }
