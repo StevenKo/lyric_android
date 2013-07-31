@@ -48,40 +48,27 @@ public class GcmBroadcastReceiver extends BroadcastReceiver{
         
         openActivity = Integer.parseInt(intent.getStringExtra("activity"));
         
-//        switch(openActivity){
-//        	case 0:
-//        		contentIntent = PendingIntent.getActivity(ctx, 0, new Intent(ctx, MainActivity.class), 0);
-//        		break;
-//        	case 1:
-//        		contentIntent = PendingIntent.getActivity(ctx, 0, new Intent(ctx, MyNovelActivity.class), 0);
-//        		break;
-//        	case 2:
-//        		Intent activity_intent = new Intent(ctx, BookmarkActivity.class);
-//        		if(intent.getStringExtra("is_resent").equals("true"))
-//        		    activity_intent.putExtra("IS_RECNET", true);
-//        		else
-//        			activity_intent.putExtra("IS_RECNET", false);
-//        		contentIntent = PendingIntent.getActivity(ctx, 0, activity_intent, 0);
-//        		break;
-//        	case 3:
-//        		Intent activity_intent1 = new Intent(ctx, CategoryActivity.class);
-//        		activity_intent1.putExtra("CategoryName", intent.getStringExtra("category_name"));
-//        		activity_intent1.putExtra("CategoryId", Integer.parseInt(intent.getStringExtra("category_id")));
-//        		contentIntent = PendingIntent.getActivity(ctx, 0, activity_intent1, 0);
-//        		break;
-//        	case 4:
-//        		Intent activity_intent2 = new Intent(ctx, NovelIntroduceActivity.class);
-//        		activity_intent2.putExtra("NovelName",intent.getStringExtra("novel_name"));
-//        		activity_intent2.putExtra("NovelAuthor",intent.getStringExtra("novel_author"));
-//        		activity_intent2.putExtra("NovelDescription",intent.getStringExtra("novel_description"));
-//        		activity_intent2.putExtra("NovelUpdate",intent.getStringExtra("novel_update"));
-//        		activity_intent2.putExtra("NovelPicUrl",intent.getStringExtra("novel_pic_url"));
-//        		activity_intent2.putExtra("NovelArticleNum",intent.getStringExtra("novel_article_num"));
-//        		activity_intent2.putExtra("NovelId",Integer.parseInt(intent.getStringExtra("novel_id")));
-//        		contentIntent = PendingIntent.getActivity(ctx, 0, activity_intent2, 0);
-//        		break;
-//        	
-//        }
+        switch(openActivity){
+        	case 0:
+        		contentIntent = PendingIntent.getActivity(ctx, 0, new Intent(ctx, NewAlbumActivity.class), 0);
+        		break;
+        	case 1:
+        		contentIntent = PendingIntent.getActivity(ctx, 0, new Intent(ctx, HotAlbumActivity.class), 0);
+        		break;
+        	case 2:
+        		contentIntent = PendingIntent.getActivity(ctx, 0, new Intent(ctx, TopListActivity.class), 0);
+        		break;
+        	case 3:
+        		contentIntent = PendingIntent.getActivity(ctx, 0, new Intent(ctx, RecommendSongActivity.class), 0);
+        		break;
+        	case 4:
+        		Intent activity_intent2 = new Intent(ctx, TopListSongsActivity.class);
+        		activity_intent2.putExtra("TopListName",intent.getStringExtra("top_list_name"));
+        		activity_intent2.putExtra("TopListId",Integer.parseInt(intent.getStringExtra("top_list_id")));
+        		contentIntent = PendingIntent.getActivity(ctx, 0, activity_intent2, 0);
+        		break;
+        	
+        }
         
 
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(ctx)

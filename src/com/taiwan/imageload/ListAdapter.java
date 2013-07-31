@@ -61,12 +61,7 @@ public class ListAdapter extends BaseAdapter {
             vi.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // Toast.makeText(activity, "tt", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(activity, NewAlbumActivity.class);
-                    // Bundle bundle = new Bundle();
-                    // bundle.putInt("CategoryId", data.get(position).getId());
-                    // bundle.putString("CategoryTitle", data.get(position).getCateName());
-                    // intent.putExtras(bundle);
                     activity.startActivity(intent);
                 }
             });
