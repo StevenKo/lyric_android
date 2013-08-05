@@ -50,22 +50,22 @@ public class GcmBroadcastReceiver extends BroadcastReceiver{
         
         switch(openActivity){
         	case 0:
-        		contentIntent = PendingIntent.getActivity(ctx, 0, new Intent(ctx, NewAlbumActivity.class), 0);
+        		contentIntent = PendingIntent.getActivity(ctx, 0, new Intent(ctx, NewAlbumActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
         		break;
         	case 1:
-        		contentIntent = PendingIntent.getActivity(ctx, 0, new Intent(ctx, HotAlbumActivity.class), 0);
+        		contentIntent = PendingIntent.getActivity(ctx, 0, new Intent(ctx, HotAlbumActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
         		break;
         	case 2:
-        		contentIntent = PendingIntent.getActivity(ctx, 0, new Intent(ctx, TopListActivity.class), 0);
+        		contentIntent = PendingIntent.getActivity(ctx, 0, new Intent(ctx, TopListActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
         		break;
         	case 3:
-        		contentIntent = PendingIntent.getActivity(ctx, 0, new Intent(ctx, RecommendSongActivity.class), 0);
+        		contentIntent = PendingIntent.getActivity(ctx, 0, new Intent(ctx, RecommendSongActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
         		break;
         	case 4:
         		Intent activity_intent2 = new Intent(ctx, TopListSongsActivity.class);
         		activity_intent2.putExtra("TopListName",intent.getStringExtra("top_list_name"));
         		activity_intent2.putExtra("TopListId",Integer.parseInt(intent.getStringExtra("top_list_id")));
-        		contentIntent = PendingIntent.getActivity(ctx, 0, activity_intent2, 0);
+        		contentIntent = PendingIntent.getActivity(ctx, 0, activity_intent2, PendingIntent.FLAG_UPDATE_CURRENT);
         		break;
         	
         }
@@ -77,6 +77,7 @@ public class GcmBroadcastReceiver extends BroadcastReceiver{
         .setStyle(new NotificationCompat.BigTextStyle()
         .bigText(intent.getStringExtra("big_text")))
         .setContentText(intent.getStringExtra("content"))
+        .setTicker(intent.getStringExtra("content"))
         .setAutoCancel(true);
 
         mBuilder.setContentIntent(contentIntent);
