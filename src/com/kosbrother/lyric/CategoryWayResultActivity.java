@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,11 +23,12 @@ import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.adwhirl.AdWhirlLayout;
-import com.adwhirl.AdWhirlManager;
-import com.adwhirl.AdWhirlTargeting;
-import com.adwhirl.AdWhirlLayout.AdWhirlInterface;
+import com.google.ads.Ad;
+import com.google.ads.AdListener;
+import com.google.ads.AdRequest;
+import com.google.ads.AdSize;
 import com.google.ads.AdView;
+import com.google.ads.AdRequest.ErrorCode;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.kosbrother.lyric.api.LyricAPI;
 import com.kosbrother.lyric.db.SQLiteLyric;
@@ -35,7 +37,7 @@ import com.taiwan.imageload.GridViewSingersAdapter;
 import com.taiwan.imageload.LoadMoreGridView;
 
 @SuppressLint("NewApi")
-public class CategoryWayResultActivity extends Activity implements AdWhirlInterface {
+public class CategoryWayResultActivity extends Activity{
 
 	private LoadMoreGridView   mGridView;
 	private ArrayList<Singer> mSingers;
@@ -51,7 +53,6 @@ public class CategoryWayResultActivity extends Activity implements AdWhirlInterf
     private int       myPage     = 1;
     private LinearLayout     loadmoreLayout;
     private AlertDialog.Builder aboutUsDialog;
-    private final String  adWhirlKey = Setting.adwhirlKey;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -101,17 +102,7 @@ public class CategoryWayResultActivity extends Activity implements AdWhirlInterf
         
         setAboutUsDialog();
         
-        try {
-            Display display = getWindowManager().getDefaultDisplay();
-            int width = display.getWidth(); // deprecated
-            int height = display.getHeight(); // deprecated
-
-            if (width > 320) {
-                setAdAdwhirl();
-            }
-        } catch (Exception e) {
-
-        }
+        AdViewUtil.setAdView((LinearLayout) findViewById(R.id.adonView), this);
     }
     
     private class DownloadChannelsTask extends AsyncTask {
@@ -245,32 +236,6 @@ public class CategoryWayResultActivity extends Activity implements AdWhirlInterf
 
                     }
                 });
-    }
-    
-    private void setAdAdwhirl() {
-        // TODO Auto-generated method stub
-        AdWhirlManager.setConfigExpireTimeout(1000 * 60);
-        AdWhirlTargeting.setAge(23);
-        AdWhirlTargeting.setGender(AdWhirlTargeting.Gender.MALE);
-        AdWhirlTargeting.setKeywords("online games gaming");
-        AdWhirlTargeting.setPostalCode("94123");
-        AdWhirlTargeting.setTestMode(false);
-
-        AdWhirlLayout adwhirlLayout = new AdWhirlLayout(this, adWhirlKey);
-
-        LinearLayout mainLayout = (LinearLayout) findViewById(R.id.adonView);
-
-        adwhirlLayout.setAdWhirlInterface(this);
-
-        mainLayout.addView(adwhirlLayout);
-
-        mainLayout.invalidate();
-    }
-
-    @Override
-    public void adWhirlGeneric() {
-        // TODO Auto-generated method stub
-
     }
 
     public void rotationHoriztion(int beganDegree, int endDegree, AdView view) {

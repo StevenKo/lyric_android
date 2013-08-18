@@ -19,11 +19,6 @@ import android.view.MenuItem;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.widget.LinearLayout;
-
-import com.adwhirl.AdWhirlLayout;
-import com.adwhirl.AdWhirlManager;
-import com.adwhirl.AdWhirlTargeting;
-import com.adwhirl.AdWhirlLayout.AdWhirlInterface;
 import com.google.ads.AdView;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.kosbrother.fragment.HotSongFragment;
@@ -33,7 +28,7 @@ import com.kosbrother.lyric.api.LyricAPI;
 import com.kosbrother.lyric.entity.SingerCategory;
 import com.viewpagerindicator.TabPageIndicator;
 
-public class RecommendSongActivity extends FragmentActivity implements AdWhirlInterface {
+public class RecommendSongActivity extends FragmentActivity {
 
     private ViewPager                 pager;
     private AlertDialog.Builder       aboutUsDialog;
@@ -60,17 +55,7 @@ public class RecommendSongActivity extends FragmentActivity implements AdWhirlIn
 
         setAboutUsDialog();
         
-        try {
-            Display display = getWindowManager().getDefaultDisplay();
-            int width = display.getWidth(); // deprecated
-            int height = display.getHeight(); // deprecated
-
-            if (width > 320) {
-                setAdAdwhirl();
-            }
-        } catch (Exception e) {
-
-        }
+        AdViewUtil.setAdView((LinearLayout) findViewById(R.id.adonView), this);
     }
 
     @Override
@@ -145,31 +130,6 @@ public class RecommendSongActivity extends FragmentActivity implements AdWhirlIn
                 });
     }
     
-    private void setAdAdwhirl() {
-        // TODO Auto-generated method stub
-        AdWhirlManager.setConfigExpireTimeout(1000 * 60);
-        AdWhirlTargeting.setAge(23);
-        AdWhirlTargeting.setGender(AdWhirlTargeting.Gender.MALE);
-        AdWhirlTargeting.setKeywords("online games gaming");
-        AdWhirlTargeting.setPostalCode("94123");
-        AdWhirlTargeting.setTestMode(false);
-
-        AdWhirlLayout adwhirlLayout = new AdWhirlLayout(this, adWhirlKey);
-
-        LinearLayout mainLayout = (LinearLayout) findViewById(R.id.adonView);
-
-        adwhirlLayout.setAdWhirlInterface(this);
-
-        mainLayout.addView(adwhirlLayout);
-
-        mainLayout.invalidate();
-    }
-
-    @Override
-    public void adWhirlGeneric() {
-        // TODO Auto-generated method stub
-
-    }
 
     public void rotationHoriztion(int beganDegree, int endDegree, AdView view) {
         final float centerX = 320 / 2.0f;
