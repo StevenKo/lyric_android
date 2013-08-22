@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -178,7 +179,7 @@ public class CollectAlbumFragment extends Fragment {
 				albums += album.getId() + ",";
 			}
 			
-			LyricAPI.sendCollectAlbums(albums, MainTabActivty.getRegistrationId(mActivity));
+			LyricAPI.sendCollectAlbums(albums, Settings.Secure.getString(mActivity.getContentResolver(),Settings.Secure.ANDROID_ID));
 			return null;
 		}
     	

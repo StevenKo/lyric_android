@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -116,7 +117,7 @@ public class AlbumActivity extends Activity {
 		@Override
 		protected Object doInBackground(Object... params) {
 			
-			LyricAPI.sendAlbum(mAlbum.getId(), MainTabActivty.getRegistrationId(AlbumActivity.this));
+			LyricAPI.sendAlbum(mAlbum.getId(), Settings.Secure.getString(AlbumActivity.this.getContentResolver(),Settings.Secure.ANDROID_ID));
 			return null;
 		}
     	

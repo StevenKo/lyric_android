@@ -646,10 +646,10 @@ public class LyricAPI {
         }
     }
 
-	public static boolean sendRegistrationId(String regid) {
+	public static boolean sendRegistrationId(String regid,String deviceId) {
 		try{
 			DefaultHttpClient httpClient = new DefaultHttpClient();
-			String url = HOST + "/api/v1/users.json?regid="+regid;						
+			String url = HOST + "/api/v1/users.json?regid="+regid+"&device_id="+deviceId;					
 			if(DEBUG)
 				Log.d(TAG, "URL : " + url);
 
@@ -668,10 +668,10 @@ public class LyricAPI {
 		} 
 	}
 	
-	public static boolean sendCollectSongs(String songs,String regid){
+	public static boolean sendCollectSongs(String songs,String deviceId){
     	try{
 			DefaultHttpClient httpClient = new DefaultHttpClient();
-			String url = HOST + "/api/v1/users/update_collected_songs.json?songs="+songs+"&regid="+regid;						
+			String url = HOST + "/api/v1/users/update_collected_songs.json?songs="+songs+"&device_id="+deviceId;						
 			if(DEBUG)
 				Log.d(TAG, "URL : " + url);
 
@@ -691,10 +691,10 @@ public class LyricAPI {
 
     }
 	
-	public static boolean sendCollectSingers(String singers,String regid){
+	public static boolean sendCollectSingers(String singers,String deviceId){
     	try{
 			DefaultHttpClient httpClient = new DefaultHttpClient();
-			String url = HOST + "/api/v1/users/update_collected_singers.json?singers="+singers+"&regid="+regid;						
+			String url = HOST + "/api/v1/users/update_collected_singers.json?singers="+singers+"&device_id="+deviceId;						
 			if(DEBUG)
 				Log.d(TAG, "URL : " + url);
 
@@ -714,10 +714,10 @@ public class LyricAPI {
 
     }
 	
-	public static boolean sendCollectAlbums(String albums,String regid){
+	public static boolean sendCollectAlbums(String albums,String deviceId){
     	try{
 			DefaultHttpClient httpClient = new DefaultHttpClient();
-			String url = HOST + "/api/v1/users/update_collected_albums.json?albums="+albums+"&regid="+regid;						
+			String url = HOST + "/api/v1/users/update_collected_albums.json?albums="+albums+"&device_id="+deviceId;						
 			if(DEBUG)
 				Log.d(TAG, "URL : " + url);
 
@@ -736,33 +736,10 @@ public class LyricAPI {
 		} 
 
     }
-	public static boolean sendSong(int song,String regid){
+	public static boolean sendSong(int song,String deviceId){
     	try{
 			DefaultHttpClient httpClient = new DefaultHttpClient();
-			String url = HOST + "/api/v1/users/update_looked_songs.json?regid="+regid+"&song="+song;						
-			if(DEBUG)
-				Log.d(TAG, "URL : " + url);
-
-			HttpPut httpPut = new HttpPut(url);
-			HttpResponse response = httpClient.execute(httpPut);
-
-			StatusLine statusLine =  response.getStatusLine();
-			if (statusLine.getStatusCode() == 200){
-				return true;
-			}else{
-				return false;
-			}
-		} 
-	    catch (Exception e) {
-			return false;
-		} 
-
-    }
-	
-	public static boolean sendAlbum(int album,String regid){
-    	try{
-			DefaultHttpClient httpClient = new DefaultHttpClient();
-			String url = HOST + "/api/v1/users/update_looked_albums.json?regid="+regid+"&album="+album;						
+			String url = HOST + "/api/v1/users/update_looked_songs.json?device_id="+deviceId+"&song="+song;						
 			if(DEBUG)
 				Log.d(TAG, "URL : " + url);
 
@@ -782,10 +759,33 @@ public class LyricAPI {
 
     }
 	
-	public static boolean sendSinger(int singer,String regid){
+	public static boolean sendAlbum(int album,String deviceId){
     	try{
 			DefaultHttpClient httpClient = new DefaultHttpClient();
-			String url = HOST + "/api/v1/users/update_looked_singers.json?regid="+regid+"&singer="+singer;						
+			String url = HOST + "/api/v1/users/update_looked_albums.json?device_id="+deviceId+"&album="+album;						
+			if(DEBUG)
+				Log.d(TAG, "URL : " + url);
+
+			HttpPut httpPut = new HttpPut(url);
+			HttpResponse response = httpClient.execute(httpPut);
+
+			StatusLine statusLine =  response.getStatusLine();
+			if (statusLine.getStatusCode() == 200){
+				return true;
+			}else{
+				return false;
+			}
+		} 
+	    catch (Exception e) {
+			return false;
+		} 
+
+    }
+	
+	public static boolean sendSinger(int singer,String deviceId){
+    	try{
+			DefaultHttpClient httpClient = new DefaultHttpClient();
+			String url = HOST + "/api/v1/users/update_looked_singers.json?device_id="+deviceId+"&singer="+singer;						
 			if(DEBUG)
 				Log.d(TAG, "URL : " + url);
 

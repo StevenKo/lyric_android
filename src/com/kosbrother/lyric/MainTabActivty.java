@@ -13,6 +13,7 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -44,6 +45,7 @@ public class MainTabActivty extends TabActivity {
     public static final String EXTRA_MESSAGE = "message";
     private static final String PROPERTY_ON_SERVER_EXPIRATION_TIME = "onServerExpirationTimeMs";
     public static final String PROPERTY_REG_ID = "registration_id";
+    public static final String PROPERTY_DEVICE_ID = "device_id";
     private static final String PROPERTY_APP_VERSION = "appVersion";
     /**
      * Default lifespan (7 days) of a reservation until it is considered expired.
@@ -83,8 +85,9 @@ public class MainTabActivty extends TabActivity {
         
         context = getApplicationContext();
         regid = getRegistrationId(context);
+        String device_id = getDeviceId(context);
 
-        if (regid.length() == 0) {
+        if (regid.length() == 0 || device_id.length() == 0) {
             registerBackground();
         }
         gcm = GoogleCloudMessaging.getInstance(this);
@@ -215,6 +218,11 @@ public class MainTabActivty extends TabActivity {
         }
         return registrationId;
     }
+    public static String getDeviceId(Context context) {
+        final SharedPreferences prefs = getGCMPreferences(context);
+        String deviceId = prefs.getString(PROPERTY_DEVICE_ID, "");
+        return deviceId;
+    }
     
     private static SharedPreferences getGCMPreferences(Context context) {
         return context.getSharedPreferences(TabCollectActivity.keyPref, 0);
@@ -251,19 +259,20 @@ public class MainTabActivty extends TabActivity {
 	                }
 	                regid = gcm.register(SENDER_ID);
 	                msg = "Device registered, registration id=" + regid;
-	                LyricAPI.sendRegistrationId(regid);
-	                
-	                setRegistrationId(context, regid);
+	                String deviceId = Settings.Secure.getString(MainTabActivty.this.getContentResolver(),Settings.Secure.ANDROID_ID); 
+	                LyricAPI.sendRegistrationId(regid,deviceId);    
+	                setRegistrationId(context, regid,deviceId);
 	            } catch (IOException ex) {
 	                msg = "Error :" + ex.getMessage();
 	            }
 	            return msg;
 			}
 
-			private void setRegistrationId(Context context, String regid) {
+			private void setRegistrationId(Context context, String regid,String deviceId) {
 				final SharedPreferences prefs = getGCMPreferences(context);
 				SharedPreferences.Editor editor = prefs.edit();
 				editor.putString(PROPERTY_REG_ID, regid);
+				editor.putString(PROPERTY_DEVICE_ID, deviceId);
 				editor.putInt(PROPERTY_APP_VERSION, getAppVersion(context));
 				editor.putLong(PROPERTY_ON_SERVER_EXPIRATION_TIME, REGISTRATION_EXPIRY_TIME_MS + System.currentTimeMillis());
 				editor.commit();

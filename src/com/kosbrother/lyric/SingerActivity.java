@@ -9,6 +9,7 @@ import android.content.res.Resources;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -101,7 +102,7 @@ public class SingerActivity extends FragmentActivity {
 		@Override
 		protected Object doInBackground(Object... params) {
 			
-			LyricAPI.sendSinger(theSinger.getId(), MainTabActivty.getRegistrationId(SingerActivity.this));
+			LyricAPI.sendSinger(theSinger.getId(), Settings.Secure.getString(SingerActivity.this.getContentResolver(),Settings.Secure.ANDROID_ID));
 			return null;
 		}
     	
