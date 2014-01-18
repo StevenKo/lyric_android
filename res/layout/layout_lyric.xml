@@ -55,7 +55,7 @@
 		    	android:paddingTop="10dp"
 		    	android:paddingBottom="20dp"
 		    	android:text="tttt"
-		    	android:textSize="30px"
+		    	android:textSize="20dp"
 		    	android:textIsSelectable="true"
 		        />
 	</ScrollView>
