@@ -111,7 +111,7 @@ public class SingerCategoryActivity extends FragmentActivity {
         @Override
         public Fragment getItem(int position) {
 
-            SingerCategoryFragment kk = new SingerCategoryFragment(mCategory.get(position).getId());
+            SingerCategoryFragment kk = SingerCategoryFragment.newInstance(mCategory.get(position).getId());
             return kk;
         }
 

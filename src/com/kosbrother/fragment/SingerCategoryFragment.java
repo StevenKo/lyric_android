@@ -27,7 +27,7 @@ public class SingerCategoryFragment extends Fragment {
 	
 //	private ListSongAdapter mdapter;
 	private ArrayList<SingerSearchWayItem> mSearchways;
-	private int singerSearchWayId;
+	private static int singerSearchWayId;
 	private GridView mGridView;
 	private GridViewSearchWayAdapter mdapter;
 	private LinearLayout progressLayout;
@@ -35,10 +35,13 @@ public class SingerCategoryFragment extends Fragment {
 	private Button buttonReload;
 	
 	
-    public SingerCategoryFragment(int search_way_id) {
 
+    
+    public static SingerCategoryFragment newInstance(int search_way_id) {
+
+    	SingerCategoryFragment fragment = new SingerCategoryFragment();
     	singerSearchWayId = search_way_id;
-//        return fragment;
+        return fragment;
 
     }
 
