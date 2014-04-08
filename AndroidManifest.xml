@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.kosbrother.lyric"
-    android:versionCode="18"
-    android:versionName="1.9.5" 
+    android:versionCode="19"
+    android:versionName="1.9.6" 
     android:installLocation="auto">
 
     <uses-sdk
@@ -127,25 +127,15 @@
         <activity android:name="com.google.ads.AdActivity"
               android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"/>
         
-		<activity android:name="com.vpon.adon.android.WebInApp"
-		 android:screenOrientation="portrait"
-		 android:configChanges="orientation|keyboardHidden|navigation|keyboard"
-		 
-		/>
-		<activity android:name="com.vpon.adon.android.CrazyAdRun"
-		 android:configChanges="orientation|keyboardHidden|navigation|keyboard"
-		 android:theme="@android:style/Theme.Translucent" />          
-		<activity android:name="com.vpon.adon.android.webClientHandler.QRActivity"
-		 android:finishOnTaskLaunch = "true"
-		 android:clearTaskOnLaunch = "true"
-		 android:configChanges="keyboardHidden|navigation|keyboard"
-		>
-		</activity>
-		<activity android:name="com.vpon.adon.android.webClientHandler.ShootActivity"
-		 android:finishOnTaskLaunch = "true"
-		 android:clearTaskOnLaunch = "true"
-		 android:configChanges="keyboardHidden|navigation|keyboard">
-		</activity>
+		
+        <activity
+            android:name="com.vpadn.widget.VpadnActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|keyboard|screenLayout|uiMode|screenSize|smallestScreenSize"
+            android:hardwareAccelerated="true"
+            android:theme="@android:style/Theme.Translucent" >
+        </activity>
+        
+        
 		<activity android:name="com.googleing.zxinging.client.android.CaptureActivity"
 		 android:finishOnTaskLaunch = "true"
 		 android:clearTaskOnLaunch = "true"
