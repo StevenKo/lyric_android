@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.kosbrother.lyric"
     android:versionCode="19"
-    android:versionName="1.9.6" 
+    android:versionName="1.9.7" 
     android:installLocation="auto">
 
     <uses-sdk
@@ -135,6 +135,16 @@
             android:theme="@android:style/Theme.Translucent" >
         </activity>
         
+        <!--HODo Ad 設定  -->
+    	<activity android:name="com.hodo.ADActivity"/>
+		<activity
+		     android:name="com.hodo.SplashaActivity"
+		     android:theme="@android:style/Theme.Translucent"/>
+		<activity
+		     android:name="com.hodo.SVideoActivity"
+		     android:theme="@android:style/Theme.Translucent"
+		     android:configChanges="orientation"/>
+        
         
 		<activity android:name="com.googleing.zxinging.client.android.CaptureActivity"
 		 android:finishOnTaskLaunch = "true"
@@ -171,12 +181,12 @@
 	<!-- Keeps the processor from sleeping when a message is received. -->
 	<!-- <uses-permission android:name="android.permission.WAKE_LOCK" />  --> 
     
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />    
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>    
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+ 	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+	<uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+	<uses-permission android:name="android.permission.VIBRATE"/>
     
     <!-- <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/> -->
